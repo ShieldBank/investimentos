@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type SetStateAction } from "react";
 import { Card } from "./components/ui/card";
 import { Input } from "./components/ui/input";
 import {
@@ -11,9 +11,9 @@ import {
 } from "./components/ui/table";
 
 function App() {
-  const [CDIAno, setCDIAno] = useState<number>(0);
+  const [CDIAno, setCDIAno] = useState<SetStateAction<number>>(0);
   const [inflacao, setInflacao] = useState<number>(0);
-  const [periodo, setPeriodo] = useState<number>(0);
+  const [periodo, setPeriodo] = useState<SetStateAction<HTMLInputElement>>(0);
   const [aporteInicial, setaporteInicial] = useState<number>(0);
   const [aporteMensal, setaporteMensal] = useState<number>(0);
 
@@ -63,7 +63,22 @@ function App() {
       Rendimento_Líquido_Imposto: 0,
     },
   ];
+  function formmatedN(n: number) {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "percent",
+      currency: "BRL",
+      minimumFractionDigits: 2,
+    }).format(n);
+  }
 
+  function formattedReal(n: number) {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 2,
+    }).format(n);
+  }
+  console.log({ aporteInicial, aporteMensal, periodo, CDIAno, inflacao });
   return (
     <>
       <div className="bg-gray-950 min-h-screen border-0 w-full p-10 py-20">
@@ -73,12 +88,18 @@ function App() {
               <Input
                 type="text"
                 placeholder="aporte inicial"
-                onChange={(e) => setaporteInicial(e.target.value)}
+                value={formattedReal(aporteInicial)}
+                onChange={(e) => {
+                  setaporteInicial(e.target.value.replace(/[\D/]/g, "") / 100);
+                }}
               />
               <Input
                 type="text"
                 placeholder="aporte mensal"
-                onChange={(e) => setaporteMensal(e.target.value)}
+                value={formattedReal(aporteMensal)}
+                onChange={(e) => {
+                  setaporteMensal(e.target.value.replace(/[\D/]/g, "") / 100);
+                }}
               />
               <Input
                 type="text"
@@ -164,22 +185,21 @@ function App() {
                   minimumFractionDigits: 2,
                 }).format(raizYear);
 
-                function formmatedN(n: number) {
-                  return new Intl.NumberFormat("pt-BR", {
-                    style: "percent",
-                    currency: "BRL",
-                    minimumFractionDigits: 2,
-                  }).format(n);
-                }
-                console.log(tax);
-                const vf = -(
-                  aporteInicial * Math.pow(1 + tax, periodo) +
-                  (aporteMensal *
-                    (1 + tax * 0) *
-                    (Math.pow(1 + tax, periodo) - 1)) /
-                    tax
-                );
-                console.log(vf);
+                const vf =
+                  aporteInicial * (1 + raizYear) ** periodo +
+                  aporteMensal * (((1 + raizYear) ** periodo - 1) / raizYear);
+
+                const rendimentoPeriodoValorInvestido =
+                  Number(aporteInicial) + Number(aporteMensal) * 5;
+
+                const rendimentoPeriodoPercent =
+                  (vf - rendimentoPeriodoValorInvestido) /
+                  rendimentoPeriodoValorInvestido;
+
+                const rendimentoPeriodo = vf - rendimentoPeriodoValorInvestido;
+                const rendimentoLiquidoImposto =
+                  rendimentoPeriodo - rendimentoPeriodo * (aliquota / 100);
+
                 return (
                   <TableBody>
                     <TableRow>
@@ -211,13 +231,13 @@ function App() {
                           {formmatedPercent}
                         </TableCell>{" "}
                         <TableCell className="font-medium">
-                          {e.Rendimento_Período_percentual}
+                          {formmatedN(rendimentoPeriodoPercent)}
                         </TableCell>{" "}
                         <TableCell className="font-medium">
-                          {/* {(VF / 100).toFixed(2)} */}
+                          {formattedReal(rendimentoPeriodo)}
                         </TableCell>{" "}
                         <TableCell className="font-medium">
-                          {e.Rendimento_Valor_investido}
+                          {formattedReal(vf)}
                         </TableCell>{" "}
                         <TableCell className="font-medium">
                           {e.Ativo === "CRA Inflação"
@@ -227,7 +247,7 @@ function App() {
                             : formmatedN(aliquota / 100)}
                         </TableCell>
                         <TableCell className="font-medium">
-                          {e.Rendimento_Líquido_Imposto}
+                          {formattedReal(rendimentoLiquidoImposto)}
                         </TableCell>
                       </>
                     </TableRow>
