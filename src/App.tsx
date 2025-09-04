@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, type SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardTitle } from "./components/ui/card";
 import { Input } from "./components/ui/input";
 import {
@@ -16,8 +16,9 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
+  type ChartConfig,
 } from "./components/ui/chart";
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { Label } from "./components/ui/label";
 
 import SHIELDBANK from "../assets/SHIELDBANK.png";
@@ -140,7 +141,8 @@ function App() {
                 placeholder="aporte inicial"
                 value={formattedReal(aporteInicial)}
                 onChange={(e) => {
-                  setaporteInicial(e.target.value.replace(/[\D/]/g, "") / 100);
+                  const apenasNumeros = e.target.value.replace(/[\D]/g, "");
+                  setaporteInicial(Number(apenasNumeros) / 100);
                 }}
               />
 
@@ -152,7 +154,9 @@ function App() {
                 placeholder="aporte mensal"
                 value={formattedReal(aporteMensal)}
                 onChange={(e) => {
-                  setaporteMensal(e.target.value.replace(/[\D/]/g, "") / 100);
+                  const apenasNumeros = e.target.value.replace(/[\D]/g, "");
+
+                  setaporteMensal(Number(apenasNumeros) / 100);
                 }}
               />
               <Label htmlFor="periodo">Periodo do Aporte</Label>
@@ -161,7 +165,7 @@ function App() {
                 id="periodo"
                 type="text"
                 placeholder="periodo (mês)"
-                onChange={(e) => setPeriodo(e.target.value)}
+                onChange={(e) => setPeriodo(Number(e.target.value))}
               />
               <Label htmlFor="CDI">CDI (ano)</Label>
 
@@ -169,7 +173,7 @@ function App() {
                 id="CDI"
                 type="text"
                 placeholder="CDI (ano)"
-                onChange={(e) => setCDIAno(e.target.value)}
+                onChange={(e) => setCDIAno(Number(e.target.value))}
               />
 
               <Label htmlFor="inflação">inflação (ano)</Label>
@@ -178,7 +182,7 @@ function App() {
                 id="inflação"
                 type="text"
                 placeholder="inflação (ano)"
-                onChange={(e) => setInflacao(e.target.value)}
+                onChange={(e) => setInflacao(Number(e.target.value))}
               />
             </Card>
           </div>
