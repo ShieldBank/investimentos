@@ -385,7 +385,8 @@ function App() {
 
                   switch (e.Ativo) {
                     case "CDB Pós Fixado": {
-                      const taxYear: number = (e.Indexador * CDIAno) / 100;
+                      const taxYear: number =
+                        (e.Indexador * (CDIAno ?? 0)) / 100;
                       raizYear = (taxYear / 100 + 1) ** (1 / 12) - 1;
                       break;
                     }
@@ -574,7 +575,8 @@ function App() {
 
                   switch (e.Ativo) {
                     case "CDB Pós Fixado": {
-                      const taxYear: number = (e.Indexador * CDIAno) / 100;
+                      const taxYear: number =
+                        (e.Indexador * (CDIAno ?? 0)) / 100;
                       raizYear = (taxYear / 100 + 1) ** (1 / 12) - 1;
                       break;
                     }
