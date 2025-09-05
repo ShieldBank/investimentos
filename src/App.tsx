@@ -248,9 +248,10 @@ function App() {
               <Label htmlFor="CDI">CDI (ano)</Label>
 
               <Input
-                className="bg-transparent text-[#162456] text-2xl"
+                className="bg-transparent text-[#162456] text-2xl disabled:opacity-80"
                 id="CDI"
                 type="text"
+                disabled
                 placeholder="CDI (ano)"
                 value={formmatedN((CDIAno ?? 1) / 100)}
                 onChange={(e) => setCDIAno(Number(e.target.value))}
@@ -259,9 +260,10 @@ function App() {
               <Label htmlFor="inflação">inflação (ano)</Label>
 
               <Input
-                className="bg-transparent text-[#162456] text-2xl"
+                className="bg-transparent text-[#162456] text-2xl disabled:opacity-80"
                 id="inflação"
                 type="text"
+                disabled
                 placeholder="inflação (ano)"
                 value={formmatedN(inflacao / 100)}
                 onChange={(e) => setInflacao(Number(e.target.value))}
