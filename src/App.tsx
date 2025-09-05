@@ -23,14 +23,14 @@ import { Label } from "./components/ui/label";
 
 import SHIELDBANK from "../assets/SHIELDBANK.png";
 import { Button } from "./components/ui/button";
+import axios from "axios";
 
 function App() {
-  const [CDIAno, setCDIAno] = useState<number>(0);
+  const [CDIAno, setCDIAno] = useState<number>();
   const [inflacao, setInflacao] = useState<number>(0);
   const [periodo, setPeriodo] = useState<number>(0);
   const [aporteInicial, setaporteInicial] = useState<number>(0);
   const [aporteMensal, setaporteMensal] = useState<number>(0);
-
   const [indexador, setIndexador] = useState<boolean>(false);
   const values = [
     {
@@ -79,6 +79,17 @@ function App() {
     },
   ];
 
+  // const chartConfig = {
+  //   desktop: {
+  //     label: "Desktop",
+  //     color: "var(--chart-1)",
+  //   },
+  //   mobile: {
+  //     label: "Mobile",
+  //     color: "var(--chart-2)",
+  //   },
+  // } satisfies ChartConfig;
+
   const [barSize, setBarSize] = useState<number>();
   useEffect(() => {
     const handleResize = () => {
@@ -94,8 +105,57 @@ function App() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  const getMonth = new Date().getMonth() + 1;
+  const getDay = new Date().getDay() - 1;
+  const getYear = new Date().getFullYear();
 
-  console.log(barSize);
+  const getDayFormatted = getDay.toString().padStart(2, "0");
+  const getMonthFormatted = getMonth.toString().padStart(2, "0");
+  const getYearFormatted = getYear.toString().padStart(2, "0");
+  const dateformatted = `${getDayFormatted}/${getMonthFormatted}/${getYearFormatted}`;
+  const dateformattedInflacao = `01/01/${getYearFormatted}`;
+
+  const urlBancoCentral = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=${dateformatted}&dataFinal=${dateformatted}`;
+  const urlBancoCentralInflacao = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json&dataInicial=${dateformattedInflacao}`;
+  const dadosCDI = async () => {
+    console.log("entrei aqui CDI");
+    const result = (await axios.get(urlBancoCentral)).data;
+    const cdiDay = result[0].valor / 100;
+
+    const cdiAnual = (1 + Number(cdiDay)) ** 252 - 1;
+
+    setCDIAno(cdiAnual * 100);
+  };
+  useEffect(() => {
+    dadosCDI();
+  }, []);
+  const dados = async () => {
+    console.log("entrei aqui Inflação");
+
+    const result: [
+      {
+        data: string;
+        valor: string;
+      }
+    ] = (await axios.get(urlBancoCentralInflacao)).data;
+    const sizeMonth = result.length;
+
+    const soma = result.reduce(
+      (acc, currentValue) => Number(currentValue.valor) + acc,
+      0
+    );
+    const inflacaoAtual = soma;
+    const mediaInflacao = soma / sizeMonth;
+    const inserindoMediaMesesSubsequentes = mediaInflacao * (12 - sizeMonth);
+
+    const inflacaoMedia = inflacaoAtual + inserindoMediaMesesSubsequentes;
+
+    setInflacao(inflacaoMedia);
+  };
+  useEffect(() => {
+    dados();
+  }, []);
+
   const [rendimentoGrafico, setRendimentoGrafico] = useState(values);
   function formmatedN(n: number) {
     return new Intl.NumberFormat("pt-BR", {
@@ -125,6 +185,24 @@ function App() {
     },
   } satisfies ChartConfig;
 
+  // const chartData = [
+  //   { month: "January", desktop: 186, mobile: 80 },
+  //   { month: "February", desktop: 305, mobile: 200 },
+  //   { month: "March", desktop: 237, mobile: 120 },
+  //   { month: "April", desktop: 73, mobile: 190 },
+  //   { month: "May", desktop: 209, mobile: 130 },
+  //   { month: "June", desktop: 214, mobile: 140 },
+  // ];
+  // const chartConfig1 = {
+  //   desktop: {
+  //     label: "Desktop",
+  //     color: "var(--chart-1)",
+  //   },
+  //   mobile: {
+  //     label: "Mobile",
+  //     color: "var(--chart-2)",
+  //   },
+  // } satisfies ChartConfig;
   return (
     <>
       <div className="   border-0 w-full p-10 py-30 max-md:py-30 ">
@@ -170,18 +248,22 @@ function App() {
               <Label htmlFor="CDI">CDI (ano)</Label>
 
               <Input
+                className="bg-transparent text-[#162456] text-2xl"
                 id="CDI"
                 type="text"
                 placeholder="CDI (ano)"
+                value={formmatedN((CDIAno ?? 1) / 100)}
                 onChange={(e) => setCDIAno(Number(e.target.value))}
               />
 
               <Label htmlFor="inflação">inflação (ano)</Label>
 
               <Input
+                className="bg-transparent text-[#162456] text-2xl"
                 id="inflação"
                 type="text"
                 placeholder="inflação (ano)"
+                value={formmatedN(inflacao / 100)}
                 onChange={(e) => setInflacao(Number(e.target.value))}
               />
             </Card>
@@ -536,7 +618,6 @@ function App() {
                     aporteMensal *
                       (((1 + (raizYear ?? 0)) ** periodo - 1) /
                         (raizYear ?? 0));
-
                   const rendimentoPeriodoValorInvestido =
                     Number(aporteInicial) + Number(aporteMensal) * periodo;
                   const rendimentoPeriodoPercent =
@@ -547,6 +628,7 @@ function App() {
                     vf - rendimentoPeriodoValorInvestido;
                   const rendimentoLiquidoImposto =
                     rendimentoPeriodo - rendimentoPeriodo * (aliquota / 100);
+
                   return (
                     <TableBody key={i}>
                       <TableRow>
@@ -568,11 +650,16 @@ function App() {
                           <TableCell className="font-medium">
                             {`${
                               e.Ativo === "CDB Pós Fixado"
-                                ? `${(e.Indexador * CDIAno) / 100}%`
+                                ? `${(
+                                    (e.Indexador * (CDIAno ?? 0)) /
+                                    100
+                                  ).toFixed(2)}%`
                                 : e.Ativo === "Tesouro Pré Fixado"
                                 ? `${e.Indexador}%`
                                 : e.Ativo === "CRA Inflação"
-                                ? `${e.Indexador + Number(inflacao)}%`
+                                ? `${
+                                    e.Indexador + Number(inflacao.toFixed(2))
+                                  }%`
                                 : "7,44%"
                             }`}
                           </TableCell>
@@ -659,18 +746,16 @@ function App() {
                   </ChartContainer>
                 </CardContent>
               </Card>
-              {/* <Card className="w-full sm:max-w-[600px] ">
+              {/* <Card>
                 <CardHeader className="text-amber-50">
-                  {/* <CardTitle>Area Chart - Stacked</CardTitle>
-                  <CardDescription>
-                    Showing total visitors for the last 6 months
-                  </CardDescription> 
+                  <CardTitle>Linha - Rendimentos</CardTitle>
+                  <CardDescription>January - June 2024</CardDescription>
                 </CardHeader>
-                <CardContent className=" text-amber-50 ">
-                  <ChartContainer config={chartConfig}>
-                    <AreaChart
+                <CardContent>
+                  <ChartContainer config={chartConfig1}>
+                    <LineChart
                       accessibilityLayer
-                      data={rendimentoGrafico}
+                      data={chartData}
                       margin={{
                         left: 12,
                         right: 12,
@@ -678,41 +763,31 @@ function App() {
                     >
                       <CartesianGrid vertical={false} />
                       <XAxis
-                        dataKey="Ativo"
+                        dataKey="month"
                         tickLine={false}
                         axisLine={false}
                         tickMargin={8}
-                        tick={{ fill: "#ffffff", style: { fill: "#ffffff" } }}
+                        tickFormatter={(value) => value.slice(0, 3)}
                       />
                       <ChartTooltip
                         cursor={false}
-                        content={<ChartTooltipContent indicator="dot" />}
+                        content={<ChartTooltipContent />}
                       />
-                      <Area
-                        dataKey="Rendimento_Período_real"
-                        type="natural"
-                        fill="var(--color-Rendimento_Período_real)"
-                        fillOpacity={0.4}
-                        stroke="var(--color-Rendimento_Período_real)"
-                        stackId="a"
+                      <Line
+                        dataKey="desktop"
+                        type="monotone"
+                        strokeWidth={2}
+                        dot={false}
+                        stroke="#3b82f6" // azul direto
                       />
-                      <Area
-                        dataKey="Rendimento_Líquido_Imposto"
-                        type="natural"
-                        fill="var(--color-Rendimento_Líquido_Imposto)"
-                        fillOpacity={0.4}
-                        stroke="var(--color-Rendimento_Líquido_Imposto)"
-                        stackId="a"
+                      <Line
+                        dataKey="mobile"
+                        type="monotone"
+                        strokeWidth={2}
+                        dot={false}
+                        stroke="#3b82f6" // azul direto
                       />
-                      <Area
-                        dataKey="Ativo"
-                        type="natural"
-                        fill="var(--color-Rendimento_Período_real)"
-                        fillOpacity={0.4}
-                        stroke="var(--color-Rendimento_Período_real)"
-                        stackId="a"
-                      />
-                    </AreaChart>
+                    </LineChart>
                   </ChartContainer>
                 </CardContent>
                 <CardFooter>
@@ -720,10 +795,10 @@ function App() {
                     <div className="grid gap-2">
                       <div className="flex items-center gap-2 leading-none font-medium">
                         Trending up by 5.2% this month{" "}
-                        {/* <TrendingUp className="h-4 w-4" /> 
+                        <TrendingUp className="h-4 w-4" />
                       </div>
                       <div className="text-muted-foreground flex items-center gap-2 leading-none">
-                        January - June 2024
+                        Showing total visitors for the last 6 months
                       </div>
                     </div>
                   </div>
