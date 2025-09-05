@@ -32,10 +32,22 @@ function App() {
   const [aporteInicial, setaporteInicial] = useState<number>(0);
   const [aporteMensal, setaporteMensal] = useState<number>(0);
   const [indexador, setIndexador] = useState<boolean>(false);
+
   const values = [
     {
+      Ativo: "Shield Pay",
+      Indexador: 150,
+      Taxa_a: 0,
+      Taxa_m: 0,
+      Rendimento_Período_percentual: 0,
+      Rendimento_Período_real: 0,
+      Rendimento_Valor_investido: 0,
+      Aliquota_de_Imposto: 0,
+      Rendimento_Líquido_Imposto: 0,
+    },
+    {
       Ativo: "CDB Pós Fixado",
-      Indexador: 120,
+      Indexador: 110,
       Taxa_a: 0,
       Taxa_m: 0,
       Rendimento_Período_percentual: 0,
@@ -184,7 +196,7 @@ function App() {
       color: "#60a5fa",
     },
   } satisfies ChartConfig;
-
+  console.log(rendimentoGrafico);
   // const chartData = [
   //   { month: "January", desktop: 186, mobile: 80 },
   //   { month: "February", desktop: 305, mobile: 200 },
@@ -205,12 +217,12 @@ function App() {
   // } satisfies ChartConfig;
   return (
     <>
-      <div className="   border-0 w-full p-10 py-30 max-md:py-30 ">
+      <div className=" h-auto  border-0 w-full p-10 py-30 max-md:py-30 flex justify-center ">
         <div className="w-full  max-md:flex max-md:flex-col max-md:justify-center">
           <div className=" w-full flex justify-around  max-md:flex max-md:flex-col    ">
             <img className="w-[40%] max-md:w-full -mt-40 " src={SHIELDBANK} />
 
-            <Card className="w-[40%] max-md:w-full max-md:mb-10  h-full bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
+            <Card className="w-[40%]  max-md:w-full max-md:mb-10  h-full bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
               <Label htmlFor="aporteInicial">Aporte Inicial</Label>
 
               <Input
@@ -270,10 +282,46 @@ function App() {
               />
             </Card>
           </div>
+          {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
+            <div className="w-full flex justify-center mt-10 gap-10 max-md:flex-col">
+              <Card className=" max-w-2xl max-md:w-full max-md:mb-10  h-auto bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
+                <div className="  flex  flex-col gap-5 justify-center items-center">
+                  <h1 className="text-2xl text-blue-950">Valor Total</h1>
+                  <Label htmlFor="Valor Total" className="text-4xl">
+                    {formattedReal(
+                      rendimentoGrafico[0].Rendimento_Valor_investido +
+                        rendimentoGrafico[0].Rendimento_Período_real
+                    )}
+                  </Label>
+                </div>
+              </Card>
+              <Card className=" min-w-[3rem] max-md:w-full max-md:mb-10  h-auto bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
+                <div className="  flex  flex-col gap-5 justify-center items-center">
+                  <h1 className="text-2xl text-blue-950">Valor Investido</h1>
+                  <Label htmlFor="Valor Investido" className="text-4xl">
+                    {formattedReal(
+                      rendimentoGrafico[0].Rendimento_Valor_investido
+                    )}
+                  </Label>
+                </div>
+              </Card>
+              <Card className=" max-w-2xl min-w-[3rem] max-md:w-full max-md:mb-10  h-auto bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
+                <div className="  flex  flex-col gap-5 justify-center items-center">
+                  <h1 className="text-2xl text-blue-950">Juros Totais</h1>
+                  <Label htmlFor="periodo" className="text-4xl">
+                    {" "}
+                    {formattedReal(
+                      rendimentoGrafico[0].Rendimento_Período_real
+                    )}
+                  </Label>
+                </div>
+              </Card>
+            </div>
+          )}
           <div className="h-full  ">
             <Card className="">
               <div className="flex gap-4 items-center">
-                <h2 className="text-amber-50">Quer trocar o indexador?</h2>
+                <h2 className="text-amber-50">Trocar Taxa Shield?</h2>
                 {indexador === false ? (
                   <Button
                     type="button"
@@ -296,27 +344,27 @@ function App() {
               </div>
 
               {indexador && (
-                <Card className="w-[14%] h-[20%] max-md:w-full max-md:mb-10   bg-[#e9e9e9] border-0 rounded-2xl p-4 text-amber-50 gap-3">
+                <Card className="w-[12%] h-[20%] max-md:w-full max-md:mb-10   bg-[#e9e9e9] border-0 rounded-2xl p-4 text-amber-50 gap-3">
                   <Label className="" htmlFor="CDI">
                     <Input
-                      className="w-20 text-amber-50"
-                      id="CDI"
+                      className="w-10 text-amber-50"
+                      id="Taxa Shield"
                       type="text"
-                      placeholder="aporte inicial"
+                      placeholder="Taxa Shield"
                       value={rendimentoGrafico[0].Indexador || 0}
-                      onChange={(cdi) => {
+                      onChange={(taxa) => {
                         setRendimentoGrafico((state) =>
                           state.map((e, i) =>
                             i === 0
-                              ? { ...e, Indexador: Number(cdi.target.value) }
+                              ? { ...e, Indexador: Number(taxa.target.value) }
                               : e
                           )
                         );
                       }}
                     />
-                    CDI
+                    Taxa Shield
                   </Label>
-
+                  {/* 
                   <Label htmlFor="a.a">
                     <Input
                       className="w-20 text-amber-50"
@@ -355,7 +403,7 @@ function App() {
                       }
                     />
                     + IPCA
-                  </Label>
+                  </Label> */}
                 </Card>
               )}
 
@@ -386,6 +434,12 @@ function App() {
                   let aliquota;
 
                   switch (e.Ativo) {
+                    case "Shield Pay": {
+                      const taxYear: number =
+                        (e.Indexador * (CDIAno ?? 0)) / 100;
+                      raizYear = (taxYear / 100 + 1) ** (1 / 12) - 1;
+                      break;
+                    }
                     case "CDB Pós Fixado": {
                       const taxYear: number =
                         (e.Indexador * (CDIAno ?? 0)) / 100;
@@ -440,10 +494,26 @@ function App() {
                   // eslint-disable-next-line react-hooks/rules-of-hooks
                   useEffect(() => {
                     switch (e.Ativo) {
-                      case "CDB Pós Fixado":
+                      case "Shield Pay":
                         setRendimentoGrafico((state) =>
                           state.map((e, i) =>
                             i === 0
+                              ? {
+                                  ...e,
+                                  Rendimento_Líquido_Imposto:
+                                    rendimentoLiquidoImposto,
+                                  Rendimento_Período_real: rendimentoPeriodo,
+                                  Rendimento_Valor_investido:
+                                    rendimentoPeriodoValorInvestido,
+                                }
+                              : e
+                          )
+                        );
+                        break;
+                      case "CDB Pós Fixado":
+                        setRendimentoGrafico((state) =>
+                          state.map((e, i) =>
+                            i === 1
                               ? {
                                   ...e,
                                   Rendimento_Líquido_Imposto:
@@ -460,7 +530,7 @@ function App() {
                       case "Tesouro Pré Fixado":
                         setRendimentoGrafico((state) =>
                           state.map((e, i) =>
-                            i === 1
+                            i === 2
                               ? {
                                   ...e,
                                   Rendimento_Líquido_Imposto:
@@ -476,7 +546,7 @@ function App() {
                       case "CRA Inflação":
                         setRendimentoGrafico((state) =>
                           state.map((e, i) =>
-                            i === 2
+                            i === 3
                               ? {
                                   ...e,
                                   Rendimento_Líquido_Imposto: rendimentoPeriodo,
@@ -491,7 +561,7 @@ function App() {
                       case "Poupança":
                         setRendimentoGrafico((state) =>
                           state.map((e, i) =>
-                            i === 3
+                            i === 4
                               ? {
                                   ...e,
                                   Rendimento_Líquido_Imposto: rendimentoPeriodo,
@@ -576,6 +646,12 @@ function App() {
                   let aliquota;
 
                   switch (e.Ativo) {
+                    case "Shield Pay": {
+                      const taxYear: number =
+                        (e.Indexador * (CDIAno ?? 0)) / 100;
+                      raizYear = (taxYear / 100 + 1) ** (1 / 12) - 1;
+                      break;
+                    }
                     case "CDB Pós Fixado": {
                       const taxYear: number =
                         (e.Indexador * (CDIAno ?? 0)) / 100;
