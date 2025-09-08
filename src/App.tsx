@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardTitle } from "./components/ui/card";
 import { Input } from "./components/ui/input";
 import {
@@ -32,6 +32,9 @@ function App() {
   const [aporteInicial, setaporteInicial] = useState<number>(0);
   const [aporteMensal, setaporteMensal] = useState<number>(0);
   const [indexador, setIndexador] = useState<boolean>(false);
+
+  const [aporteInicialJuros, setAporteInicialJuros] = useState(0);
+  const [aporteMensalJuros, setaporteMensalJuros] = useState(0);
 
   const values = [
     {
@@ -118,22 +121,23 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   const getMonth = new Date().getMonth() + 1;
-  const getDay = new Date().getDay() - 1;
+  const getDay = new Date().getDate();
   const getYear = new Date().getFullYear();
 
   const getDayFormatted = getDay.toString().padStart(2, "0");
   const getMonthFormatted = getMonth.toString().padStart(2, "0");
   const getYearFormatted = getYear.toString().padStart(2, "0");
   const dateformatted = `${getDayFormatted}/${getMonthFormatted}/${getYearFormatted}`;
+  const dateformattedInitial = `01/${getMonthFormatted}/${getYearFormatted}`;
+
   const dateformattedInflacao = `01/01/${getYearFormatted}`;
 
-  const urlBancoCentral = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=${dateformatted}&dataFinal=${dateformatted}`;
+  const urlBancoCentral = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=${dateformattedInitial}&dataFinal=${dateformatted}`;
   const urlBancoCentralInflacao = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json&dataInicial=${dateformattedInflacao}`;
+
   const dadosCDI = async () => {
-    console.log("entrei aqui CDI");
     const result = (await axios.get(urlBancoCentral)).data;
     const cdiDay = result[0].valor / 100;
-
     const cdiAnual = (1 + Number(cdiDay)) ** 252 - 1;
 
     setCDIAno(cdiAnual * 100);
@@ -142,8 +146,6 @@ function App() {
     dadosCDI();
   }, []);
   const dados = async () => {
-    console.log("entrei aqui Inflação");
-
     const result: [
       {
         data: string;
@@ -185,6 +187,35 @@ function App() {
     }).format(n);
   }
 
+  const mesesjurosCompostos = useMemo(() => {
+    const meses: number[] = [];
+    const mesesTotais = getMonth + 1 + periodo;
+    for (let i = getMonth + 1; i < mesesTotais; i++) {
+      console.log(i);
+      if (i > 12 && i < 25) {
+        meses.push(i - 12);
+      } else if (i > 24 && i < 37) {
+        meses.push(i - 24);
+      } else if (i > 36 && i < 49) {
+        meses.push(i - 36);
+      } else if (i > 48 && i < 61) {
+        meses.push(i - 48);
+      } else if (i > 60 && i < 73) {
+        meses.push(i - 60);
+      } else if (i > 72 && i < 85) {
+        meses.push(i - 72);
+      } else if (i > 84 && i < 97) {
+        meses.push(i - 84);
+      } else if (i > 96 && i < 108) {
+        meses.push(i - 96);
+      } else {
+        meses.push(i);
+      }
+    }
+
+    return meses;
+  }, [periodo]);
+  let aporteJuros = aporteInicial + aporteMensal;
   const chartConfig = {
     Rendimento_Período_real: {
       label: "Rendimento Período",
@@ -196,7 +227,8 @@ function App() {
       color: "#60a5fa",
     },
   } satisfies ChartConfig;
-  console.log(rendimentoGrafico);
+  const acumuladorJuros = [];
+
   // const chartData = [
   //   { month: "January", desktop: 186, mobile: 80 },
   //   { month: "February", desktop: 305, mobile: 200 },
@@ -283,42 +315,154 @@ function App() {
             </Card>
           </div>
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
-            <div className="w-full flex justify-center mt-10 gap-10 max-md:flex-col">
-              <Card className=" max-w-2xl max-md:w-full max-md:mb-10  h-auto bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
-                <div className="  flex  flex-col gap-5 justify-center items-center">
-                  <h1 className="text-2xl text-blue-950">Valor Total</h1>
-                  <Label htmlFor="Valor Total" className="text-4xl">
-                    {formattedReal(
-                      rendimentoGrafico[0].Rendimento_Valor_investido +
+            <Card className="w-full  flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
+              <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
+                <Card className="transition-transform duration-300 ease-in-out hover:animate-pulse bg-[#162456] w-full  shadow-2xl max-md:w-full max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 border-0 rounded-2xl p-10  gap-3">
+                  <div className="  flex  flex-col gap-2 justify-center items-center">
+                    <h1 className="text-3xl   text-amber-50 ">Valor Total</h1>
+                    <Label
+                      htmlFor="Valor Total"
+                      className="text-4xl  text-amber-50 "
+                    >
+                      {formattedReal(
+                        rendimentoGrafico[0].Rendimento_Valor_investido +
+                          rendimentoGrafico[0].Rendimento_Período_real
+                      )}
+                    </Label>
+                  </div>
+                </Card>
+                <Card className=" max-md:w-full  w-full shadow-2xl max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
+                  <div className="  flex  flex-col gap-2 justify-center items-center">
+                    <h1 className="text-3xl text-blue-950">Valor Investido</h1>
+                    <Label htmlFor="Valor Investido" className="text-4xl">
+                      {formattedReal(
+                        rendimentoGrafico[0].Rendimento_Valor_investido
+                      )}
+                    </Label>
+                  </div>
+                </Card>
+                <Card className=" max-md:w-full  w-full shadow-2xl max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
+                  <div className="  flex  flex-col gap-2 justify-center items-center">
+                    <h1 className="text-3xl  text-blue-950">Juros Totais</h1>
+                    <Label
+                      htmlFor="periodo"
+                      className="text-4xl  text-blue-950"
+                    >
+                      {" "}
+                      {formattedReal(
                         rendimentoGrafico[0].Rendimento_Período_real
-                    )}
-                  </Label>
-                </div>
-              </Card>
-              <Card className=" min-w-[3rem] max-md:w-full max-md:mb-10  h-auto bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
-                <div className="  flex  flex-col gap-5 justify-center items-center">
-                  <h1 className="text-2xl text-blue-950">Valor Investido</h1>
-                  <Label htmlFor="Valor Investido" className="text-4xl">
-                    {formattedReal(
-                      rendimentoGrafico[0].Rendimento_Valor_investido
-                    )}
-                  </Label>
-                </div>
-              </Card>
-              <Card className=" max-w-2xl min-w-[3rem] max-md:w-full max-md:mb-10  h-auto bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
-                <div className="  flex  flex-col gap-5 justify-center items-center">
-                  <h1 className="text-2xl text-blue-950">Juros Totais</h1>
-                  <Label htmlFor="periodo" className="text-4xl">
-                    {" "}
-                    {formattedReal(
-                      rendimentoGrafico[0].Rendimento_Período_real
-                    )}
-                  </Label>
-                </div>
-              </Card>
-            </div>
+                      )}
+                    </Label>
+                  </div>
+                </Card>
+              </div>
+            </Card>
           )}
           <div className="h-full  ">
+            {/* Tabela de Rendimento por mes  */}
+            <Card className="">
+              <CardTitle className="text-amber-50">
+                Tabela De Rendimentos 💰
+              </CardTitle>
+              <Table className="bg-[#171717] text-amber-50 ">
+                <TableHeader className="">
+                  <TableRow className="border-[#ffffff26]">
+                    <TableHead className="font-medium sticky left-0 bg-[#171717]  z-50 min-w-[100px]  ">
+                      Meses
+                    </TableHead>
+                    <TableHead className="min-w-[160px] ">Juros</TableHead>
+                    <TableHead className="min-w-[160px] ">
+                      Total Investido
+                    </TableHead>
+                    <TableHead className="min-w-[160px] ">
+                      Total Juros
+                    </TableHead>
+                    <TableHead className="min-w-[160px] ">
+                      Total Acumulado
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+
+                {periodo > 0 &&
+                  mesesjurosCompostos.map((e, index) => {
+                    let raizYear;
+                    const taxaMensal = rendimentoGrafico.filter(
+                      (e) => e.Ativo === "Shield Pay"
+                    );
+
+                    const taxYear: number =
+                      (taxaMensal[0].Indexador * (CDIAno ?? 0)) / 100;
+                    raizYear = (taxYear / 100 + 1) ** (1 / 12) - 1;
+
+                    aporteJuros =
+                      index === 0
+                        ? aporteInicial * Number(raizYear.toFixed(3))
+                        : (aporteMensal * index + aporteInicial) *
+                          Number(raizYear.toFixed(3));
+
+                    acumuladorJuros.push(aporteJuros);
+                    console.log(aporteJuros);
+
+                    const juroSobrejuros = acumuladorJuros.reduce(
+                      (acc, current) => acc + current,
+                      0
+                    );
+                    // console.log(acumuladorJuros);
+                    const AporteRendimento =
+                      index === 0
+                        ? aporteInicial + aporteJuros
+                        : aporteInicial * (index + 1) +
+                          aporteMensal +
+                          aporteJuros;
+
+                    const totalInvestimentos =
+                      index === 0 ? aporteInicial : aporteMensal * (index + 1);
+
+                    return (
+                      <TableBody key={index}>
+                        <TableRow>
+                          <>
+                            <TableCell className="font-medium sticky left-0 bg-[#171717] z-50  ">
+                              {e}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {formattedReal(aporteJuros)}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {formattedReal(totalInvestimentos)}
+                            </TableCell>
+
+                            <TableCell className="font-medium">
+                              {formattedReal(juroSobrejuros)}
+                            </TableCell>
+
+                            <TableCell className="font-medium">
+                              {formattedReal(
+                                juroSobrejuros + totalInvestimentos
+                              )}
+                            </TableCell>
+                            {/* <TableCell className="font-medium">
+                            {formattedReal(rendimentoPeriodo)}
+                          </TableCell>
+                          <TableCell className="font-medium">
+                            {formattedReal(vf)}
+                          </TableCell>
+                          <TableCell className="font-medium">
+                            {e.Ativo === "CRA Inflação"
+                              ? formattedReal(rendimentoPeriodo)
+                              : e.Ativo === "Poupança"
+                              ? formattedReal(rendimentoPeriodo)
+                              : formattedReal(rendimentoLiquidoImposto)}
+                          </TableCell> */}
+                          </>
+                        </TableRow>
+                      </TableBody>
+                    );
+                  })}
+              </Table>
+            </Card>
+            {/* Tabela de Rendimento   */}
+
             <Card className="">
               <div className="flex gap-4 items-center">
                 <h2 className="text-amber-50">Trocar Taxa Shield?</h2>
@@ -413,22 +557,16 @@ function App() {
               <Table className="bg-[#171717] text-amber-50 ">
                 <TableHeader className="">
                   <TableRow className="border-[#ffffff26]">
-                    <TableHead className="font-medium sticky left-0 bg-[#171717]  z-50 min-w-[100px]  ">
+                    <TableHead className="font-medium sticky left-0 bg-[#171717]  z-50 min-w-[100px] max-w-[10px]">
                       Ativo
                     </TableHead>
-                    <TableHead className="min-w-[160px] ">Indexador</TableHead>
-                    <TableHead className="min-w-[160px] ">
-                      {" "}
-                      Rendimento no Período (R$){" "}
-                    </TableHead>
-                    <TableHead className="min-w-[160px] ">
-                      {" "}
-                      Rendimento + Valor investido (R$){" "}
-                    </TableHead>
+                    <TableHead>Indexador</TableHead>
+                    <TableHead> Rendimento no Período (R$) </TableHead>
+                    <TableHead> Rendimento + Valor investido (R$) </TableHead>
                     <TableHead> Rendimento Líquido de Imposto </TableHead>
-                    {/* <TableHead className="text-right">Amount</TableHead> */}
                   </TableRow>
                 </TableHeader>
+
                 {rendimentoGrafico.map((e, i) => {
                   let raizYear;
                   let aliquota;
@@ -583,6 +721,7 @@ function App() {
                     // eslint-disable-next-line react-hooks/exhaustive-deps
                     rendimentoGrafico[0].Indexador,
                   ]);
+
                   return (
                     <TableBody key={i}>
                       <TableRow>
@@ -590,17 +729,7 @@ function App() {
                           <TableCell className="font-medium sticky left-0 bg-[#171717] z-50  ">
                             {e.Ativo}
                           </TableCell>
-                          <TableCell className="font-medium z-10">
-                            {`${e.Indexador}% ${
-                              e.Ativo === "CDB Pós Fixado"
-                                ? "do CDI"
-                                : e.Ativo === "Tesouro Pré Fixado"
-                                ? "a.a"
-                                : e.Ativo === "CRA Inflação"
-                                ? " + IPCA"
-                                : ""
-                            }`}
-                          </TableCell>
+
                           <TableCell className="font-medium">
                             {formattedReal(rendimentoPeriodo)}
                           </TableCell>
@@ -621,6 +750,8 @@ function App() {
                 })}
               </Table>
             </Card>
+            {/* Tabela de Rendimento Detalhado  */}
+
             <Card>
               <CardTitle className="text-amber-50 ">
                 Tabela De Rendimentos Detalhada 📃💰
@@ -826,64 +957,6 @@ function App() {
                   </ChartContainer>
                 </CardContent>
               </Card>
-              {/* <Card>
-                <CardHeader className="text-amber-50">
-                  <CardTitle>Linha - Rendimentos</CardTitle>
-                  <CardDescription>January - June 2024</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ChartContainer config={chartConfig1}>
-                    <LineChart
-                      accessibilityLayer
-                      data={chartData}
-                      margin={{
-                        left: 12,
-                        right: 12,
-                      }}
-                    >
-                      <CartesianGrid vertical={false} />
-                      <XAxis
-                        dataKey="month"
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                        tickFormatter={(value) => value.slice(0, 3)}
-                      />
-                      <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent />}
-                      />
-                      <Line
-                        dataKey="desktop"
-                        type="monotone"
-                        strokeWidth={2}
-                        dot={false}
-                        stroke="#3b82f6" // azul direto
-                      />
-                      <Line
-                        dataKey="mobile"
-                        type="monotone"
-                        strokeWidth={2}
-                        dot={false}
-                        stroke="#3b82f6" // azul direto
-                      />
-                    </LineChart>
-                  </ChartContainer>
-                </CardContent>
-                <CardFooter>
-                  <div className="flex w-full items-start gap-2 text-sm">
-                    <div className="grid gap-2">
-                      <div className="flex items-center gap-2 leading-none font-medium">
-                        Trending up by 5.2% this month{" "}
-                        <TrendingUp className="h-4 w-4" />
-                      </div>
-                      <div className="text-muted-foreground flex items-center gap-2 leading-none">
-                        Showing total visitors for the last 6 months
-                      </div>
-                    </div>
-                  </div>
-                </CardFooter>
-              </Card> */}
             </div>
           </div>
         </div>
