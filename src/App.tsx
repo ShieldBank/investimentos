@@ -282,6 +282,93 @@ function App() {
               />
             </Card>
           </div>
+
+          <div className="flex gap-4 items-center mb-2">
+            <h2 className="text-amber-50 ">Trocar Taxa Shield?</h2>
+            {indexador === false ? (
+              <Button
+                type="button"
+                className="bg-amber-50 rounded-[0.7rem] w-10 border-0 hover:bg-[#162456] hover:text-amber-50 hover:border-0"
+                variant="outline"
+                onClick={() => setIndexador(true)}
+              >
+                Sim
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                className="bg-amber-50 rounded-[0.7rem] w-10  border-0 hover:bg-red-800 hover:text-amber-50 hover:border-0"
+                variant="outline"
+                onClick={() => setIndexador(false)}
+              >
+                Não
+              </Button>
+            )}
+          </div>
+
+          {indexador && (
+            <Card className="w-[14%] h-full max-md:w-full max-md:mb-10   bg-[#e9e9e9] border-0 rounded-2xl p-4 text-amber-50 gap-3">
+              <Label className="" htmlFor="Taxa Shield">
+                <Input
+                  className="w-16 text-amber-50"
+                  id="Taxa Shield"
+                  type="text"
+                  placeholder="Taxa Shield"
+                  value={rendimentoGrafico[0].Indexador || 0}
+                  onChange={(taxa) => {
+                    setRendimentoGrafico((state) =>
+                      state.map((e, i) =>
+                        i === 0
+                          ? { ...e, Indexador: Number(taxa.target.value) }
+                          : e
+                      )
+                    );
+                  }}
+                />
+                Taxa Shield
+              </Label>
+
+              <Label htmlFor="a.a">
+                <Input
+                  className="w-16 text-amber-50"
+                  id="a.a"
+                  type="text"
+                  placeholder="aporte mensal"
+                  value={rendimentoGrafico[1].Indexador || 0}
+                  onChange={(a) => {
+                    setRendimentoGrafico((state) =>
+                      state.map((e, i) =>
+                        i === 1
+                          ? { ...e, Indexador: Number(a.target.value) }
+                          : e
+                      )
+                    );
+                  }}
+                />
+                Tesouro Pré Fixado
+              </Label>
+
+              <Label htmlFor=" + IPCA">
+                <Input
+                  className="w-16 text-amber-50"
+                  id=" + IPCA"
+                  type="text"
+                  placeholder="periodo (mês)"
+                  value={rendimentoGrafico[2].Indexador || 0}
+                  onChange={(ipca) =>
+                    setRendimentoGrafico((state) =>
+                      state.map((e, i) =>
+                        i === 2
+                          ? { ...e, Indexador: Number(ipca.target.value) }
+                          : e
+                      )
+                    )
+                  }
+                />
+                + IPCA
+              </Label>
+            </Card>
+          )}
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
             <Card className="w-full  flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
               <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
@@ -474,93 +561,6 @@ function App() {
             </Card>
             {/* Tabela de Rendimento */}
             <Card className="">
-              <div className="flex gap-4 items-center">
-                <h2 className="text-amber-50">Trocar Taxa Shield?</h2>
-                {indexador === false ? (
-                  <Button
-                    type="button"
-                    className="bg-amber-50 rounded-[0.7rem] w-10 border-0 hover:bg-[#162456] hover:text-amber-50 hover:border-0"
-                    variant="outline"
-                    onClick={() => setIndexador(true)}
-                  >
-                    Sim
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    className="bg-amber-50 rounded-[0.7rem] w-10  border-0 hover:bg-red-800 hover:text-amber-50 hover:border-0"
-                    variant="outline"
-                    onClick={() => setIndexador(false)}
-                  >
-                    Não
-                  </Button>
-                )}
-              </div>
-
-              {indexador && (
-                <Card className="w-[14%] h-full max-md:w-full max-md:mb-10   bg-[#e9e9e9] border-0 rounded-2xl p-4 text-amber-50 gap-3">
-                  <Label className="" htmlFor="Taxa Shield">
-                    <Input
-                      className="w-16 text-amber-50"
-                      id="Taxa Shield"
-                      type="text"
-                      placeholder="Taxa Shield"
-                      value={rendimentoGrafico[0].Indexador || 0}
-                      onChange={(taxa) => {
-                        setRendimentoGrafico((state) =>
-                          state.map((e, i) =>
-                            i === 0
-                              ? { ...e, Indexador: Number(taxa.target.value) }
-                              : e
-                          )
-                        );
-                      }}
-                    />
-                    Taxa Shield
-                  </Label>
-
-                  <Label htmlFor="a.a">
-                    <Input
-                      className="w-16 text-amber-50"
-                      id="a.a"
-                      type="text"
-                      placeholder="aporte mensal"
-                      value={rendimentoGrafico[1].Indexador || 0}
-                      onChange={(a) => {
-                        setRendimentoGrafico((state) =>
-                          state.map((e, i) =>
-                            i === 1
-                              ? { ...e, Indexador: Number(a.target.value) }
-                              : e
-                          )
-                        );
-                      }}
-                    />
-                    Tesouro Pré Fixado
-                  </Label>
-
-                  <Label htmlFor=" + IPCA">
-                    <Input
-                      className="w-16 text-amber-50"
-                      id=" + IPCA"
-                      type="text"
-                      placeholder="periodo (mês)"
-                      value={rendimentoGrafico[2].Indexador || 0}
-                      onChange={(ipca) =>
-                        setRendimentoGrafico((state) =>
-                          state.map((e, i) =>
-                            i === 2
-                              ? { ...e, Indexador: Number(ipca.target.value) }
-                              : e
-                          )
-                        )
-                      }
-                    />
-                    + IPCA
-                  </Label>
-                </Card>
-              )}
-
               <CardTitle className="text-amber-50">
                 Tabela De Rendimentos 💰
               </CardTitle>
