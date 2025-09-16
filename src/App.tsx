@@ -482,6 +482,7 @@ function App() {
 
                 {periodo > 0 &&
                   mesesjurosCompostos.map((e, index) => {
+                    console.log(e);
                     let raizYear: number;
                     const taxaMensal = rendimentoGrafico.filter(
                       (e) => e.Ativo === "Shield Pay"
@@ -490,7 +491,6 @@ function App() {
                     const taxYear: number = taxaMensal[0].Indexador;
                     // eslint-disable-next-line prefer-const
                     raizYear = taxYear / 100;
-                    console.log(taxYear / 100);
                     aporteJuros =
                       index === 0
                         ? aporteInicial * Number(raizYear.toFixed(3))
@@ -565,7 +565,6 @@ function App() {
 
                     //   return mesNome;
                     // }
-                    console.log({ testeee: aporteJuros });
                     return (
                       <>
                         <TableBody key={index}>
@@ -917,7 +916,6 @@ function App() {
 
                     rendimentoGrafico[0].Indexador,
                   ]);
-                  console.log();
                   return (
                     <TableBody key={i}>
                       <TableRow>
