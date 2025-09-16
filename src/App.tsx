@@ -346,8 +346,8 @@ function App() {
                   className="w-16 text-amber-50  appearance-none "
                   id="Taxa Shield "
                   type="number"
-                  placeholder="Taxa Shield "
-                  value={rendimentoGrafico[0].Indexador || null}
+                  placeholder="Taxa Shield"
+                  value={rendimentoGrafico[0].Indexador || ""}
                   onChange={(taxa) => {
                     setRendimentoGrafico((state) =>
                       state.map((e, i) =>
@@ -519,52 +519,52 @@ function App() {
                       aporte: totalInvestimentos,
                       juros: juroSobrejuros,
                     });
-                    function mesFormatted(mes: number) {
-                      let mesNome: string = "";
-                      switch (mes) {
-                        case 1:
-                          mesNome = "Jan";
-                          break;
-                        case 2:
-                          mesNome = "Fev";
-                          break;
-                        case 3:
-                          mesNome = "Mar";
-                          break;
-                        case 4:
-                          mesNome = "Abr";
-                          break;
-                        case 5:
-                          mesNome = "Mai";
-                          break;
-                        case 6:
-                          mesNome = "Jun";
-                          break;
-                        case 7:
-                          mesNome = "Jul";
-                          break;
-                        case 8:
-                          mesNome = "Ago";
-                          break;
-                        case 9:
-                          mesNome = "Set";
-                          break;
-                        case 10:
-                          mesNome = "Out";
-                          break;
-                        case 11:
-                          mesNome = "Nov";
-                          break;
-                        case 12:
-                          mesNome = "Dez";
-                          break;
+                    // function mesFormatted(mes: number) {
+                    //   let mesNome: string = "";
+                    //   switch (mes) {
+                    //     case 1:
+                    //       mesNome = "Jan";
+                    //       break;
+                    //     case 2:
+                    //       mesNome = "Fev";
+                    //       break;
+                    //     case 3:
+                    //       mesNome = "Mar";
+                    //       break;
+                    //     case 4:
+                    //       mesNome = "Abr";
+                    //       break;
+                    //     case 5:
+                    //       mesNome = "Mai";
+                    //       break;
+                    //     case 6:
+                    //       mesNome = "Jun";
+                    //       break;
+                    //     case 7:
+                    //       mesNome = "Jul";
+                    //       break;
+                    //     case 8:
+                    //       mesNome = "Ago";
+                    //       break;
+                    //     case 9:
+                    //       mesNome = "Set";
+                    //       break;
+                    //     case 10:
+                    //       mesNome = "Out";
+                    //       break;
+                    //     case 11:
+                    //       mesNome = "Nov";
+                    //       break;
+                    //     case 12:
+                    //       mesNome = "Dez";
+                    //       break;
 
-                        default:
-                          break;
-                      }
+                    //     default:
+                    //       break;
+                    //   }
 
-                      return mesNome;
-                    }
+                    //   return mesNome;
+                    // }
                     console.log({ testeee: aporteJuros });
                     return (
                       <>
