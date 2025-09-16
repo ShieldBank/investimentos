@@ -51,7 +51,7 @@ function App() {
   const values = [
     {
       Ativo: "Shield Pay",
-      Indexador: 150,
+      Indexador: 1.5,
       Taxa_a: 0,
       Taxa_m: 0,
       Rendimento_Período_percentual: 0,
@@ -193,7 +193,6 @@ function App() {
     const meses: number[] = [];
     const mesesTotais = getMonth + 1 + periodo;
     for (let i = getMonth + 1; i < mesesTotais; i++) {
-      console.log(i);
       if (i > 12 && i < 25) {
         meses.push(i - 12);
       } else if (i > 24 && i < 37) {
@@ -344,11 +343,11 @@ function App() {
             <Card className="w-[14%] h-full max-md:w-full max-md:mb-10   bg-[#e9e9e9] border-0 rounded-2xl p-4 text-amber-50 gap-3">
               <Label className="" htmlFor="Taxa Shield">
                 <Input
-                  className="w-16 text-amber-50"
-                  id="Taxa Shield"
-                  type="text"
-                  placeholder="Taxa Shield"
-                  value={rendimentoGrafico[0].Indexador || 0}
+                  className="w-16 text-amber-50  appearance-none "
+                  id="Taxa Shield "
+                  type="number"
+                  placeholder="Taxa Shield "
+                  value={rendimentoGrafico[0].Indexador || null}
                   onChange={(taxa) => {
                     setRendimentoGrafico((state) =>
                       state.map((e, i) =>
@@ -359,7 +358,7 @@ function App() {
                     );
                   }}
                 />
-                Taxa Shield
+                Taxa Shield Mes
               </Label>
 
               <Label htmlFor="a.a">
@@ -440,7 +439,7 @@ function App() {
                 <Card className=" max-md:w-full  w-full shadow-2xl max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
                   <div className="  flex  flex-col gap-2 justify-center items-center">
                     <h1 className="text-3xl  text-blue-950 max-md:text-2xl">
-                      Juros Totais
+                      Rendimento Shield
                     </h1>
                     <Label
                       htmlFor="periodo"
@@ -488,11 +487,10 @@ function App() {
                       (e) => e.Ativo === "Shield Pay"
                     );
 
-                    const taxYear: number =
-                      (taxaMensal[0].Indexador * (CDIAno ?? 0)) / 100;
+                    const taxYear: number = taxaMensal[0].Indexador;
                     // eslint-disable-next-line prefer-const
-                    raizYear = (taxYear / 100 + 1) ** (1 / 12) - 1;
-
+                    raizYear = taxYear / 100;
+                    console.log(taxYear / 100);
                     aporteJuros =
                       index === 0
                         ? aporteInicial * Number(raizYear.toFixed(3))
@@ -567,16 +565,14 @@ function App() {
 
                       return mesNome;
                     }
-                    {
-                      console.log(dadosGrafico);
-                    }
+                    console.log({ testeee: aporteJuros });
                     return (
                       <>
                         <TableBody key={index}>
                           <TableRow>
                             <>
                               <TableCell className="font-medium sticky left-0 bg-[#171717] z-50  ">
-                                {`${mesFormatted(e)}  - ${index}`}
+                                {`  ${index} `}
                               </TableCell>
                               <TableCell className="font-medium">
                                 {formattedReal(aporteJuros)}
@@ -743,7 +739,7 @@ function App() {
             {/* Tabela de Rendimento */}
             <Card className="h-full max-md:h-[30rem]">
               <CardTitle className="text-amber-50">
-                Tabela De Rendimentos Detalhados💰
+                Comparativo de taxas 💰
               </CardTitle>
               <Table className="bg-[#171717] text-amber-50 mt-1">
                 <TableHeader className="">
@@ -767,9 +763,9 @@ function App() {
 
                   switch (e.Ativo) {
                     case "Shield Pay": {
-                      const taxYear: number =
-                        (e.Indexador * (CDIAno ?? 0)) / 100;
-                      raizYear = (taxYear / 100 + 1) ** (1 / 12) - 1;
+                      const taxYear: number = e.Indexador;
+                      raizYear = taxYear / 100;
+                      // raizYear = e.Indexador / 100;
                       break;
                     }
                     case "CDB Pós Fixado": {
@@ -921,7 +917,7 @@ function App() {
 
                     rendimentoGrafico[0].Indexador,
                   ]);
-
+                  console.log();
                   return (
                     <TableBody key={i}>
                       <TableRow>
@@ -943,11 +939,9 @@ function App() {
                           <TableCell className="font-medium">
                             {`${
                               e.Ativo === "Shield Pay"
-                                ? `${(
-                                    (e.Indexador * (CDIAno ?? 0)) /
-                                    100
-                                  ).toFixed(2)}%`
-                                : e.Ativo === "CDB Pós Fixado"
+                                ? `${(e.Indexador * 12).toFixed(2)}%`
+                                : // ? `${(e.Indexador * 12).toFixed(2)}%`
+                                e.Ativo === "CDB Pós Fixado"
                                 ? `${(
                                     (e.Indexador * (CDIAno ?? 0)) /
                                     100
