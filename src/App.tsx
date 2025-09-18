@@ -435,284 +435,288 @@ function App() {
           )}
           <div>
             {/* Tabela de Rendimento por mes  */}
-            <Card className="border-0">
-              <CardTitle className="text-amber-50">
-                Tabela De Rendimentos 💰
-              </CardTitle>
-              <Table className="bg-[#171717] text-amber-50 ">
-                <TableHeader className="">
-                  <TableRow className="border-[#ffffff26]">
-                    <TableHead className="font-medium sticky left-0 bg-[#171717]  z-50 min-w-[100px]  ">
-                      Meses
-                    </TableHead>
-                    <TableHead className="min-w-[160px] ">Juros</TableHead>
-                    <TableHead className="min-w-[160px] ">
-                      Total Investido
-                    </TableHead>
-                    <TableHead className="min-w-[160px] ">
-                      Total Juros
-                    </TableHead>
-                    <TableHead className="min-w-[160px] ">
-                      Total Acumulado
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
+            {periodo > 0 && (
+              <>
+                <Card className="border-0">
+                  <CardTitle className="text-amber-50">
+                    Tabela De Rendimentos 💰
+                  </CardTitle>
+                  <Table className="bg-[#171717] text-amber-50 ">
+                    <TableHeader className="">
+                      <TableRow className="border-[#ffffff26]">
+                        <TableHead className="font-medium sticky left-0 bg-[#171717]  z-50 min-w-[100px]  ">
+                          Meses
+                        </TableHead>
+                        <TableHead className="min-w-[160px] ">Juros</TableHead>
+                        <TableHead className="min-w-[160px] ">
+                          Total Investido
+                        </TableHead>
+                        <TableHead className="min-w-[160px] ">
+                          Total Juros
+                        </TableHead>
+                        <TableHead className="min-w-[160px] ">
+                          Total Acumulado
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
 
-                {periodo > 0 &&
-                  mesesjurosCompostos.map((e, index) => {
-                    console.log(e);
-                    let raizYear: number;
-                    const taxaMensal = rendimentoGrafico.filter(
-                      (e) => e.Ativo === "Shield Pay"
-                    );
+                    {periodo > 0 &&
+                      mesesjurosCompostos.map((e, index) => {
+                        console.log(e);
+                        let raizYear: number;
+                        const taxaMensal = rendimentoGrafico.filter(
+                          (e) => e.Ativo === "Shield Pay"
+                        );
 
-                    const taxYear: number = taxaMensal[0].Indexador;
-                    // eslint-disable-next-line prefer-const
-                    raizYear = taxYear / 100;
-                    aporteJuros =
-                      index === 0
-                        ? aporteInicial * Number(raizYear.toFixed(3))
-                        : (aporteMensal * index + aporteInicial) *
-                          Number(raizYear.toFixed(3));
+                        const taxYear: number = taxaMensal[0].Indexador;
+                        // eslint-disable-next-line prefer-const
+                        raizYear = taxYear / 100;
+                        aporteJuros =
+                          index === 0
+                            ? aporteInicial * Number(raizYear.toFixed(3))
+                            : (aporteMensal * index + aporteInicial) *
+                              Number(raizYear.toFixed(3));
 
-                    acumuladorJuros.push(aporteJuros);
+                        acumuladorJuros.push(aporteJuros);
 
-                    const juroSobrejuros = acumuladorJuros.reduce(
-                      (acc, current) => acc + current,
-                      0
-                    );
+                        const juroSobrejuros = acumuladorJuros.reduce(
+                          (acc, current) => acc + current,
+                          0
+                        );
 
-                    // console.log(acumuladorJuros);
-                    // const AporteRendimento =
-                    //   index === 0
-                    //     ? aporteInicial + aporteJuros
-                    //     : aporteInicial * (index + 1) +
-                    //       aporteMensal +
-                    //       aporteJuros;
+                        // console.log(acumuladorJuros);
+                        // const AporteRendimento =
+                        //   index === 0
+                        //     ? aporteInicial + aporteJuros
+                        //     : aporteInicial * (index + 1) +
+                        //       aporteMensal +
+                        //       aporteJuros;
 
-                    const totalInvestimentos =
-                      aporteInicial + aporteMensal * index;
-                    dadosGrafico.push({
-                      id: index + 1,
-                      aporte: totalInvestimentos,
-                      juros: juroSobrejuros,
-                    });
-                    // function mesFormatted(mes: number) {
-                    //   let mesNome: string = "";
-                    //   switch (mes) {
-                    //     case 1:
-                    //       mesNome = "Jan";
-                    //       break;
-                    //     case 2:
-                    //       mesNome = "Fev";
-                    //       break;
-                    //     case 3:
-                    //       mesNome = "Mar";
-                    //       break;
-                    //     case 4:
-                    //       mesNome = "Abr";
-                    //       break;
-                    //     case 5:
-                    //       mesNome = "Mai";
-                    //       break;
-                    //     case 6:
-                    //       mesNome = "Jun";
-                    //       break;
-                    //     case 7:
-                    //       mesNome = "Jul";
-                    //       break;
-                    //     case 8:
-                    //       mesNome = "Ago";
-                    //       break;
-                    //     case 9:
-                    //       mesNome = "Set";
-                    //       break;
-                    //     case 10:
-                    //       mesNome = "Out";
-                    //       break;
-                    //     case 11:
-                    //       mesNome = "Nov";
-                    //       break;
-                    //     case 12:
-                    //       mesNome = "Dez";
-                    //       break;
+                        const totalInvestimentos =
+                          aporteInicial + aporteMensal * index;
+                        dadosGrafico.push({
+                          id: index + 1,
+                          aporte: totalInvestimentos,
+                          juros: juroSobrejuros,
+                        });
+                        // function mesFormatted(mes: number) {
+                        //   let mesNome: string = "";
+                        //   switch (mes) {
+                        //     case 1:
+                        //       mesNome = "Jan";
+                        //       break;
+                        //     case 2:
+                        //       mesNome = "Fev";
+                        //       break;
+                        //     case 3:
+                        //       mesNome = "Mar";
+                        //       break;
+                        //     case 4:
+                        //       mesNome = "Abr";
+                        //       break;
+                        //     case 5:
+                        //       mesNome = "Mai";
+                        //       break;
+                        //     case 6:
+                        //       mesNome = "Jun";
+                        //       break;
+                        //     case 7:
+                        //       mesNome = "Jul";
+                        //       break;
+                        //     case 8:
+                        //       mesNome = "Ago";
+                        //       break;
+                        //     case 9:
+                        //       mesNome = "Set";
+                        //       break;
+                        //     case 10:
+                        //       mesNome = "Out";
+                        //       break;
+                        //     case 11:
+                        //       mesNome = "Nov";
+                        //       break;
+                        //     case 12:
+                        //       mesNome = "Dez";
+                        //       break;
 
-                    //     default:
-                    //       break;
-                    //   }
+                        //     default:
+                        //       break;
+                        //   }
 
-                    //   return mesNome;
-                    // }
-                    return (
-                      <>
-                        <TableBody key={index}>
-                          <TableRow>
-                            <>
-                              <TableCell className="font-medium sticky left-0 bg-[#171717] z-50  ">
-                                {`  ${index} `}
-                              </TableCell>
-                              <TableCell className="font-medium">
-                                {formattedReal(aporteJuros)}
-                              </TableCell>
-                              <TableCell className="font-medium">
-                                {formattedReal(totalInvestimentos)}
-                              </TableCell>
+                        //   return mesNome;
+                        // }
+                        return (
+                          <>
+                            <TableBody key={index}>
+                              <TableRow>
+                                <>
+                                  <TableCell className="font-medium sticky left-0 bg-[#171717] z-50  ">
+                                    {`  ${index} `}
+                                  </TableCell>
+                                  <TableCell className="font-medium">
+                                    {formattedReal(aporteJuros)}
+                                  </TableCell>
+                                  <TableCell className="font-medium">
+                                    {formattedReal(totalInvestimentos)}
+                                  </TableCell>
 
-                              <TableCell className="font-medium">
-                                {formattedReal(juroSobrejuros)}
-                              </TableCell>
+                                  <TableCell className="font-medium">
+                                    {formattedReal(juroSobrejuros)}
+                                  </TableCell>
 
-                              <TableCell className="font-medium">
-                                {formattedReal(
-                                  juroSobrejuros + totalInvestimentos
-                                )}
-                              </TableCell>
-                            </>
-                          </TableRow>
-                        </TableBody>
-                      </>
-                    );
-                  })}
-              </Table>
-            </Card>
-            <div className="flex justify-center items-center w-full max-md:flex max-md:flex-col">
-              <Card className="w-[35rem]  max-md:w-full max-md:mb-10    border-0 rounded-2xl  text-amber-50 gap-3">
-                <CardHeader>
-                  <CardTitle>Grafico de Juros + Investimentos</CardTitle>
-                </CardHeader>
-                <CardContent className=" max-md:w-[22rem] ">
-                  <ChartContainer
-                    config={chartConfigDados}
-                    className=" w-[35rem] h-[20rem] max-md:w-[22rem] text-amber-50"
-                  >
-                    <LineChart
-                      accessibilityLayer
-                      data={dadosGrafico}
-                      margin={{
-                        left: 0,
-                        right: 0,
-                        top: 20,
-                        bottom: 0,
-                      }}
-                    >
-                      <CartesianGrid vertical={false} stroke="#6b72807d " />
-                      <XAxis
-                        dataKey="id"
-                        interval="preserveStartEnd"
-                        tickLine={false}
-                        axisLine={false}
-                        className="text-amber-50"
-                        tick={{
-                          fill: "#ffffff",
-                          style: { fill: "#ffffff" },
-                        }}
-                        tickFormatter={(value) => value}
-                        tickMargin={8}
-                      />{" "}
-                      <YAxis
-                        tick={{
-                          fill: "#ffffff",
-                          style: { fill: "#ffffff" },
-                        }}
-                        yAxisId="aporteY"
-                        orientation="left"
-                        axisLine={false}
-                        tickLine={false}
-                      />
-                      <YAxis
-                        yAxisId="jurosY"
-                        orientation="right"
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent />}
-                      />
-                      <Line
-                        yAxisId="aporteY"
-                        dataKey="aporte"
-                        name="Aportes"
-                        stroke="var(--color-Investimentos)"
-                        fill="var(--color-Investimentos)"
-                        type="linear"
-                        strokeWidth={2}
-                      />
-                      <Line
-                        dataKey="juros"
-                        yAxisId="jurosY"
-                        name="Juros"
-                        stroke="var(--color-Juros)"
-                        fill="var(--color-Juros)"
-                        type="monotone"
-                        strokeWidth={2}
-                      />
-                      <Legend verticalAlign="bottom" align="center" />
-                    </LineChart>
-                  </ChartContainer>
-                </CardContent>
-                <CardFooter>
-                  <div className="flex w-full items-start gap-2 text-sm">
-                    <div className="grid gap-2">
-                      {/* <div className="flex items-center gap-2 leading-none font-medium">
+                                  <TableCell className="font-medium">
+                                    {formattedReal(
+                                      juroSobrejuros + totalInvestimentos
+                                    )}
+                                  </TableCell>
+                                </>
+                              </TableRow>
+                            </TableBody>
+                          </>
+                        );
+                      })}
+                  </Table>
+                </Card>
+                <div className="flex justify-center items-center w-full max-md:flex max-md:flex-col">
+                  <Card className="w-[35rem]  max-md:w-full max-md:mb-10    border-0 rounded-2xl  text-amber-50 gap-3">
+                    <CardHeader>
+                      <CardTitle>Grafico de Juros + Investimentos</CardTitle>
+                    </CardHeader>
+                    <CardContent className=" max-md:w-[22rem] ">
+                      <ChartContainer
+                        config={chartConfigDados}
+                        className=" w-[35rem] h-[20rem] max-md:w-[22rem] text-amber-50"
+                      >
+                        <LineChart
+                          accessibilityLayer
+                          data={dadosGrafico}
+                          margin={{
+                            left: 0,
+                            right: 0,
+                            top: 20,
+                            bottom: 0,
+                          }}
+                        >
+                          <CartesianGrid vertical={false} stroke="#6b72807d " />
+                          <XAxis
+                            dataKey="id"
+                            interval="preserveStartEnd"
+                            tickLine={false}
+                            axisLine={false}
+                            className="text-amber-50"
+                            tick={{
+                              fill: "#ffffff",
+                              style: { fill: "#ffffff" },
+                            }}
+                            tickFormatter={(value) => value}
+                            tickMargin={8}
+                          />{" "}
+                          <YAxis
+                            tick={{
+                              fill: "#ffffff",
+                              style: { fill: "#ffffff" },
+                            }}
+                            yAxisId="aporteY"
+                            orientation="left"
+                            axisLine={false}
+                            tickLine={false}
+                          />
+                          <YAxis
+                            yAxisId="jurosY"
+                            orientation="right"
+                            tickLine={false}
+                            axisLine={false}
+                          />
+                          <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent />}
+                          />
+                          <Line
+                            yAxisId="aporteY"
+                            dataKey="aporte"
+                            name="Aportes"
+                            stroke="var(--color-Investimentos)"
+                            fill="var(--color-Investimentos)"
+                            type="linear"
+                            strokeWidth={2}
+                          />
+                          <Line
+                            dataKey="juros"
+                            yAxisId="jurosY"
+                            name="Juros"
+                            stroke="var(--color-Juros)"
+                            fill="var(--color-Juros)"
+                            type="monotone"
+                            strokeWidth={2}
+                          />
+                          <Legend verticalAlign="bottom" align="center" />
+                        </LineChart>
+                      </ChartContainer>
+                    </CardContent>
+                    <CardFooter>
+                      <div className="flex w-full items-start gap-2 text-sm">
+                        <div className="grid gap-2">
+                          {/* <div className="flex items-center gap-2 leading-none font-medium">
                         Comparando o Crescimento de Juros Compostos e Aportes
                         <TrendingUp className="h-4 w-4" />
                       </div> */}
-                    </div>
-                  </div>
-                </CardFooter>
-              </Card>
+                        </div>
+                      </div>
+                    </CardFooter>
+                  </Card>
 
-              <Card className="border-0 ">
-                <CardContent className="   w-full  flex  text-amber-50 ">
-                  <ChartContainer
-                    config={chartConfig}
-                    className=" w-[50rem] h-[20rem] max-md:w-[25rem]"
-                  >
-                    <BarChart
-                      accessibilityLayer
-                      data={rendimentoGrafico}
-                      barCategoryGap={10}
-                      barGap={4}
-                    >
-                      <CartesianGrid vertical={false} />
-                      <XAxis
-                        className="text-[1rem] max-md:text-[0.7rem]"
-                        dataKey="Ativo"
-                        tickMargin={4}
-                        tick={{
-                          fill: "#ffffff",
-                          style: { fill: "#ffffff" },
-                        }}
-                        tickFormatter={(value) => value.slice(0, 15)}
-                      />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <ChartLegend
-                        verticalAlign="bottom"
-                        align="center"
-                        className="max-md:mb-12"
-                        wrapperStyle={{ color: "#fff" }}
-                        content={<ChartLegendContent />}
-                      />
+                  <Card className="border-0 ">
+                    <CardContent className="   w-full  flex  text-amber-50 ">
+                      <ChartContainer
+                        config={chartConfig}
+                        className=" w-[50rem] h-[20rem] max-md:w-[25rem]"
+                      >
+                        <BarChart
+                          accessibilityLayer
+                          data={rendimentoGrafico}
+                          barCategoryGap={10}
+                          barGap={4}
+                        >
+                          <CartesianGrid vertical={false} />
+                          <XAxis
+                            className="text-[1rem] max-md:text-[0.7rem]"
+                            dataKey="Ativo"
+                            tickMargin={4}
+                            tick={{
+                              fill: "#ffffff",
+                              style: { fill: "#ffffff" },
+                            }}
+                            tickFormatter={(value) => value.slice(0, 15)}
+                          />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <ChartLegend
+                            verticalAlign="bottom"
+                            align="center"
+                            className="max-md:mb-12"
+                            wrapperStyle={{ color: "#fff" }}
+                            content={<ChartLegendContent />}
+                          />
 
-                      <Bar
-                        dataKey="Rendimento_Período_real"
-                        fill="var(--color-Rendimento_Período_real)"
-                        radius={4}
-                        barSize={barSize}
-                      />
+                          <Bar
+                            dataKey="Rendimento_Período_real"
+                            fill="var(--color-Rendimento_Período_real)"
+                            radius={4}
+                            barSize={barSize}
+                          />
 
-                      <Bar
-                        dataKey="Rendimento_Líquido_Imposto"
-                        fill="var(--color-Rendimento_Líquido_Imposto)"
-                        radius={4}
-                        barSize={barSize}
-                      />
-                    </BarChart>
-                  </ChartContainer>
-                </CardContent>
-              </Card>
-            </div>
+                          <Bar
+                            dataKey="Rendimento_Líquido_Imposto"
+                            fill="var(--color-Rendimento_Líquido_Imposto)"
+                            radius={4}
+                            barSize={barSize}
+                          />
+                        </BarChart>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+                </div>
+              </>
+            )}
             {/* Tabela de Rendimento */}
             <Card className="h-full max-md:h-[30rem] border-0">
               <CardTitle className="text-amber-50">
