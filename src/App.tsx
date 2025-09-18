@@ -37,7 +37,7 @@ import {
 import { Label } from "./components/ui/label";
 
 import SHIELDBANK from "../assets/SHIELDBANK.png";
-import { Button } from "./components/ui/button";
+// import { Button } from "./components/ui/button";
 import axios from "axios";
 
 function App() {
@@ -46,7 +46,7 @@ function App() {
   const [periodo, setPeriodo] = useState<number>(0);
   const [aporteInicial, setaporteInicial] = useState<number>(0);
   const [aporteMensal, setaporteMensal] = useState<number>(0);
-  const [indexador, setIndexador] = useState<boolean>(false);
+  // const [indexador, setIndexador] = useState<boolean>(false);
 
   const values = [
     {
@@ -314,36 +314,13 @@ function App() {
                 onChange={(e) => setInflacao(Number(e.target.value))}
               />
             </Card>
-          </div>
-
-          <div className="flex gap-4 items-center mb-2">
-            <h2 className="text-amber-50 ">Trocar Taxa Shield?</h2>
-            {indexador === false ? (
-              <Button
-                type="button"
-                className="bg-amber-50 rounded-[0.7rem] w-10 border-0 hover:bg-[#162456] hover:text-amber-50 hover:border-0"
-                variant="outline"
-                onClick={() => setIndexador(true)}
-              >
-                Sim
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                className="bg-amber-50 rounded-[0.7rem] w-10  border-0 hover:bg-red-800 hover:text-amber-50 hover:border-0"
-                variant="outline"
-                onClick={() => setIndexador(false)}
-              >
-                Não
-              </Button>
-            )}
-          </div>
-
-          {indexador && (
-            <Card className="w-[14%] h-full max-md:w-full max-md:mb-10   bg-[#e9e9e9] border-0 rounded-2xl p-4 text-amber-50 gap-3">
-              <Label className="" htmlFor="Taxa Shield">
+            <Card className="w-[16%] h-full  max-md:w-full max-md:mb-10   bg-transparent border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
+              <Label className="text-2xl text-amber-50 m-5">
+                Simulação de Taxa
+              </Label>
+              <Label className="text-amber-50" htmlFor="Taxa Shield">
                 <Input
-                  className="w-16 text-amber-50  appearance-none "
+                  className="w-20   text-black bg-amber-50  appearance-none "
                   id="Taxa Shield "
                   type="number"
                   placeholder="Taxa Shield"
@@ -358,50 +335,51 @@ function App() {
                     );
                   }}
                 />
-                Taxa Shield Mes
+                <p className="text-[1rem]">Taxa Shield Mes</p>
               </Label>
 
-              <Label htmlFor="a.a">
+              <Label htmlFor="a.a" className="text-amber-50">
                 <Input
-                  className="w-16 text-amber-50"
+                  className="w-20  text-black bg-amber-50  appearance-none "
                   id="a.a"
                   type="text"
                   placeholder="aporte mensal"
-                  value={rendimentoGrafico[1].Indexador || 0}
+                  value={rendimentoGrafico[2].Indexador || 0}
                   onChange={(a) => {
                     setRendimentoGrafico((state) =>
                       state.map((e, i) =>
-                        i === 1
+                        i === 2
                           ? { ...e, Indexador: Number(a.target.value) }
                           : e
                       )
                     );
                   }}
                 />
-                Tesouro Pré Fixado
+                <p className="text-[1rem]"> Tesouro Pré Fixado</p>
               </Label>
 
-              <Label htmlFor=" + IPCA">
+              <Label htmlFor=" + IPCA" className="text-amber-50">
                 <Input
-                  className="w-16 text-amber-50"
+                  className="w-20  text-black bg-amber-50  appearance-none "
                   id=" + IPCA"
                   type="text"
                   placeholder="periodo (mês)"
-                  value={rendimentoGrafico[2].Indexador || 0}
+                  value={rendimentoGrafico[3].Indexador || 0}
                   onChange={(ipca) =>
                     setRendimentoGrafico((state) =>
                       state.map((e, i) =>
-                        i === 2
+                        i === 3
                           ? { ...e, Indexador: Number(ipca.target.value) }
                           : e
                       )
                     )
                   }
                 />
-                + IPCA
+                <p className="text-[1rem]"> + IPCA</p>
               </Label>
             </Card>
-          )}
+          </div>
+
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
             <Card className="w-full  flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
               <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
@@ -457,7 +435,7 @@ function App() {
           )}
           <div>
             {/* Tabela de Rendimento por mes  */}
-            <Card className="">
+            <Card className="border-0">
               <CardTitle className="text-amber-50">
                 Tabela De Rendimentos 💰
               </CardTitle>
@@ -685,7 +663,7 @@ function App() {
                 </CardFooter>
               </Card>
 
-              <Card className=" ">
+              <Card className="border-0 ">
                 <CardContent className="   w-full  flex  text-amber-50 ">
                   <ChartContainer
                     config={chartConfig}
@@ -736,7 +714,7 @@ function App() {
               </Card>
             </div>
             {/* Tabela de Rendimento */}
-            <Card className="h-full max-md:h-[30rem]">
+            <Card className="h-full max-md:h-[30rem] border-0">
               <CardTitle className="text-amber-50">
                 Comparativo de taxas 💰
               </CardTitle>

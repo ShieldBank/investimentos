@@ -88,6 +88,6 @@ input[type="number"]::-webkit-outer-spin-button {
     @apply border-border outline-ring/50 h-fit;
   }
   body {
-    @apply bg-gray-950  text-foreground;
+    @apply bg-slate-900  text-foreground;
   }
 }
