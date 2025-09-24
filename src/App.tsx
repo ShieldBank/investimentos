@@ -62,7 +62,7 @@ function App() {
     },
     {
       Ativo: "CDB Pós Fixado",
-      Indexador: 110,
+      Indexador: 100,
       Taxa_a: 0,
       Taxa_m: 0,
       Rendimento_Período_percentual: 0,
@@ -337,6 +337,25 @@ function App() {
                 />
                 <p className="text-[1rem]">Taxa Shield Mes</p>
               </Label>
+              <Label htmlFor="a.a" className="text-amber-50">
+                <Input
+                  className="w-20  text-black bg-amber-50  appearance-none "
+                  id="a.a"
+                  type="text"
+                  placeholder="aporte mensal"
+                  value={rendimentoGrafico[1].Indexador || 0}
+                  onChange={(a) => {
+                    setRendimentoGrafico((state) =>
+                      state.map((e, i) =>
+                        i === 1
+                          ? { ...e, Indexador: Number(a.target.value) }
+                          : e
+                      )
+                    );
+                  }}
+                />
+                <p className="text-[1rem]"> CDB Pós Fixado</p>
+              </Label>
 
               <Label htmlFor="a.a" className="text-amber-50">
                 <Input
@@ -441,20 +460,20 @@ function App() {
                   <CardTitle className="text-amber-50">
                     Tabela De Rendimentos 💰
                   </CardTitle>
-                  <Table className="bg-[#171717] text-amber-50 ">
+                  <Table className="bg-slate-50 text-black   ">
                     <TableHeader className="">
-                      <TableRow className="border-[#ffffff26]">
-                        <TableHead className="font-medium sticky left-0 bg-[#171717]  z-50 min-w-[100px]  ">
+                      <TableRow className="border border-gray-400  ">
+                        <TableHead className=" font-medium sticky left-0 border border-gray-400  bg-slate-50 z-50 min-w-[100px]  ">
                           Meses
                         </TableHead>
-                        <TableHead className="min-w-[160px] ">Juros</TableHead>
+                        <TableHead className="min-w-[160px]  ">Juros</TableHead>
                         <TableHead className="min-w-[160px] ">
                           Total Investido
                         </TableHead>
-                        <TableHead className="min-w-[160px] ">
+                        <TableHead className="min-w-[160px]  ">
                           Total Juros
                         </TableHead>
-                        <TableHead className="min-w-[160px] ">
+                        <TableHead className="min-w-[160px]  ">
                           Total Acumulado
                         </TableHead>
                       </TableRow>
@@ -548,23 +567,23 @@ function App() {
                         return (
                           <>
                             <TableBody key={index}>
-                              <TableRow>
+                              <TableRow className="">
                                 <>
-                                  <TableCell className="font-medium sticky left-0 bg-[#171717] z-50  ">
+                                  <TableCell className="font-medium sticky left-0 bg-slate-50 z-50  border border-gray-400 ">
                                     {`  ${index} `}
                                   </TableCell>
-                                  <TableCell className="font-medium">
+                                  <TableCell className="font-medium border-y border-gray-400  ">
                                     {formattedReal(aporteJuros)}
                                   </TableCell>
-                                  <TableCell className="font-medium">
+                                  <TableCell className="font-medium border-y border-gray-400">
                                     {formattedReal(totalInvestimentos)}
                                   </TableCell>
 
-                                  <TableCell className="font-medium">
+                                  <TableCell className="font-medium border-y border-gray-400 ">
                                     {formattedReal(juroSobrejuros)}
                                   </TableCell>
 
-                                  <TableCell className="font-medium">
+                                  <TableCell className="font-medium  border-y border-gray-400">
                                     {formattedReal(
                                       juroSobrejuros + totalInvestimentos
                                     )}
@@ -577,8 +596,8 @@ function App() {
                       })}
                   </Table>
                 </Card>
-                <div className="flex justify-center items-center w-full max-md:flex max-md:flex-col">
-                  <Card className="w-[35rem]  max-md:w-full max-md:mb-10    border-0 rounded-2xl  text-amber-50 gap-3">
+                <div className="flex gap-10 justify-center items-center w-full max-md:flex max-md:flex-col">
+                  <Card className="w-[35rem] bg-transparent  max-md:w-full max-md:mb-10    border-0 rounded-2xl  text-amber-50 gap-3">
                     <CardHeader>
                       <CardTitle>Grafico de Juros + Investimentos</CardTitle>
                     </CardHeader>
@@ -665,7 +684,7 @@ function App() {
                     </CardFooter>
                   </Card>
 
-                  <Card className="border-0 ">
+                  <Card className="border-0 bg-transparent ">
                     <CardContent className="   w-full  flex  text-amber-50 ">
                       <ChartContainer
                         config={chartConfig}
@@ -718,24 +737,38 @@ function App() {
               </>
             )}
             {/* Tabela de Rendimento */}
-            <Card className="h-full max-md:h-[30rem] border-0">
+            <Card className="h-full bg-transparent max-md:h-[30rem] border-0">
               <CardTitle className="text-amber-50">
                 Comparativo de taxas 💰
               </CardTitle>
-              <Table className="bg-[#171717] text-amber-50 mt-1">
+              <Table className="bg-slate-50 text-black border border-gray-400 mt-1">
                 <TableHeader className="">
                   <TableRow className="border-[#ffffff26]">
-                    <TableHead className="font-medium sticky left-0 bg-[#171717]  z-50 min-w-[100px] max-w-[10px]">
+                    <TableHead className="font-medium sticky left-0 bg-slate-50 border border-gray-400  z-50 min-w-[100px] max-w-[10px]">
                       Ativo
                     </TableHead>
-                    <TableHead>Indexador</TableHead>
-                    <TableHead>Taxa a.a.</TableHead>
-                    <TableHead>Taxa a.m.</TableHead>
-                    <TableHead> Rendimento no Período (%)</TableHead>
-                    <TableHead> Rendimento no Período (R$) </TableHead>
-                    <TableHead> Rendimento + Valor investido (R$) </TableHead>
-                    <TableHead> Aliquota de Imposto </TableHead>
-                    <TableHead> Rendimento Líquido de Imposto </TableHead>
+                    <TableHead className=" ">Indexador</TableHead>
+                    <TableHead className="border-y border-gray-400">
+                      Taxa a.a.
+                    </TableHead>
+                    <TableHead className="">Taxa a.m.</TableHead>
+                    <TableHead className="">
+                      {" "}
+                      Rendimento no Período (%)
+                    </TableHead>
+                    <TableHead className="">
+                      {" "}
+                      Rendimento no Período (R$){" "}
+                    </TableHead>
+                    <TableHead className="">
+                      {" "}
+                      Rendimento + Valor investido (R$){" "}
+                    </TableHead>
+                    <TableHead className=""> Aliquota de Imposto </TableHead>
+                    <TableHead className="">
+                      {" "}
+                      Rendimento Líquido de Imposto{" "}
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 {rendimentoGrafico.map((e, i) => {
@@ -902,10 +935,10 @@ function App() {
                     <TableBody key={i}>
                       <TableRow>
                         <>
-                          <TableCell className="font-medium sticky left-0 bg-[#171717] z-50  ">
+                          <TableCell className="font-medium sticky left-0 bg-slate-50 z-50 border border-gray-400 ">
                             {e.Ativo}
                           </TableCell>
-                          <TableCell className="font-medium z-10">
+                          <TableCell className="font-medium z-10  border-y border-gray-400">
                             {`${e.Indexador}% ${
                               e.Ativo === "CDB Pós Fixado"
                                 ? "do CDI"
@@ -916,7 +949,7 @@ function App() {
                                 : ""
                             }`}
                           </TableCell>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium border-y border-gray-400">
                             {`${
                               e.Ativo === "Shield Pay"
                                 ? `${(e.Indexador * 12).toFixed(2)}%`
@@ -935,26 +968,26 @@ function App() {
                                 : "7,44%"
                             }`}
                           </TableCell>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium border-y border-gray-400 ">
                             {formmatedPercent}
                           </TableCell>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium border-y border-gray-400">
                             {formmatedN(rendimentoPeriodoPercent)}
                           </TableCell>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium border-y border-gray-400">
                             {formattedReal(rendimentoPeriodo)}
                           </TableCell>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium border-y border-gray-400">
                             {formattedReal(vf)}
                           </TableCell>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium border-y border-gray-400">
                             {e.Ativo === "CRA Inflação"
                               ? "isento"
                               : e.Ativo === "Poupança"
                               ? "isento"
                               : formmatedN(aliquota / 100)}
                           </TableCell>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium border-y border-gray-400">
                             {e.Ativo === "CRA Inflação"
                               ? formattedReal(rendimentoPeriodo)
                               : e.Ativo === "Poupança"
