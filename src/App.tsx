@@ -542,18 +542,10 @@ function App() {
                                   aporteMensal) *
                                 Number(raizYear.toFixed(3));
                           acumuladorJuros.push(aporteJuros);
-                          console.log("ok", acumuladorJuros);
 
                           const juroSobrejuros = acumuladorJuros.reduce(
                             (acc, current) => acc + current,
                             0
-                          );
-
-                          console.log(
-                            acumuladorJuros.reduce(
-                              (acc, current) => acc + current,
-                              0
-                            )
                           );
 
                           const totalInvestimentos =
@@ -563,28 +555,6 @@ function App() {
                             aporte: totalInvestimentos,
                             juros: juroSobrejuros,
                           });
-
-                          // console.log({
-                          //   aporte: aporteInicial,
-                          //   raix: raizYear,
-                          //   juros: aporteInicial * Number(raizYear.toFixed(3)),
-                          // });
-
-                          // console.log(
-                          //   ((aporteMensal +
-                          //     aporteInicial * Number(raizYear.toFixed(3))) *
-                          //     index +
-                          //     jurosPassado) *
-                          //     Number(raizYear.toFixed(3))
-                          // );
-
-                          // console.log(
-                          //   "teste",
-                          //   (aporteMensal +
-                          //     aporteInicial * Number(raizYear.toFixed(3)) +
-                          //     aporteMensal) *
-                          //     Number(raizYear.toFixed(3))
-                          // );
 
                           // function mesFormatted(mes: number) {
                           //   let mesNome: string = "";
@@ -891,11 +861,11 @@ function App() {
                     default:
                   }
 
-                  if (periodo >= 0 && periodo < 6) {
+                  if (periodo >= 0 && periodo <= 6) {
                     aliquota = 22.5;
-                  } else if (periodo >= 6 && periodo < 12) {
+                  } else if (periodo > 6 && periodo <= 12) {
                     aliquota = 20;
-                  } else if (periodo >= 12 && periodo < 24) {
+                  } else if (periodo > 12 && periodo <= 24) {
                     aliquota = 17.5;
                   } else {
                     aliquota = 15;
@@ -1010,7 +980,7 @@ function App() {
                     periodo,
                     aporteInicial,
                     aporteMensal,
-
+                    selectedOption,
                     rendimentoGrafico[0].Indexador,
                   ]);
                   return (
