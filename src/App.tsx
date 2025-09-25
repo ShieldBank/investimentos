@@ -525,7 +525,7 @@ function App() {
 
                       {periodo > 0 &&
                         mesesjurosCompostos.map((e, index) => {
-                          console.log(e);
+                          console.log({ teste: index });
                           let raizYear: number;
                           const taxaMensal = rendimentoGrafico.filter(
                             (e) => e.Ativo === "Shield Bank"
@@ -534,26 +534,28 @@ function App() {
                           const taxYear: number = taxaMensal[0].Indexador;
                           // eslint-disable-next-line prefer-const
                           raizYear = taxYear / 100;
+
                           aporteJuros =
                             index === 0
                               ? aporteInicial * Number(raizYear.toFixed(3))
-                              : (aporteMensal * index + aporteInicial) *
+                              : (aporteMensal * index +
+                                  aporteInicial * Number(raizYear.toFixed(3)) +
+                                  aporteMensal) *
                                 Number(raizYear.toFixed(3));
-
                           acumuladorJuros.push(aporteJuros);
+                          console.log("ok", acumuladorJuros);
 
                           const juroSobrejuros = acumuladorJuros.reduce(
                             (acc, current) => acc + current,
                             0
                           );
 
-                          // console.log(acumuladorJuros);
-                          // const AporteRendimento =
-                          //   index === 0
-                          //     ? aporteInicial + aporteJuros
-                          //     : aporteInicial * (index + 1) +
-                          //       aporteMensal +
-                          //       aporteJuros;
+                          console.log(
+                            acumuladorJuros.reduce(
+                              (acc, current) => acc + current,
+                              0
+                            )
+                          );
 
                           const totalInvestimentos =
                             aporteInicial + aporteMensal * index;
@@ -562,6 +564,29 @@ function App() {
                             aporte: totalInvestimentos,
                             juros: juroSobrejuros,
                           });
+
+                          // console.log({
+                          //   aporte: aporteInicial,
+                          //   raix: raizYear,
+                          //   juros: aporteInicial * Number(raizYear.toFixed(3)),
+                          // });
+
+                          // console.log(
+                          //   ((aporteMensal +
+                          //     aporteInicial * Number(raizYear.toFixed(3))) *
+                          //     index +
+                          //     jurosPassado) *
+                          //     Number(raizYear.toFixed(3))
+                          // );
+
+                          // console.log(
+                          //   "teste",
+                          //   (aporteMensal +
+                          //     aporteInicial * Number(raizYear.toFixed(3)) +
+                          //     aporteMensal) *
+                          //     Number(raizYear.toFixed(3))
+                          // );
+
                           // function mesFormatted(mes: number) {
                           //   let mesNome: string = "";
                           //   switch (mes) {
