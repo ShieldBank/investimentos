@@ -524,8 +524,7 @@ function App() {
                       </TableHeader>
 
                       {periodo > 0 &&
-                        mesesjurosCompostos.map((e, index) => {
-                          console.log({ teste: index });
+                        mesesjurosCompostos.map((_, index) => {
                           let raizYear: number;
                           const taxaMensal = rendimentoGrafico.filter(
                             (e) => e.Ativo === "Shield Bank"
