@@ -36,7 +36,7 @@ import {
 } from "recharts";
 import { Label } from "./components/ui/label";
 
-import SHIELDBANK from "../assets/SHIELDBANK.png";
+import SHIELDBANK from "../assets/SHIELDBANK_AZUL_05@4x.png";
 // import { Button } from "./components/ui/button";
 import axios from "axios";
 
@@ -44,10 +44,11 @@ function App() {
   const [CDIAno, setCDIAno] = useState<number>();
   const [inflacao, setInflacao] = useState<number>(0);
   const [periodo, setPeriodo] = useState<number>(0);
+  const [selectedOption, setSelectedOption] = useState<number>(0);
   const [aporteInicial, setaporteInicial] = useState<number>(0);
   const [aporteMensal, setaporteMensal] = useState<number>(0);
   // const [indexador, setIndexador] = useState<boolean>(false);
-
+  console.log({ teste: selectedOption });
   const values = [
     {
       Ativo: "Shield Bank",
@@ -258,13 +259,16 @@ function App() {
           <div className=" w-full flex justify-around  max-md:flex max-md:flex-col    ">
             <img className="w-[40%] max-sm:w-full -mt-40 " src={SHIELDBANK} />
 
-            <Card className="w-[40%]  max-md:w-full max-md:mb-10  h-full bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
-              <Label htmlFor="aporteInicial">Aporte Inicial</Label>
+            <Card className="w-[40%]  max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
+              <Label htmlFor="aporteInicial" className="text-[#CCAA76]">
+                Aporte Inicial
+              </Label>
 
               <Input
                 id="aporteInicial"
                 type="text"
                 placeholder="aporte inicial"
+                className="bg-slate-50"
                 value={formattedReal(aporteInicial)}
                 onChange={(e) => {
                   const apenasNumeros = e.target.value.replace(/[\D]/g, "");
@@ -272,12 +276,15 @@ function App() {
                 }}
               />
 
-              <Label htmlFor="aporteMensal">Aporte Mensal</Label>
+              <Label htmlFor="aporteMensal" className="text-[#CCAA76]">
+                Investimento Mensal
+              </Label>
 
               <Input
                 id="aporteMensal"
                 type="text"
                 placeholder="aporte mensal"
+                className="bg-slate-50"
                 value={formattedReal(aporteMensal)}
                 onChange={(e) => {
                   const apenasNumeros = e.target.value.replace(/[\D]/g, "");
@@ -285,18 +292,43 @@ function App() {
                   setaporteMensal(Number(apenasNumeros) / 100);
                 }}
               />
-              <Label htmlFor="periodo">Periodo do Aporte</Label>
+              <Label htmlFor="periodo" className="text-[#CCAA76] ">
+                Periodo do Aporte
+              </Label>
+              <div className="flex  gap-2">
+                <Input
+                  id="periodo"
+                  type=""
+                  placeholder="periodo"
+                  className="bg-slate-50"
+                  onChange={(e) => setPeriodo(Number(e.target.value))}
+                />
+                <select
+                  className="bg-slate-50 w-[5rem] p-1.5 rounded-[0.5rem]"
+                  name="periodo"
+                  id="periodo"
+                  onChange={(e) => {
+                    console.log(periodo);
+                    console.log(selectedOption);
+                    return e.target.value === "mes"
+                      ? (setSelectedOption(0),
+                        setPeriodo((state) => state / 12))
+                      : (setPeriodo((state) => state * 12),
+                        setSelectedOption(1));
+                  }}
+                >
+                  <option value="mes" selected>
+                    mes
+                  </option>
+                  <option value="ano">ano</option>
+                </select>
+              </div>
+              <Label htmlFor="CDI" className="text-[#CCAA76]">
+                CDI (ano)
+              </Label>
 
               <Input
-                id="periodo"
-                type="text"
-                placeholder="periodo (mês)"
-                onChange={(e) => setPeriodo(Number(e.target.value))}
-              />
-              <Label htmlFor="CDI">CDI (ano)</Label>
-
-              <Input
-                className="bg-transparent text-[#162456] max-md:text-2xl text-2xl disabled:opacity-80"
+                className="bg-transparent text-amber-50 max-md:text-2xl text-2xl disabled:opacity-80"
                 id="CDI"
                 type="text"
                 disabled
@@ -305,10 +337,12 @@ function App() {
                 onChange={(e) => setCDIAno(Number(e.target.value))}
               />
 
-              <Label htmlFor="inflação">inflação (ano)</Label>
+              <Label htmlFor="inflação" className="text-[#CCAA76]">
+                inflação (ano)
+              </Label>
 
               <Input
-                className="bg-transparent text-[#162456] max-md:text-2xl text-2xl disabled:opacity-80"
+                className="bg-transparent text-amber-50 max-md:text-2xl text-2xl disabled:opacity-80"
                 id="inflação"
                 type="text"
                 disabled
@@ -317,17 +351,17 @@ function App() {
                 onChange={(e) => setInflacao(Number(e.target.value))}
               />
             </Card>
-            <Card className="w-[18%] h-full  max-md:w-full max-md:mb-10   bg-transparent border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
-              <Label className="text-xl text-amber-50 m-5">
+            <Card className="w-[18%] h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
+              <Label className="text-xl text-[#CCAA76] m-5">
                 Simulação de Taxa
               </Label>
               <Label className="text-amber-50" htmlFor="Taxa Shield">
                 <Input
-                  className="w-20   text-black bg-amber-50  appearance-none "
+                  className="w-full text-center   text-black bg-amber-50  appearance-none  "
                   id="Taxa Shield "
                   type="number"
-                  placeholder="Taxa Shield"
-                  value={rendimentoGrafico[0].Indexador || ""}
+                  placeholder="Insira sua taxa shield"
+                  //value={rendimentoGrafico[0].Indexador || ""}
                   onChange={(taxa) => {
                     setRendimentoGrafico((state) =>
                       state.map((e, i) =>
@@ -338,9 +372,9 @@ function App() {
                     );
                   }}
                 />
-                <p className="text-[1rem]">Taxa Shield Mes</p>
+                {/* <p className="text-[1rem]">Taxa Shield Mes</p> */}
               </Label>
-              <Label htmlFor="a.a" className="text-amber-50">
+              <Label htmlFor="a.a" className="text-[#CCAA76]">
                 <Input
                   className="w-20  text-black bg-amber-50  appearance-none "
                   id="a.a"
@@ -360,7 +394,7 @@ function App() {
                 <p className="text-[1rem]"> CDB Pós Fixado</p>
               </Label>
 
-              <Label htmlFor="a.a" className="text-amber-50">
+              <Label htmlFor="a.a" className="text-[#CCAA76]">
                 <Input
                   className="w-20  text-black bg-amber-50  appearance-none "
                   id="a.a"
@@ -380,7 +414,7 @@ function App() {
                 <p className="text-[1rem]"> Tesouro Pré Fixado</p>
               </Label>
 
-              <Label htmlFor=" + IPCA" className="text-amber-50">
+              <Label htmlFor=" + IPCA" className="text-[#CCAA76]">
                 <Input
                   className="w-20  text-black bg-amber-50  appearance-none "
                   id=" + IPCA"
@@ -404,6 +438,7 @@ function App() {
 
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
             <Card className="w-full  flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
+              <h2 className="text-4xl text-black">Resumo</h2>
               <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
                 <Card className="transition-transform duration-300 ease-in-out hover:animate-pulse bg-[#162456] w-full  shadow-2xl max-md:w-full max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 border-0 rounded-2xl p-10  gap-3">
                   <div className="  flex  flex-col gap-2 justify-center items-center">
@@ -459,25 +494,30 @@ function App() {
             {/* Tabela de Rendimento por mes  */}
             {periodo > 0 && (
               <>
-                <div className="max-w-full grid grid-cols-2 grid-rows-2 max-sm:flex max-sm:flex-col place-content-center place-items-center  ">
-                  <Card className="   border-0 col-start-1 row-start-1  max-sm:max-w-full ">
-                    <CardTitle className="text-amber-50 ">
-                      Tabela De Rendimentos 💰
+                <div
+                  key={selectedOption}
+                  className="max-w-full flex flex-col gap-5 max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 "
+                >
+                  <Card className="  rounded-3xl  border-0   max-sm:max-w-full ">
+                    <CardTitle className="text-black text-3xl max-md:text-2xl">
+                      Tabela De Rendimentos
                     </CardTitle>
-                    <Table className=" border  border-gray-400 rounded-b-3xl bg-slate-50 text-black w-auto ">
+                    <Table className="  rounded-2xl   bg-slate-50 text-black w-auto max-md:h-[14rem] max-md:text-center ">
                       <TableHeader className="  bg-gray-900 text-amber-50 ">
-                        <TableRow className="   ">
-                          <TableHead className="border-0 font-medium sticky left-0  bg-gray-900 border-gray-400  z-50 w-[80px]   ">
+                        <TableRow className="  ">
+                          <TableHead className="  font-medium sticky left-0  bg-gray-900 border-gray-400  z-50 w-[80px] max-md:text-[0.9rem]  ">
                             Meses
                           </TableHead>
-                          <TableHead className="w-[150px]  ">Juros</TableHead>
-                          <TableHead className=" w-[150px] ">
+                          <TableHead className="w-[150px] max-md:text-[0.9rem] ">
+                            Juros
+                          </TableHead>
+                          <TableHead className=" w-[150px] max-md:text-[0.9rem]">
                             Total Investido
                           </TableHead>
-                          <TableHead className=" w-[150px]  ">
+                          <TableHead className=" w-[150px] max-md:text-[0.9rem] ">
                             Total Juros
                           </TableHead>
-                          <TableHead className=" w-[150px]  ">
+                          <TableHead className=" w-[150px] max-md:text-[0.9rem] ">
                             Total Acumulado
                           </TableHead>
                         </TableRow>
@@ -485,7 +525,6 @@ function App() {
 
                       {periodo > 0 &&
                         mesesjurosCompostos.map((e, index) => {
-                          console.log(e);
                           let raizYear: number;
                           const taxaMensal = rendimentoGrafico.filter(
                             (e) => e.Ativo === "Shield Bank"
@@ -571,23 +610,23 @@ function App() {
                           return (
                             <>
                               <TableBody key={index}>
-                                <TableRow className="">
+                                <TableRow className="max-md:">
                                   <>
-                                    <TableCell className="font-medium sticky left-0 bg-slate-50 z-50  border border-gray-400 ">
+                                    <TableCell className="font-medium sticky left-0 bg-slate-50 z-50  border border-gray-400 max-md:text-[0.9rem]   ">
                                       {`  ${index} `}
                                     </TableCell>
-                                    <TableCell className="font-medium border-y border-gray-400  ">
+                                    <TableCell className="font-medium border-y border-gray-400 max-md:text-[0.9rem]  ">
                                       {formattedReal(aporteJuros)}
                                     </TableCell>
-                                    <TableCell className="font-medium border-y border-gray-400">
+                                    <TableCell className="font-medium border-y border-gray-400 max-md:text-[0.9rem] ">
                                       {formattedReal(totalInvestimentos)}
                                     </TableCell>
 
-                                    <TableCell className="font-medium border-y border-gray-400 ">
+                                    <TableCell className="font-medium border-y border-gray-400 max-md:text-[0.9rem] ">
                                       {formattedReal(juroSobrejuros)}
                                     </TableCell>
 
-                                    <TableCell className="font-medium  border-y border-gray-400">
+                                    <TableCell className="font-medium  border-y border-gray-400 max-md:text-[0.9rem] ">
                                       {formattedReal(
                                         juroSobrejuros + totalInvestimentos
                                       )}
@@ -601,11 +640,11 @@ function App() {
                     </Table>
                   </Card>
                   {/* <div className="flex gap-10 justify-center items-center w-full max-md:flex max-md:flex-col"> */}
-                  <Card className="  mt-20 max-sm:mt-0 col-start-2 row-start-1  shadow-2x  bg-transparent  max-md:mb-10  max-sm:max-w-full   border-0 rounded-b-3xl  text-amber-50 gap-3">
+                  <Card className="  max-sm:-mt-15   shadow-2x  bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-amber-50 gap-3">
                     <CardHeader>
                       <CardTitle>Grafico de Juros + Investimentos</CardTitle>
                     </CardHeader>
-                    <CardContent className=" w-full ">
+                    <CardContent className=" w-full bg-gray-900 rounded-4xl p-5 max-md:p-2 max-md:w-[25rem] ">
                       <ChartContainer
                         config={chartConfigDados}
                         className=" w-[35rem] h-full  max-sm:max-w-full text-amber-50"
@@ -692,11 +731,11 @@ function App() {
                     </CardFooter>
                   </Card>
 
-                  <Card className=" max-sm:-mt-10 -mt-10 col-start-1 col-end-3 row-start-2 border-0 bg-transparent ">
-                    <CardContent className="  flex  text-amber-50 ">
+                  <Card className=" max-sm:-mt-10  row-start-2 border-0 bg-transparent max-sm:max-w-full  max-md:items-center ">
+                    <CardContent className="  flex  text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
                       <ChartContainer
                         config={chartConfig}
-                        className=" chart-container  w-[60rem] h-[25rem]  max-sm:w-[22rem] "
+                        className=" chart-container  w-[60rem] h-[25rem]  max-sm:w-[22rem]   max-sm:h-[20rem]"
                       >
                         <BarChart
                           accessibilityLayer
@@ -713,13 +752,13 @@ function App() {
                               fill: "#ffffff",
                               style: { fill: "#ffffff" },
                             }}
-                            tickFormatter={(value) => value.slice(0, 10)}
+                            tickFormatter={(value) => value.slice(0, 7)}
                           />
                           <ChartTooltip content={<ChartTooltipContent />} />
                           <ChartLegend
                             verticalAlign="bottom"
                             align="center"
-                            className="max-md:mb-12"
+                            className="max-md:mb-2"
                             wrapperStyle={{ color: "#fff" }}
                             content={<ChartLegendContent />}
                           />
@@ -749,7 +788,7 @@ function App() {
             )}
             {/* Tabela de Rendimento */}
             <Card className=" max-w-full h-full -mt-10  max-sm:max-w-ful max-sm:mt-0 bg-transparent max-md:h-[30rem]  border-0   ">
-              <CardTitle className="text-amber-50">
+              <CardTitle className="text-black text-3xl ">
                 Comparativo de taxas 💰
               </CardTitle>
               <Table className="border-t-1 border-gray-400   bg-slate-50 text-black  mt-1  rounded-b-3xl   ">
@@ -758,13 +797,10 @@ function App() {
                     <TableHead className="font-medium sticky left-0 bg-gray-900  border-0  z-50 min-w-[100px] max-w-[10px] ">
                       Ativo
                     </TableHead>
-                    <TableHead className=" ">Indexador</TableHead>
+                    <TableHead className=" ">Taxa</TableHead>
                     <TableHead className=" ">Taxa a.a.</TableHead>
                     <TableHead className="">Taxa a.m.</TableHead>
-                    <TableHead className="">
-                      {" "}
-                      Rendimento no Período (%)
-                    </TableHead>
+
                     <TableHead className="">
                       {" "}
                       Rendimento no Período (R$){" "}
@@ -980,9 +1016,7 @@ function App() {
                           <TableCell className="font-medium border-y border-gray-400 ">
                             {formmatedPercent}
                           </TableCell>
-                          <TableCell className="font-medium border-y border-gray-400">
-                            {formmatedN(rendimentoPeriodoPercent)}
-                          </TableCell>
+
                           <TableCell className="font-medium border-y border-gray-400">
                             {formattedReal(rendimentoPeriodo)}
                           </TableCell>
