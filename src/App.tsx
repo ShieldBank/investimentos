@@ -875,9 +875,9 @@ function App() {
                         (raizYear ?? 0));
                   const rendimentoPeriodoValorInvestido =
                     Number(aporteInicial) + Number(aporteMensal) * periodo;
-                  const rendimentoPeriodoPercent =
-                    (vf - rendimentoPeriodoValorInvestido) /
-                    rendimentoPeriodoValorInvestido;
+                  // const rendimentoPeriodoPercent =
+                  //   (vf - rendimentoPeriodoValorInvestido) /
+                  //   rendimentoPeriodoValorInvestido;
 
                   const rendimentoPeriodo =
                     vf - rendimentoPeriodoValorInvestido;
