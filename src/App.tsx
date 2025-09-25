@@ -502,7 +502,7 @@ function App() {
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
                     </CardTitle>
-                    <Table className="  rounded-2xl   bg-slate-50 text-black w-auto max-md:h-[14rem] max-md:text-center ">
+                    <Table className="  rounded-2xl   bg-slate-50 text-black w-auto max-md:h-[12rem] max-md:text-center ">
                       <TableHeader className="  bg-gray-900 text-amber-50 ">
                         <TableRow className="  ">
                           <TableHead className="  font-medium sticky left-0  bg-gray-900 border-gray-400  z-50 w-[80px] max-md:text-[0.9rem]  ">
@@ -524,7 +524,8 @@ function App() {
                       </TableHeader>
 
                       {periodo > 0 &&
-                        mesesjurosCompostos.map((index) => {
+                        mesesjurosCompostos.map((e, index) => {
+                          console.log(e);
                           let raizYear: number;
                           const taxaMensal = rendimentoGrafico.filter(
                             (e) => e.Ativo === "Shield Bank"
@@ -875,9 +876,9 @@ function App() {
                         (raizYear ?? 0));
                   const rendimentoPeriodoValorInvestido =
                     Number(aporteInicial) + Number(aporteMensal) * periodo;
-                  // const rendimentoPeriodoPercent =
-                  //   (vf - rendimentoPeriodoValorInvestido) /
-                  //   rendimentoPeriodoValorInvestido;
+                  const rendimentoPeriodoPercent =
+                    (vf - rendimentoPeriodoValorInvestido) /
+                    rendimentoPeriodoValorInvestido;
 
                   const rendimentoPeriodo =
                     vf - rendimentoPeriodoValorInvestido;
