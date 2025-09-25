@@ -640,150 +640,162 @@ function App() {
                         })}
                     </Table>
                   </Card>
-                  {/* <div className="flex gap-10 justify-center items-center w-full max-md:flex max-md:flex-col"> */}
-                  <Card className="  max-sm:-mt-15   shadow-2x  bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-amber-50 gap-3">
-                    <CardHeader>
-                      <CardTitle>Grafico de Juros + Investimentos</CardTitle>
-                    </CardHeader>
-                    <CardContent className=" w-full bg-gray-900 rounded-4xl p-5 max-md:p-2 max-md:w-[25rem] ">
-                      <ChartContainer
-                        config={chartConfigDados}
-                        className=" w-[35rem] h-full  max-sm:max-w-full text-amber-50"
-                      >
-                        <LineChart
-                          accessibilityLayer
-                          data={dadosGrafico}
-                          margin={{
-                            left: 0,
-                            right: 0,
-                            top: 20,
-                            bottom: 0,
-                          }}
-                          style={{
-                            fill: "#ffffff",
-                            style: { fill: "#ffffff" },
-                          }}
+                  <div className="flex gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
+                    <Card className="w-full   border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                      <CardHeader className="w-full justify-center items-center">
+                        <CardTitle className="text-3xl max-md:text-xl max-md:text-center">
+                          Grafico de Juros + Investimentos
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="  w-full h-full bg-gray-900 rounded-4xl p-5 max-md:p-2 max-md:w-[25rem] ">
+                        <ChartContainer
+                          config={chartConfigDados}
+                          className="   max-sm:max-w-full text-amber-50"
                         >
-                          <CartesianGrid vertical={false} stroke="#6b72807d " />
-                          <XAxis
-                            dataKey="id"
-                            interval="preserveStartEnd"
-                            tickLine={false}
-                            axisLine={false}
-                            className="text-amber-50"
-                            tick={{
+                          <LineChart
+                            accessibilityLayer
+                            data={dadosGrafico}
+                            margin={{
+                              left: 0,
+                              right: 0,
+                              top: 20,
+                              bottom: 0,
+                            }}
+                            style={{
                               fill: "#ffffff",
                               style: { fill: "#ffffff" },
                             }}
-                            tickFormatter={(value) => value}
-                            tickMargin={8}
-                          />{" "}
-                          <YAxis
-                            tick={{
-                              fill: "#ffffff",
-                              style: { fill: "#ffffff" },
-                            }}
-                            yAxisId="aporteY"
-                            orientation="left"
-                            axisLine={false}
-                            tickLine={false}
-                          />
-                          <YAxis
-                            yAxisId="jurosY"
-                            orientation="right"
-                            tickLine={false}
-                            axisLine={false}
-                          />
-                          <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent />}
-                          />
-                          <Line
-                            yAxisId="aporteY"
-                            dataKey="aporte"
-                            name="Aportes"
-                            stroke="var(--color-Investimentos)"
-                            fill="var(--color-Investimentos)"
-                            type="linear"
-                            strokeWidth={2}
-                          />
-                          <Line
-                            dataKey="juros"
-                            yAxisId="jurosY"
-                            name="Juros"
-                            stroke="var(--color-Juros)"
-                            fill="var(--color-Juros)"
-                            type="monotone"
-                            strokeWidth={2}
-                          />
-                          <Legend verticalAlign="bottom" align="center" />
-                        </LineChart>
-                      </ChartContainer>
-                    </CardContent>
-                    <CardFooter>
-                      <div className="flex w-full items-start gap-2 text-sm">
-                        <div className="grid gap-2">
-                          {/* <div className="flex items-center gap-2 leading-none font-medium">
+                          >
+                            <CartesianGrid
+                              vertical={false}
+                              stroke="#6b72807d "
+                            />
+                            <XAxis
+                              dataKey="id"
+                              interval="preserveStartEnd"
+                              tickLine={false}
+                              axisLine={false}
+                              className="text-amber-50"
+                              tick={{
+                                fill: "#ffffff",
+                                style: { fill: "#ffffff" },
+                              }}
+                              tickFormatter={(value) => value}
+                              tickMargin={8}
+                            />{" "}
+                            <YAxis
+                              tick={{
+                                fill: "#ffffff",
+                                style: { fill: "#ffffff" },
+                              }}
+                              yAxisId="aporteY"
+                              orientation="left"
+                              axisLine={false}
+                              tickLine={false}
+                            />
+                            <YAxis
+                              yAxisId="jurosY"
+                              orientation="right"
+                              tickLine={false}
+                              axisLine={false}
+                            />
+                            <ChartTooltip
+                              cursor={false}
+                              content={<ChartTooltipContent />}
+                            />
+                            <Line
+                              yAxisId="aporteY"
+                              dataKey="aporte"
+                              name="Aportes"
+                              stroke="var(--color-Investimentos)"
+                              fill="var(--color-Investimentos)"
+                              type="linear"
+                              strokeWidth={2}
+                            />
+                            <Line
+                              dataKey="juros"
+                              yAxisId="jurosY"
+                              name="Juros"
+                              stroke="var(--color-Juros)"
+                              fill="var(--color-Juros)"
+                              type="monotone"
+                              strokeWidth={2}
+                            />
+                            <Legend verticalAlign="bottom" align="center" />
+                          </LineChart>
+                        </ChartContainer>
+                      </CardContent>
+                      <CardFooter>
+                        <div className="flex w-full items-start gap-2 text-sm">
+                          <div className="grid gap-2">
+                            {/* <div className="flex items-center gap-2 leading-none font-medium">
                         Comparando o Crescimento de Juros Compostos e Aportes
                         <TrendingUp className="h-4 w-4" />
                       </div> */}
+                          </div>
                         </div>
-                      </div>
-                    </CardFooter>
-                  </Card>
+                      </CardFooter>
+                    </Card>
 
-                  <Card className=" max-sm:-mt-10  row-start-2 border-0 bg-transparent max-sm:max-w-full  max-md:items-center ">
-                    <CardContent className="  flex  text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
-                      <ChartContainer
-                        config={chartConfig}
-                        className=" chart-container  w-[60rem] h-[25rem]  max-sm:w-[22rem]   max-sm:h-[20rem]"
-                      >
-                        <BarChart
-                          accessibilityLayer
-                          data={rendimentoGrafico}
-                          barCategoryGap={10}
-                          barGap={4}
+                    <Card className="w-full  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                      <CardHeader className="w-full justify-center items-center">
+                        <CardTitle className="text-3xl max-md:text-xl">
+                          Grafico comparativo
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="  flex  text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
+                        <ChartContainer
+                          config={chartConfig}
+                          className="  w-full h-full max-sm:w-[22rem]   max-sm:h-[20rem]"
                         >
-                          <CartesianGrid vertical={false} stroke="#6b72807d " />
-                          <XAxis
-                            className="text-[1rem] max-md:text-[0.7rem]"
-                            dataKey="Ativo"
-                            tickMargin={8}
-                            tick={{
-                              fill: "#ffffff",
-                              style: { fill: "#ffffff" },
-                            }}
-                            tickFormatter={(value) => value.slice(0, 7)}
-                          />
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <ChartLegend
-                            verticalAlign="bottom"
-                            align="center"
-                            className="max-md:mb-2"
-                            wrapperStyle={{ color: "#fff" }}
-                            content={<ChartLegendContent />}
-                          />
+                          <BarChart
+                            accessibilityLayer
+                            data={rendimentoGrafico}
+                            barCategoryGap={10}
+                            barGap={4}
+                          >
+                            <CartesianGrid
+                              vertical={false}
+                              stroke="#6b72807d "
+                            />
+                            <XAxis
+                              className="text-[1rem] max-md:text-[0.7rem]"
+                              dataKey="Ativo"
+                              tickMargin={8}
+                              tick={{
+                                fill: "#ffffff",
+                                style: { fill: "#ffffff" },
+                              }}
+                              tickFormatter={(value) => value.slice(0, 7)}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <ChartLegend
+                              verticalAlign="bottom"
+                              align="center"
+                              className="max-md:mb-2"
+                              wrapperStyle={{ color: "#fff" }}
+                              content={<ChartLegendContent />}
+                            />
 
-                          <Bar
-                            dataKey="Rendimento_Período_real"
-                            fill="var(--color-Rendimento_Período_real)"
-                            radius={4}
-                            barSize={barSize}
-                            className=""
-                          />
+                            <Bar
+                              dataKey="Rendimento_Período_real"
+                              fill="var(--color-Rendimento_Período_real)"
+                              radius={4}
+                              barSize={barSize}
+                              className=""
+                            />
 
-                          <Bar
-                            dataKey="Rendimento_Líquido_Imposto"
-                            fill="var(--color-Rendimento_Líquido_Imposto)"
-                            radius={4}
-                            barSize={barSize}
-                          />
-                        </BarChart>
-                      </ChartContainer>
-                    </CardContent>
-                  </Card>
-
-                  {/* </div> */}
+                            <Bar
+                              dataKey="Rendimento_Líquido_Imposto"
+                              fill="var(--color-Rendimento_Líquido_Imposto)"
+                              radius={4}
+                              barSize={barSize}
+                            />
+                          </BarChart>
+                        </ChartContainer>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
               </>
             )}
@@ -1046,8 +1058,8 @@ function App() {
               </Table>
             </Card>
           </div>
-          <footer className="text-amber-50 text-center  ">
-            © 2025 Shield Bank
+          <footer className="text-black text-center mt-10 justify-end  ">
+            <p> © 2025 Shield Bank</p>
           </footer>
         </div>
       </div>
