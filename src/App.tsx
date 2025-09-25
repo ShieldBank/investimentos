@@ -611,7 +611,7 @@ function App() {
                           return (
                             <>
                               <TableBody key={index}>
-                                <TableRow className="max-md:">
+                                <TableRow className="max-md:h-auto">
                                   <>
                                     <TableCell className="font-medium sticky left-0 bg-slate-50 z-50  border border-gray-400 max-md:text-[0.9rem]   ">
                                       {`  ${index} `}
@@ -876,9 +876,9 @@ function App() {
                         (raizYear ?? 0));
                   const rendimentoPeriodoValorInvestido =
                     Number(aporteInicial) + Number(aporteMensal) * periodo;
-                  const rendimentoPeriodoPercent =
-                    (vf - rendimentoPeriodoValorInvestido) /
-                    rendimentoPeriodoValorInvestido;
+                  // const rendimentoPeriodoPercent =
+                  //   (vf - rendimentoPeriodoValorInvestido) /
+                  //   rendimentoPeriodoValorInvestido;
 
                   const rendimentoPeriodo =
                     vf - rendimentoPeriodoValorInvestido;
