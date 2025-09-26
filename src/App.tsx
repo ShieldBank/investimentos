@@ -609,7 +609,7 @@ function App() {
                                 <TableRow className="max-md:h-auto">
                                   <>
                                     <TableCell className="font-medium sticky left-0 bg-slate-50 z-50  border border-gray-400 max-md:text-[0.9rem]   ">
-                                      {`  ${index} `}
+                                      {`  ${index + 1} `}
                                     </TableCell>
                                     <TableCell className="font-medium border-y border-gray-400 max-md:text-[0.9rem]  ">
                                       {formattedReal(aporteJuros)}
@@ -795,11 +795,11 @@ function App() {
               </>
             )}
             {/* Tabela de Rendimento */}
-            <Card className=" max-w-full h-full -mt-10  max-sm:max-w-ful max-sm:mt-0 bg-transparent max-md:h-[30rem]  border-0   ">
+            <Card className=" max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
               <CardTitle className="text-black text-3xl ">
-                Comparativo de taxas 💰
+                Comparativo de taxas
               </CardTitle>
-              <Table className="border-t-1 border-gray-400   bg-slate-50 text-black  mt-1  rounded-b-3xl   ">
+              <Table className="border-t-1 border-gray-400   bg-slate-50 text-black   mt-1  rounded-b-3xl   ">
                 <TableHeader className="bg-gray-900 text-amber-50 ">
                   <TableRow className="border-0  rounded-3xl  ">
                     <TableHead className="font-medium sticky left-0 bg-gray-900  border-0  z-50 min-w-[100px] max-w-[10px] ">
