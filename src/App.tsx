@@ -195,7 +195,8 @@ function App() {
 
   const mesesjurosCompostos = useMemo(() => {
     const meses: number[] = [];
-    const mesesTotais = getMonth + 1 + periodo;
+    const mesesTotais =
+      getMonth + 1 + (selectedOption === 0 ? periodo : periodo * 12);
     for (let i = getMonth + 1; i < mesesTotais; i++) {
       if (i > 12 && i < 25) {
         meses.push(i - 12);
@@ -219,7 +220,7 @@ function App() {
     }
 
     return meses;
-  }, [periodo]);
+  }, [periodo, selectedOption]);
   let aporteJuros = aporteInicial + aporteMensal;
   const chartConfigDados = {
     Investimentos: {
@@ -310,11 +311,11 @@ function App() {
                   onChange={(e) => {
                     console.log(periodo);
                     console.log(selectedOption);
-                    return e.target.value === "mes"
-                      ? (setSelectedOption(0),
-                        setPeriodo((state) => state / 12))
-                      : (setPeriodo((state) => state * 12),
-                        setSelectedOption(1));
+                    if (e.target.value === "mes") {
+                      setSelectedOption(0);
+                    } else {
+                      setSelectedOption(1);
+                    }
                   }}
                 >
                   <option value="mes" selected>
