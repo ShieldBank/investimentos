@@ -173,9 +173,7 @@ function App() {
   }, []);
 
   const [rendimentoGrafico, setRendimentoGrafico] = useState(values);
-  useEffect(() => {
-    return;
-  }, [rendimentoGrafico]);
+
   function formmatedN(n: number) {
     Number(n);
     return new Intl.NumberFormat("pt-BR", {
@@ -438,67 +436,66 @@ function App() {
           </div>
 
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
-            <Card className="w-full  flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
-              <h2 className="text-4xl text-black">Resumo</h2>
-              <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
-                <Card className="transition-transform duration-300 ease-in-out hover:animate-pulse bg-[#162456] w-full  shadow-2xl max-md:w-full max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 border-0 rounded-2xl p-10  gap-3">
-                  <div className="  flex  flex-col gap-2 justify-center items-center">
-                    <h1 className="text-3xl max-md:text-2xl   text-amber-50 ">
-                      Valor Total
-                    </h1>
-                    <Label
-                      htmlFor="Valor Total"
-                      className="text-4xl   max-md:text-3xl text-amber-50 "
-                    >
-                      {formattedReal(
-                        rendimentoGrafico[0].Rendimento_Valor_investido +
+            <div key={selectedOption}>
+              <Card className="w-full  flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
+                <h2 className="text-4xl text-black">Resumo</h2>
+                <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
+                  <Card className="transition-transform duration-300 ease-in-out hover:animate-pulse bg-[#162456] w-full  shadow-2xl max-md:w-full max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 border-0 rounded-2xl p-10  gap-3">
+                    <div className="  flex  flex-col gap-2 justify-center items-center">
+                      <h1 className="text-3xl max-md:text-2xl   text-amber-50 ">
+                        Valor Total
+                      </h1>
+                      <Label
+                        htmlFor="Valor Total"
+                        className="text-4xl   max-md:text-3xl text-amber-50 "
+                      >
+                        {formattedReal(
+                          rendimentoGrafico[0].Rendimento_Valor_investido +
+                            rendimentoGrafico[0].Rendimento_Período_real
+                        )}
+                      </Label>
+                    </div>
+                  </Card>
+                  <Card className=" max-md:w-full  w-full shadow-2xl max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
+                    <div className="  flex  flex-col gap-2 justify-center items-center">
+                      <h1 className="text-3xl text-blue-950 max-md:text-2xl">
+                        Valor Investido
+                      </h1>
+                      <Label
+                        htmlFor="Valor Investido"
+                        className="text-4xl  max-md:text-3xl"
+                      >
+                        {formattedReal(
+                          rendimentoGrafico[0].Rendimento_Valor_investido
+                        )}
+                      </Label>
+                    </div>
+                  </Card>
+                  <Card className=" max-md:w-full  w-full shadow-2xl max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
+                    <div className="  flex  flex-col gap-2 justify-center items-center">
+                      <h1 className="text-3xl  text-blue-950 max-md:text-2xl">
+                        Rendimento Shield
+                      </h1>
+                      <Label
+                        htmlFor="periodo"
+                        className="text-4xl  max-md:text-3xl text-blue-950"
+                      >
+                        {" "}
+                        {formattedReal(
                           rendimentoGrafico[0].Rendimento_Período_real
-                      )}
-                    </Label>
-                  </div>
-                </Card>
-                <Card className=" max-md:w-full  w-full shadow-2xl max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
-                  <div className="  flex  flex-col gap-2 justify-center items-center">
-                    <h1 className="text-3xl text-blue-950 max-md:text-2xl">
-                      Valor Investido
-                    </h1>
-                    <Label
-                      htmlFor="Valor Investido"
-                      className="text-4xl  max-md:text-3xl"
-                    >
-                      {formattedReal(
-                        rendimentoGrafico[0].Rendimento_Valor_investido
-                      )}
-                    </Label>
-                  </div>
-                </Card>
-                <Card className=" max-md:w-full  w-full shadow-2xl max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
-                  <div className="  flex  flex-col gap-2 justify-center items-center">
-                    <h1 className="text-3xl  text-blue-950 max-md:text-2xl">
-                      Rendimento Shield
-                    </h1>
-                    <Label
-                      htmlFor="periodo"
-                      className="text-4xl  max-md:text-3xl text-blue-950"
-                    >
-                      {" "}
-                      {formattedReal(
-                        rendimentoGrafico[0].Rendimento_Período_real
-                      )}
-                    </Label>
-                  </div>
-                </Card>
-              </div>
-            </Card>
+                        )}
+                      </Label>
+                    </div>
+                  </Card>
+                </div>
+              </Card>
+            </div>
           )}
           <div>
             {/* Tabela de Rendimento por mes  */}
             {periodo > 0 && (
               <>
-                <div
-                  key={selectedOption}
-                  className="max-w-full flex flex-col gap-5 max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 "
-                >
+                <div className="max-w-full flex flex-col gap-5 max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
                   <Card className="  rounded-3xl  border-0   max-sm:max-w-full ">
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
@@ -877,12 +874,18 @@ function App() {
                     minimumFractionDigits: 2,
                   }).format(raizYear ?? 0);
                   const vf =
-                    aporteInicial * (1 + (raizYear ?? 0)) ** periodo +
+                    aporteInicial *
+                      (1 + (raizYear ?? 0)) **
+                        (selectedOption === 0 ? periodo : periodo * 12) +
                     aporteMensal *
-                      (((1 + (raizYear ?? 0)) ** periodo - 1) /
+                      (((1 + (raizYear ?? 0)) **
+                        (selectedOption === 0 ? periodo : periodo * 12) -
+                        1) /
                         (raizYear ?? 0));
                   const rendimentoPeriodoValorInvestido =
-                    Number(aporteInicial) + Number(aporteMensal) * periodo;
+                    Number(aporteInicial) +
+                    Number(aporteMensal) *
+                      (selectedOption === 0 ? periodo : periodo * 12);
                   // const rendimentoPeriodoPercent =
                   //   (vf - rendimentoPeriodoValorInvestido) /
                   //   rendimentoPeriodoValorInvestido;
