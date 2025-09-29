@@ -48,7 +48,6 @@ function App() {
   const [aporteInicial, setaporteInicial] = useState<number>(0);
   const [aporteMensal, setaporteMensal] = useState<number>(0);
   // const [indexador, setIndexador] = useState<boolean>(false);
-  console.log({ teste: selectedOption });
   const values = [
     {
       Ativo: "Shield Bank",
@@ -319,8 +318,6 @@ function App() {
                   name="periodo"
                   id="periodo"
                   onChange={(e) => {
-                    console.log(periodo);
-                    console.log(selectedOption);
                     if (e.target.value === "mes") {
                       setSelectedOption(0);
                     } else {
@@ -573,13 +570,13 @@ function App() {
 
                           jurosCompostos.push(dados);
 
-                          console.log(
-                            index === 0
-                              ? aporteInicial * Number(raizYear)
-                              : jurosCompostos[index].totalJuros +
-                                  (aporteMensal * index + aporteInicial)
-                          );
-                          console.log(jurosCompostos.map((e) => e));
+                          // console.log(
+                          //   index === 0
+                          //     ? aporteInicial * Number(raizYear)
+                          //     : jurosCompostos[index].totalJuros +
+                          //         (aporteMensal * index + aporteInicial)
+                          // );
+                          // console.log(jurosCompostos.map((e) => e));
 
                           return (
                             <>
@@ -840,14 +837,24 @@ function App() {
                     default:
                   }
 
-                  if (periodo >= 0 && periodo <= 6) {
-                    aliquota = 22.5;
-                  } else if (periodo > 6 && periodo <= 12) {
-                    aliquota = 20;
-                  } else if (periodo > 12 && periodo <= 24) {
-                    aliquota = 17.5;
-                  } else {
-                    aliquota = 15;
+                  if (selectedOption === 0) {
+                    if (periodo >= 0 && periodo <= 6) {
+                      aliquota = 22.5;
+                    } else if (periodo > 6 && periodo <= 12) {
+                      aliquota = 20;
+                    } else if (periodo > 12 && periodo <= 24) {
+                      aliquota = 17.5;
+                    } else {
+                      aliquota = 15;
+                    }
+                  }
+
+                  if (selectedOption === 1) {
+                    if (periodo >= 1 && periodo <= 2) {
+                      aliquota = 17.5;
+                    } else {
+                      aliquota = 15;
+                    }
                   }
                   const formmatedPercent = new Intl.NumberFormat("pt-BR", {
                     style: "percent",
@@ -874,7 +881,7 @@ function App() {
                   const rendimentoPeriodo =
                     vf - rendimentoPeriodoValorInvestido;
                   const rendimentoLiquidoImposto =
-                    rendimentoPeriodo - rendimentoPeriodo * (aliquota / 100);
+                    rendimentoPeriodo - rendimentoPeriodo * (aliquota! / 100);
 
                   // eslint-disable-next-line react-hooks/rules-of-hooks
                   useEffect(() => {
@@ -1020,7 +1027,7 @@ function App() {
                               ? "isento"
                               : e.Ativo === "Poupança"
                               ? "isento"
-                              : formmatedN(aliquota / 100)}
+                              : formmatedN(aliquota! / 100)}
                           </TableCell>
                           <TableCell className="font-medium border-y border-gray-400">
                             {e.Ativo === "CRA Inflação"
