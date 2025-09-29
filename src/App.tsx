@@ -251,6 +251,18 @@ function App() {
       juros: 0,
     },
   ];
+  type JurosCompostos = {
+    juros: number;
+    totalJuros: number;
+    totalAcumulado: number;
+  };
+  const jurosCompostos: JurosCompostos[] = [
+    {
+      juros: 0,
+      totalJuros: 0,
+      totalAcumulado: 0,
+    },
+  ];
   return (
     <>
       <div className=" h-full  border-0 p-10 py-30 max-md:py-30 flex justify-center ">
@@ -534,11 +546,11 @@ function App() {
 
                           aporteJuros =
                             index === 0
-                              ? aporteInicial * Number(raizYear.toFixed(3))
-                              : (aporteMensal * index +
-                                  aporteInicial * Number(raizYear.toFixed(3)) +
-                                  aporteMensal) *
-                                Number(raizYear.toFixed(3));
+                              ? aporteInicial * Number(raizYear)
+                              : (jurosCompostos[index].totalJuros +
+                                  (aporteMensal * index + aporteInicial)) *
+                                Number(raizYear);
+
                           acumuladorJuros.push(aporteJuros);
 
                           const juroSobrejuros = acumuladorJuros.reduce(
@@ -553,53 +565,22 @@ function App() {
                             aporte: totalInvestimentos,
                             juros: juroSobrejuros,
                           });
+                          const dados: JurosCompostos = {
+                            juros: aporteJuros,
+                            totalJuros: juroSobrejuros,
+                            totalAcumulado: juroSobrejuros + totalInvestimentos,
+                          };
 
-                          // function mesFormatted(mes: number) {
-                          //   let mesNome: string = "";
-                          //   switch (mes) {
-                          //     case 1:
-                          //       mesNome = "Jan";
-                          //       break;
-                          //     case 2:
-                          //       mesNome = "Fev";
-                          //       break;
-                          //     case 3:
-                          //       mesNome = "Mar";
-                          //       break;
-                          //     case 4:
-                          //       mesNome = "Abr";
-                          //       break;
-                          //     case 5:
-                          //       mesNome = "Mai";
-                          //       break;
-                          //     case 6:
-                          //       mesNome = "Jun";
-                          //       break;
-                          //     case 7:
-                          //       mesNome = "Jul";
-                          //       break;
-                          //     case 8:
-                          //       mesNome = "Ago";
-                          //       break;
-                          //     case 9:
-                          //       mesNome = "Set";
-                          //       break;
-                          //     case 10:
-                          //       mesNome = "Out";
-                          //       break;
-                          //     case 11:
-                          //       mesNome = "Nov";
-                          //       break;
-                          //     case 12:
-                          //       mesNome = "Dez";
-                          //       break;
+                          jurosCompostos.push(dados);
 
-                          //     default:
-                          //       break;
-                          //   }
+                          console.log(
+                            index === 0
+                              ? aporteInicial * Number(raizYear)
+                              : jurosCompostos[index].totalJuros +
+                                  (aporteMensal * index + aporteInicial)
+                          );
+                          console.log(jurosCompostos.map((e) => e));
 
-                          //   return mesNome;
-                          // }
                           return (
                             <>
                               <TableBody key={index}>
