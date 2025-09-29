@@ -500,16 +500,16 @@ function App() {
               </Card>
             </div>
           )}
-          <div>
+          <div className="">
             {/* Tabela de Rendimento por mes  */}
             {periodo > 0 && (
               <>
-                <div className="max-w-full flex flex-col gap-5 max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
-                  <Card className="  rounded-3xl  border-0   max-sm:max-w-full ">
+                <div className=" max-w-full  flex flex-col gap-5 max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
+                  <Card className=" h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
                     </CardTitle>
-                    <Table className="  rounded-2xl   bg-slate-50 text-black w-auto max-md:h-[12rem] max-md:text-center ">
+                    <Table className="  rounded-2xl   bg-slate-50 text-black w-auto max-md:h-[12rem] max-md:text-center  ">
                       <TableHeader className="  bg-gray-900 text-amber-50 ">
                         <TableRow className="  ">
                           <TableHead className="  font-medium sticky left-0  bg-gray-900 border-gray-400  z-50 w-[80px] max-md:text-[0.9rem]  ">
@@ -580,8 +580,11 @@ function App() {
 
                           return (
                             <>
-                              <TableBody key={index}>
-                                <TableRow className="max-md:h-auto">
+                              <TableBody
+                                key={index}
+                                className="  h-[1rem] overflow-scroll"
+                              >
+                                <TableRow className="max-md:h-max-[100%] ">
                                   <>
                                     <TableCell className="font-medium sticky left-0 bg-slate-50 z-50  border border-gray-400 max-md:text-[0.9rem]   ">
                                       {`  ${index + 1} `}
