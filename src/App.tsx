@@ -129,18 +129,23 @@ function App() {
   const getMonthFormatted = getMonth.toString().padStart(2, "0");
   const getYearFormatted = getYear.toString().padStart(2, "0");
   const dateformatted = `${getDayFormatted}/${getMonthFormatted}/${getYearFormatted}`;
-  const dateformattedInitial = `01/${getMonthFormatted}/${getYearFormatted}`;
+  // const dateformattedInitial = `01/${getMonthFormatted}/${getYearFormatted}`;
 
+  const getMonthBancoCentral = new Date()
+    .getMonth()
+    .toString()
+    .padStart(2, "0");
+
+  const dateformattedInitialBancoCentral = `01/${getMonthBancoCentral}/${getYearFormatted}`;
   const dateformattedInflacao = `01/01/${getYearFormatted}`;
 
-  const urlBancoCentral = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=${dateformattedInitial}&dataFinal=${dateformatted}`;
+  const urlBancoCentral = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=${dateformattedInitialBancoCentral}&dataFinal=${dateformatted}`;
   const urlBancoCentralInflacao = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json&dataInicial=${dateformattedInflacao}`;
 
   const dadosCDI = async () => {
     const result = (await axios.get(urlBancoCentral)).data;
     const cdiDay = result[0].valor / 100;
     const cdiAnual = (1 + Number(cdiDay)) ** 252 - 1;
-
     setCDIAno(cdiAnual * 100);
   };
   useEffect(() => {
