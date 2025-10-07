@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -39,6 +39,7 @@ import { Label } from "./components/ui/label";
 import SHIELDBANK from "../assets/SHIELDBANK_AZUL_05@4x.png";
 // import { Button } from "./components/ui/button";
 import axios from "axios";
+import { useReactToPrint } from "react-to-print";
 
 function App() {
   const [CDIAno, setCDIAno] = useState<number>();
@@ -267,12 +268,31 @@ function App() {
       totalAcumulado: 0,
     },
   ];
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  const reactToPrintFn = useReactToPrint({
+    contentRef,
+    pageStyle: `
+      @page { size: A4; margin: 1cm; }
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+          background: white;
+        }
+      }
+    `,
+  });
+
   return (
     <>
-      <div className=" h-full  border-0 p-10 py-30 max-md:py-30 flex justify-center ">
+      <div
+        className=" h-full  border-0 p-10 py-30 max-md:py-30 flex justify-center "
+        ref={contentRef}
+      >
         <div className="w-full  max-md:flex max-md:flex-col max-md:justify-center">
-          <div className=" w-full flex justify-around  max-md:flex max-md:flex-col    ">
-            <img className="w-[40%] max-sm:w-full -mt-40 " src={SHIELDBANK} />
+          <div className=" w-full flex justify-around gap-2 max-md:flex max-md:flex-col    ">
+            <img className="w-[38%] max-sm:w-full -mt-40 " src={SHIELDBANK} />
 
             <Card className="w-[40%]  max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
               <Label htmlFor="aporteInicial" className="text-[#CCAA76]">
@@ -365,7 +385,7 @@ function App() {
               />
             </Card>
             <Card className="w-[18%] h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
-              <Label className="text-xl text-[#CCAA76] m-5">
+              <Label className="text-[1.2rem] text-[#CCAA76] m-5">
                 Simulação de Taxa
               </Label>
               <Label className="text-amber-50" htmlFor="Taxa Shield">
@@ -447,6 +467,14 @@ function App() {
                 <p className="text-[1rem]"> + IPCA</p>
               </Label>
             </Card>
+            <div className="flex justify-center">
+              <button
+                className="no-print print:hidden cursor-pointer bg-[#020922] text-amber-50 rounded-2xl p-1 max-md:justify-center  max-md:p-4 max-md:w-[10rem] max-md:mb-10 "
+                onClick={reactToPrintFn}
+              >
+                Exporta em PDF
+              </button>
+            </div>
           </div>
 
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
@@ -509,8 +537,8 @@ function App() {
             {/* Tabela de Rendimento por mes  */}
             {periodo > 0 && (
               <>
-                <div className=" max-w-full  flex flex-col gap-5 max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
-                  <Card className=" h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
+                <div className=" max-w-full   flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
+                  <Card className=" max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
                     </CardTitle>
@@ -618,17 +646,17 @@ function App() {
                         })}
                     </Table>
                   </Card>
-                  <div className="flex gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
-                    <Card className="w-full   border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                  <div className="print-w-full print-h-full flex  gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
+                    <Card className="w-full print-w-full print-h-full  border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl max-md:text-center">
                           Grafico de Juros + Investimentos
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="  w-full h-full bg-gray-900 rounded-4xl p-5 max-md:p-2 max-md:w-[25rem] ">
+                      <CardContent className=" bg-gray-900 rounded-4xl p-5 max-md:p-2 ">
                         <ChartContainer
                           config={chartConfigDados}
-                          className="   max-sm:max-w-full text-amber-50"
+                          className=" w-full h-full print-w-full  text-amber-50"
                         >
                           <LineChart
                             accessibilityLayer
@@ -647,6 +675,8 @@ function App() {
                             <CartesianGrid
                               vertical={false}
                               stroke="#6b72807d "
+                              strokeDasharray="3 3"
+                              // stroke="#e5e7eb"
                             />
                             <XAxis
                               dataKey="id"
@@ -689,6 +719,9 @@ function App() {
                               fill="var(--color-Investimentos)"
                               type="linear"
                               strokeWidth={2}
+                              isAnimationActive={true}
+                              animationDuration={1000}
+                              animationEasing="ease-in-out"
                             />
                             <Line
                               dataKey="juros"
@@ -715,16 +748,16 @@ function App() {
                       </CardFooter>
                     </Card>
 
-                    <Card className="w-full  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                    <Card className="w-full print-w-full  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl">
                           Grafico comparativo
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="  flex  text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
+                      <CardContent className="flex print-h-[380px] text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
                         <ChartContainer
                           config={chartConfig}
-                          className="  w-full h-full max-sm:w-[22rem]   max-sm:h-[20rem]"
+                          className="w-full h-full print-w-full "
                         >
                           <BarChart
                             accessibilityLayer
@@ -778,7 +811,7 @@ function App() {
               </>
             )}
             {/* Tabela de Rendimento */}
-            <Card className=" max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
+            <Card className=" print-container break-inside-avoid max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
               <CardTitle className="text-black text-3xl ">
                 Comparativo de taxas
               </CardTitle>
@@ -1052,7 +1085,7 @@ function App() {
               </Table>
             </Card>
           </div>
-          <footer className="text-black text-center mt-10 justify-end  ">
+          <footer className="print-container p-0 m-0 text-black text-center mt-10   ">
             <p> © 2025 Shield Bank</p>
           </footer>
         </div>
