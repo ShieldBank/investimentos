@@ -656,7 +656,7 @@ function App() {
                       <CardContent className=" bg-gray-900 rounded-4xl p-5 max-md:p-2 ">
                         <ChartContainer
                           config={chartConfigDados}
-                          className=" w-full h-full print-w-full  text-amber-50"
+                          className=" w-full max-sm:h-[200px] print-w-full  text-amber-50"
                         >
                           <LineChart
                             accessibilityLayer
@@ -757,7 +757,7 @@ function App() {
                       <CardContent className="flex print-h-[380px] text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
                         <ChartContainer
                           config={chartConfig}
-                          className="w-full h-full print-w-full "
+                          className="w-full max-sm:h-[180px] print-w-full "
                         >
                           <BarChart
                             accessibilityLayer
