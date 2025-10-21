@@ -31,6 +31,7 @@ import {
   Legend,
   Line,
   LineChart,
+  ResponsiveContainer,
   XAxis,
   YAxis,
 } from "recharts";
@@ -273,27 +274,46 @@ function App() {
   const reactToPrintFn = useReactToPrint({
     contentRef,
     pageStyle: `
-      @page { size: A5; margin: 1cm; }
+      @page { size: A4; margin: 1cm; }
      @media print {
       body {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         background: white;
       }
-
-      /* 🔒 Evita quebras automáticas */
-      * {
+  * {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
       }
+  
 
       /* 🔄 Mantém a escala menor no mobile */
-      @media (max-width: 768px) {
+      @media (max-width: 932px) {
         .print-container {
-          transform: scale(0.9);
-          transform-origin: top left;
+        width: 100%;
+
         }
       }
+        @media print {
+  .tabela-rendimentos {
+    page-break-after: always;
+    break-after: page;
+  }
+}
+         @media print {
+  .tabela-graficos {
+     width: 100% !important;
+    max-width: 100% !important;
+
+
+  }
+}
+  .grafico {
+     width: 85% !important;
+    height: 320px !important; /* Aumentei para deixar mais “encorpado” */
+    margin: 1rem 0; /* Menos espaço vertical */
+    
+  }
     }
     `,
   });
@@ -398,7 +418,7 @@ function App() {
                 onChange={(e) => setInflacao(Number(e.target.value))}
               />
             </Card>
-            <Card className=" no-print print:hidden w-[18%] h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
+            <Card className="w-[18%] h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
               <Label className="text-[1.2rem] text-[#CCAA76] m-5">
                 Simulação de Taxa
               </Label>
@@ -493,7 +513,7 @@ function App() {
 
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
             <div key={selectedOption}>
-              <Card className=" print-container w-full  flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
+              <Card className="w-full  flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
                 <h2 className="text-4xl text-black">Resumo</h2>
                 <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
                   <Card className="transition-transform duration-300 ease-in-out hover:animate-pulse bg-[#162456] w-full  shadow-2xl max-md:w-full max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 border-0 rounded-2xl p-10  gap-3">
@@ -552,7 +572,7 @@ function App() {
             {periodo > 0 && (
               <>
                 <div className=" max-w-full   flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
-                  <Card className=" max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
+                  <Card className="tabela-rendimentos max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
                     </CardTitle>
@@ -660,8 +680,8 @@ function App() {
                         })}
                     </Table>
                   </Card>
-                  <div className="print-w-full print-h-full flex  gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
-                    <Card className="w-full print-w-full print-h-full  border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                  <div className="flex  gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
+                    <Card className="tabela-graficos w-full border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl max-md:text-center">
                           Grafico de Juros + Investimentos
@@ -670,7 +690,7 @@ function App() {
                       <CardContent className=" bg-gray-900 rounded-4xl p-5 max-md:p-2 ">
                         <ChartContainer
                           config={chartConfigDados}
-                          className=" w-full max-sm:h-[200px] print-w-full  text-amber-50"
+                          className=" w-full  max-sm:h-[250px]  max-sm:w-[380px] grafico  text-amber-50"
                         >
                           <LineChart
                             accessibilityLayer
@@ -762,61 +782,63 @@ function App() {
                       </CardFooter>
                     </Card>
 
-                    <Card className="w-full print-w-full  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                    <Card className=" w-full   max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl">
                           Grafico comparativo
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="flex print-h-[380px] text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
+                      <CardContent className="flex  text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
                         <ChartContainer
                           config={chartConfig}
-                          className="w-full max-sm:h-[180px] print-w-full "
+                          className="w-full max-sm:h-[250px]  max-sm:w-[350px] grafico "
                         >
-                          <BarChart
-                            accessibilityLayer
-                            data={rendimentoGrafico}
-                            barCategoryGap={10}
-                            barGap={4}
-                          >
-                            <CartesianGrid
-                              vertical={false}
-                              stroke="#6b72807d "
-                            />
-                            <XAxis
-                              className="text-[1rem] max-md:text-[0.7rem]"
-                              dataKey="Ativo"
-                              tickMargin={8}
-                              tick={{
-                                fill: "#ffffff",
-                                style: { fill: "#ffffff" },
-                              }}
-                              tickFormatter={(value) => value.slice(0, 7)}
-                            />
-                            <ChartTooltip content={<ChartTooltipContent />} />
-                            <ChartLegend
-                              verticalAlign="bottom"
-                              align="center"
-                              className="max-md:mb-2"
-                              wrapperStyle={{ color: "#fff" }}
-                              content={<ChartLegendContent />}
-                            />
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                              accessibilityLayer
+                              data={rendimentoGrafico}
+                              barCategoryGap={10}
+                              barGap={4}
+                            >
+                              <CartesianGrid
+                                vertical={false}
+                                stroke="#6b72807d "
+                              />
+                              <XAxis
+                                className="text-[1rem] max-md:text-[0.7rem]"
+                                dataKey="Ativo"
+                                tickMargin={8}
+                                tick={{
+                                  fill: "#ffffff",
+                                  style: { fill: "#ffffff" },
+                                }}
+                                tickFormatter={(value) => value.slice(0, 7)}
+                              />
+                              <ChartTooltip content={<ChartTooltipContent />} />
+                              <ChartLegend
+                                verticalAlign="bottom"
+                                align="center"
+                                className="max-md:mb-2"
+                                wrapperStyle={{ color: "#fff" }}
+                                content={<ChartLegendContent />}
+                              />
 
-                            <Bar
-                              dataKey="Rendimento_Período_real"
-                              fill="var(--color-Rendimento_Período_real)"
-                              radius={4}
-                              barSize={barSize}
-                              className=""
-                            />
+                              <Bar
+                                dataKey="Rendimento_Período_real"
+                                fill="var(--color-Rendimento_Período_real)"
+                                radius={4}
+                                barSize={barSize}
+                                className=""
+                              />
 
-                            <Bar
-                              dataKey="Rendimento_Líquido_Imposto"
-                              fill="var(--color-Rendimento_Líquido_Imposto)"
-                              radius={4}
-                              barSize={barSize}
-                            />
-                          </BarChart>
+                              <Bar
+                                dataKey="Rendimento_Líquido_Imposto"
+                                fill="var(--color-Rendimento_Líquido_Imposto)"
+                                radius={4}
+                                barSize={barSize}
+                              />
+                            </BarChart>
+                          </ResponsiveContainer>
                         </ChartContainer>
                       </CardContent>
                     </Card>
@@ -825,7 +847,7 @@ function App() {
               </>
             )}
             {/* Tabela de Rendimento */}
-            <Card className=" no-print print:hidden print-container break-inside-avoid max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
+            <Card className="no-print print:hidden break-inside-avoid max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
               <CardTitle className="text-black text-3xl ">
                 Comparativo de taxas
               </CardTitle>
@@ -1099,7 +1121,7 @@ function App() {
               </Table>
             </Card>
           </div>
-          <footer className="print-container p-0 m-0 text-black text-center mt-10   ">
+          <footer className=" p-0 m-0 text-black text-center mt-10   ">
             <p> © 2025 Shield Bank</p>
           </footer>
         </div>
