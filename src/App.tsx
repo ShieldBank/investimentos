@@ -276,6 +276,13 @@ function App() {
     pageStyle: `
       @page { size: A4; margin: 1cm; }
      @media print {
+      .print-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 6rem auto !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
       body {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
@@ -321,7 +328,7 @@ function App() {
   return (
     <>
       <div
-        className=" h-full  border-0 p-10 py-30 max-md:py-30 flex justify-center "
+        className=" print-container h-full  border-0 p-10 py-30 max-md:py-30 flex justify-center "
         ref={contentRef}
       >
         <div className="w-full  max-md:flex max-md:flex-col max-md:justify-center">
