@@ -321,6 +321,10 @@ function App() {
     margin: 1rem 0; /* Menos espaço vertical */
     
   }
+    .img{
+    
+width: 35% !important;
+    }
     }
     `,
   });
@@ -328,12 +332,15 @@ function App() {
   return (
     <>
       <div
-        className=" print-container h-full  border-0 p-10 py-30 max-md:py-30 flex justify-center "
+        className="print-container h-full  border-0 p-10 py-30 max-md:py-30 flex justify-center "
         ref={contentRef}
       >
         <div className="w-full  max-md:flex max-md:flex-col max-md:justify-center">
           <div className=" w-full flex justify-around gap-2 max-md:flex max-md:flex-col    ">
-            <img className="w-[38%] max-sm:w-full -mt-40 " src={SHIELDBANK} />
+            <img
+              className="w-[38%] img max-sm:w-full -mt-40 "
+              src={SHIELDBANK}
+            />
 
             <Card className="w-[40%]  max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
               <Label htmlFor="aporteInicial" className="text-[#CCAA76]">
