@@ -274,75 +274,45 @@ function App() {
   const reactToPrintFn = useReactToPrint({
     contentRef,
     pageStyle: `
-      @page { size: A4; margin: 1cm; }
+@page { size: A4; margin: 1cm; }
  @media print {
- body {
+body {
  -webkit-print-color-adjust: exact;
- print-color-adjust: exact;
- background: white;
- }
- * {
- break-inside: avoid !important;
- page-break-inside: avoid !important;
- } 
-      /* 🚨 NOVO: Estilos de coluna para o A4/Impressão */
-      .print-container {
-          width: 100% !important;
-          column-count: 2; /* Aplica 2 colunas no contêiner principal */
-          column-gap: 20px;
-      }
+    print-color-adjust: exact;
+    background: white;
+  }
+    .card {
 
- /* 🔄 Mantém a escala menor no mobile (manter se necessário, mas não é o foco do problema) */
- @media (max-width: 932px) {
-  .print-container {
-    /* Os estilos de coluna já foram movidos para o bloco print geral */
-   width: 100%;
-          /* Remova a repetição de column-count aqui, a menos que queira um comportamento diferente */
+        break-inside: avoid;
+
+        page-break-inside: avoid;
+
+        -webkit-column-break-inside: avoid;
+page-break-after: always; /* Compatibilidade maior */
+    break-after: page; /* Sintaxe moderna */
+        width: 100%; /* Ocupa a largura total da coluna */
+
+        height: auto;
+
+        margin: 0 0 1rem 0; /* Espaçamento entre os cards dentro da coluna */
+
     }
-
-   } /* 🚨 Fim do media (max-width: 932px) */
-
-      /* Estilos para cards, essenciais para evitar quebra no meio da coluna */
-   .card {
-    break-inside: avoid;
-    page-break-inside: avoid;
-    -webkit-column-break-inside: avoid;
-    width: 100%; /* Ocupa a largura total da COLUNA */
-    height: auto; 
-    margin: 0 0 1rem 0;
-   }
-  
-  .tabela-rendimentos {
-     /* Isso forçará a tabela a ter uma página só para ela, se couber */
-     page-break-after: always;
-     break-after: page;
+        .card:last-of-type {
+      page-break-after: auto; 
+      break-after: auto;
   }
+         .grafico {
 
-      /* Adicione este estilo para que os gráficos ocupem 100% da coluna, mas force-os a ficarem um abaixo do outro dentro da coluna, já que a quebra lateral não é suportada diretamente em colunas */
-      .tabela-graficos {
-          width: 100% !important;
-          max-width: 100% !important;
-          /* Garante que o contêiner não tente quebrar a coluna principal se for muito grande */
-          break-inside: avoid; 
-      }
+     width: 85% !important;
 
-      .grafico {
-          width: 100% !important; /* Deve ser 100% da COLUNA (que já é 50% do A4) */
-          height: 320px !important; 
-          margin: 1rem 0; 
-      }
-      
-      .img {
-          /* Para a imagem, ajuste a largura para caber no fluxo de 2 colunas */
-          width: 40% !important; /* Ocupa a largura total da COLUNA */
-      }
-      /* Remova o outro .card repetido */
-  .no-break, .card * {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    height: 320px !important; /* Aumentei para deixar mais “encorpado” */
+
+    margin: 1rem 0; /* Menos espaço vertical */
+    page-break-after: auto; 
+      break-after: auto;
+   
+
   }
-  /* Remova o outro media print aninhado */
-
   }
     `,
   });
@@ -354,7 +324,7 @@ function App() {
         ref={contentRef}
       >
         <div className="w-full  max-md:flex max-md:flex-col max-md:justify-center">
-          <div className=" w-full print-container flex justify-around gap-2 max-md:flex max-md:flex-col    ">
+          <div className=" w-full  flex justify-around gap-2 max-md:flex max-md:flex-col    ">
             <img
               className="w-[38%]  img max-sm:w-full -mt-40 "
               src={SHIELDBANK}
