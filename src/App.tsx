@@ -313,6 +313,9 @@ page-break-after: always; /* Compatibilidade maior */
    
 
   }
+      img{
+      width: 30%
+      }
   }
     `,
   });
