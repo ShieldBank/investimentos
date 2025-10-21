@@ -277,36 +277,33 @@ function App() {
       @page { size: A4; margin: 1cm; }
      @media print {
       .print-container {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 6rem auto !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
+   column-count: 2;
+        column-gap: 20px; /* Espaço entre as colunas (opcional)
+        webkit-print-color-adjust: exact
   }
 
 
 
   .card{
 margin: 0 auto;
+break-inside: avoid;
+        page-break-inside: avoid;
 
-  width: 80%;
-height: 80%;
   }
-     .no-break, .card {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    -webkit-column-break-inside: avoid !important;
-    -webkit-region-break-inside: avoid !important;
-  }
+     .card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-column-break-inside: avoid; 
+    }
       .force-page-break-before {
     page-break-before: always !important;
     break-before: page !important;
   }
-      body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+    body {
+        -webkit-print-color-adjust: exact; /* Para Chrome, Safari, Edge */
+        print-color-adjust: exact;           /* Padrão */
         background: white;
-      }
+    }
   * {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
@@ -546,7 +543,7 @@ width: 35% !important;
 
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
             <div key={selectedOption}>
-              <Card className="w-full  flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
+              <Card className="w-full  card flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
                 <h2 className="text-4xl text-black">Resumo</h2>
                 <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
                   <Card className="transition-transform duration-300 ease-in-out hover:animate-pulse bg-[#162456] w-full  shadow-2xl max-md:w-full max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 border-0 rounded-2xl p-10  gap-3">
@@ -605,7 +602,7 @@ width: 35% !important;
             {periodo > 0 && (
               <>
                 <div className=" max-w-full   flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
-                  <Card className="tabela-rendimentos max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
+                  <Card className="card tabela-rendimentos max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
                     </CardTitle>
