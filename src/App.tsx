@@ -791,7 +791,7 @@ function App() {
                       <CardContent className="flex  text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
                         <ChartContainer
                           config={chartConfig}
-                          className="w-full max-sm:h-[250px]  max-sm:w-[380px] grafico "
+                          className="w-full max-sm:h-[250px]  max-sm:w-[350px] grafico "
                         >
                           <ResponsiveContainer width="100%" height="100%">
                             <BarChart
