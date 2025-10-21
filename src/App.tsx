@@ -283,6 +283,15 @@ function App() {
     padding: 0 !important;
     box-sizing: border-box !important;
   }
+
+
+
+  .card{
+margin: 0 auto;
+
+  width: 80%;
+height: 80%;
+  }
      .no-break, .card {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
@@ -346,13 +355,13 @@ width: 35% !important;
         ref={contentRef}
       >
         <div className="w-full  max-md:flex max-md:flex-col max-md:justify-center">
-          <div className=" w-full flex justify-around gap-2 max-md:flex max-md:flex-col    ">
+          <div className=" w-full div flex justify-around gap-2 max-md:flex max-md:flex-col    ">
             <img
-              className="w-[38%] img max-sm:w-full -mt-40 "
+              className="w-[38%]  img max-sm:w-full -mt-40 "
               src={SHIELDBANK}
             />
 
-            <Card className="w-[40%]  no-break force-page-break-after  max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
+            <Card className="w-[40%] card   max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
               <Label htmlFor="aporteInicial" className="text-[#CCAA76]">
                 Aporte Inicial
               </Label>
@@ -442,7 +451,7 @@ width: 35% !important;
                 onChange={(e) => setInflacao(Number(e.target.value))}
               />
             </Card>
-            <Card className="w-[18%] no-break force-page-break-after  h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
+            <Card className="w-[18%] card  h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
               <Label className="text-[1.2rem] text-[#CCAA76] m-5">
                 Simulação de Taxa
               </Label>
