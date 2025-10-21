@@ -279,22 +279,21 @@ function App() {
 body {
  -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-    background: white;
   }
     .card {
+display: block !important;
+        break-inside: avoid !important;
+    page-break-inside: avoid !important;
 
-        break-inside: avoid;
-
-        page-break-inside: avoid;
-
-        -webkit-column-break-inside: avoid;
-page-break-after: always; /* Compatibilidade maior */
-    break-after: page; /* Sintaxe moderna */
-        width: 100%; /* Ocupa a largura total da coluna */
-
-        height: auto;
-
-        margin: 0 0 1rem 0; /* Espaçamento entre os cards dentro da coluna */
+    /* 3. Força a quebra de página APÓS o card (Com todos os prefixos) */
+    page-break-after: always !important;
+    -webkit-break-after: page !important;
+    break-after: page !important; 
+    
+    /* Garante que ocupe todo o espaço e remove margens que podem atrapalhar */
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important; /
 
     }
         .card:last-of-type {
