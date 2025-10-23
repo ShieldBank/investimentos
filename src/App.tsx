@@ -277,48 +277,46 @@ function App() {
     contentRef,
     pageStyle: `
 @page { size: A4; margin: 1cm; }
- @media print {
-body {
- -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    background-color: white !important;
-  }
-
-  .resume{
-margin-top: 20rem
-
-}
-    .card {
-        break-inside: avoid !important;
-    page-break-inside: avoid !important;
-
-    page-break-after: always !important;
-    -webkit-break-after: page !important;
-    break-after: page !important; 
-    
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important; /
-
+@media print {
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        background-color: white !important;
     }
-        .card:last-of-type {
-      page-break-after: auto; 
-      break-after: auto;
-  }
-         .grafico {
 
-    width: 380px !important;
-    height: 280px !important; 
-    margin: 1rem 0;
-    page-break-after: auto; 
-    break-after: auto;
-  }
+    .card {
+        /* Controla a quebra DENTRO do card */
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
         
-      img{
-      width: 45%
-      }
-  }
-    `,
+        /* REMOVA O page-break-after: always! Se não, cada card fica em uma página separada. */
+        page-break-after: auto !important;
+        break-after: auto !important; 
+        
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important; 
+    }
+    
+    .card:last-of-type {
+        page-break-after: auto; 
+        break-after: auto;
+    }
+
+    .grafico {
+        /* Aumente o width para preencher a página A4 (100% ou um valor maior) */
+        width: 100% !important; 
+        height: 280px !important; 
+        margin: 1rem 0;
+        page-break-after: auto; 
+        break-after: auto;
+    }
+
+    img {
+        width: 45%;
+    }
+}
+`,
   });
 
   return (
@@ -335,7 +333,7 @@ margin-top: 20rem
             />
 
             <Card className="w-[40%] card break-inside-avoid print:break-inside-avoid  max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
-              <Label htmlFor="aporteInicial" className="text-[#CCAA76]">
+              <Label htmlFor="aporteInicial" className="text-[#CCAA76] ">
                 Aporte Inicial
               </Label>
 
@@ -447,7 +445,10 @@ margin-top: 20rem
                 />
                 {/* <p className="text-[1rem]">Taxa Shield Mes</p> */}
               </Label>
-              <Label htmlFor="a.a" className="text-[#CCAA76]">
+              <Label
+                htmlFor="a.a"
+                className="text-[#CCAA76] flex items-center gap-2"
+              >
                 <Input
                   className="w-20  text-black bg-amber-50  appearance-none "
                   id="a.a"
@@ -467,7 +468,10 @@ margin-top: 20rem
                 <p className="text-[1rem]"> CDB Pós Fixado</p>
               </Label>
 
-              <Label htmlFor="a.a" className="text-[#CCAA76]">
+              <Label
+                htmlFor="a.a"
+                className="text-[#CCAA76] flex items-center gap-2"
+              >
                 <Input
                   className="w-20  text-black bg-amber-50  appearance-none "
                   id="a.a"
@@ -487,7 +491,10 @@ margin-top: 20rem
                 <p className="text-[1rem]"> Tesouro Pré Fixado</p>
               </Label>
 
-              <Label htmlFor=" + IPCA" className="text-[#CCAA76]">
+              <Label
+                htmlFor=" + IPCA"
+                className="text-[#CCAA76] flex items-center gap-2"
+              >
                 <Input
                   className="w-20  text-black bg-amber-50  appearance-none "
                   id=" + IPCA"
