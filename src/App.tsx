@@ -285,19 +285,17 @@ body {
   }
 
   .resume{
-margin-top: 8rem
+margin-top: 20rem
 
 }
     .card {
         break-inside: avoid !important;
     page-break-inside: avoid !important;
 
-    /* 3. Força a quebra de página APÓS o card (Com todos os prefixos) */
     page-break-after: always !important;
     -webkit-break-after: page !important;
     break-after: page !important; 
     
-    /* Garante que ocupe todo o espaço e remove margens que podem atrapalhar */
     width: 100% !important;
     height: auto !important;
     margin: 0 !important; /
@@ -336,7 +334,7 @@ margin-top: 8rem
               src={SHIELDBANK}
             />
 
-            <Card className="w-[40%] card   max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
+            <Card className="w-[40%] card break-inside-avoid print:break-inside-avoid  max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
               <Label htmlFor="aporteInicial" className="text-[#CCAA76]">
                 Aporte Inicial
               </Label>
@@ -426,7 +424,7 @@ margin-top: 8rem
                 onChange={(e) => setInflacao(Number(e.target.value))}
               />
             </Card>
-            <Card className="w-[18%] card  h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
+            <Card className="w-[18%] card  break-inside-avoid print:break-inside-avoid h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
               <Label className="text-[1.2rem] text-[#CCAA76] m-5">
                 Simulação de Taxa
               </Label>
