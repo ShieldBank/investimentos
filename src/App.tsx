@@ -273,39 +273,59 @@ function App() {
   ];
 
   const contentRef = useRef<HTMLDivElement>(null);
+
   const reactToPrintFn = useReactToPrint({
     contentRef,
     pageStyle: `
-@page { size: A4; margin: 1cm; }
-@media print and (max-width: 600px) {
-  .recharts-wrapper {
-    width: 100% !important;
-    height: 500px !important; /* Um pouco maior no mobile */
-  }
+@page {
+  size: A4;
+  margin: 1cm;
 }
+
+/* Garantir cores no Chrome e outros navegadores */
+* {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+/* Evitar fundo branco sobrescrevendo algo */
+body {
+  background: white !important;
+}
+
+/* Evitar quebra de layout e garantir que cada card/gráfico fique por inteiro */
 @media print {
-    body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        background-color: white !important;
-    }
-         .print-container { 
-      display: block !important; 
-    }
-.no-break {
+  .print-container {
+    display: block !important;
+  }
+
+  .no-break {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
-      .card {
+
+  /* Ajustar os cards para ocupar toda a largura */
+  .card {
     margin: 0 !important;
     width: 100% !important;
   }
-.grafico {
-    width: 420px !important;
-    height: 260px !important; 
+
+  /* Ajuste principal dos gráficos para impressão desktop */
+  .grafico, 
+  .recharts-wrapper {
+    width: 100% !important;
+    height: 300px !important; /* ajuste ideal para desktop */
     margin: 1rem 0;
   }
-    
+}
+
+/* Ajustes específicos para telas pequenas (mobile) durante a impressão */
+@media print and (max-width: 600px) {
+  .grafico,
+  .recharts-wrapper {
+    width: 100% !important;
+    height: 450px !important; /* maior no mobile para leitura melhor */
+  }
 }
 `,
   });
@@ -516,8 +536,8 @@ function App() {
           </div>
 
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
-            <div key={selectedOption} className="">
-              <Card className="w-full  card   flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
+            <div key={selectedOption} className="print-container">
+              <Card className="w-full  card  no-break   flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
                 <h2 className="text-4xl text-black">Resumo</h2>
                 <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
                   <Card className="transition-transform duration-300 ease-in-out hover:animate-pulse bg-[#162456] w-full  shadow-2xl max-md:w-full max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 border-0 rounded-2xl p-10  gap-3">
