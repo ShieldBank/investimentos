@@ -311,20 +311,18 @@ body {
   }
 
   /* Ajuste principal dos gráficos para impressão desktop */
-  .grafico, 
-  .recharts-wrapper {
-    width: 100% !important;
-    height: 300px !important; /* ajuste ideal para desktop */
+  .grafico {
+    width: 430px !important;
+    height: 320px !important; /* ajuste ideal para desktop */
     margin: 1rem 0;
   }
 }
 
 /* Ajustes específicos para telas pequenas (mobile) durante a impressão */
 @media print and (max-width: 600px) {
-  .grafico,
-  .recharts-wrapper {
+  .grafico {
     width: 100% !important;
-    height: 450px !important; /* maior no mobile para leitura melhor */
+    height: 100% !important; /* maior no mobile para leitura melhor */
   }
 }
 `,
@@ -715,16 +713,16 @@ body {
                     </div>
                   </Card>
                   <div className="flex print-container  gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
-                    <Card className="   no-break  w-full border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                    <Card className="no-break  w-full border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl max-md:text-center">
                           Grafico de Juros + Investimentos
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="  bg-gray-900 rounded-4xl p-5 max-md:p-2 ">
+                      <CardContent className=" grafico bg-gray-900 rounded-4xl p-5 max-md:p-2 ">
                         <ChartContainer
                           config={chartConfigDados}
-                          className=" w-full  max-sm:h-[250px]  max-sm:w-[380px] grafico  text-amber-50"
+                          className=" w-full  max-sm:h-[250px]  max-sm:w-[380px]   text-amber-50"
                         >
                           <LineChart
                             accessibilityLayer
@@ -816,16 +814,16 @@ body {
                       </CardFooter>
                     </Card>
 
-                    <Card className=" w-full  no-break  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                    <Card className=" w-full card no-break  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl">
                           Grafico comparativo
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="flex  text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
+                      <CardContent className="flex grafico text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
                         <ChartContainer
                           config={chartConfig}
-                          className="w-full max-sm:w-[350px] max-sm:h-[280px]  grafico "
+                          className="w-full max-sm:w-[350px] max-sm:h-[280px]    "
                         >
                           <ResponsiveContainer width="100%" height="100%">
                             <BarChart
