@@ -306,7 +306,7 @@ function App() {
     margin: 1rem 0;
   }
     img {
-        width: 35%;
+        width: 25%;
     }
 }
 `,
