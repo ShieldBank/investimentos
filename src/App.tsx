@@ -306,7 +306,7 @@ function App() {
     margin: 1rem 0;
   }
     img {
-        width: 45%;
+        width: 35%;
     }
 }
 `,
@@ -518,7 +518,7 @@ function App() {
           </div>
 
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
-            <div key={selectedOption} className="resume">
+            <div key={selectedOption} className="">
               <Card className="w-full  card   flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
                 <h2 className="text-4xl text-black">Resumo</h2>
                 <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
