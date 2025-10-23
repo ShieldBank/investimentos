@@ -283,47 +283,21 @@ function App() {
         print-color-adjust: exact;
         background-color: white !important;
     }
-@media print {
-    /* ... */
-    .card:not(:first-child) {
-        /* Garante que o Card começa em uma nova página se o espaço for limitado */
-        page-break-before: auto !important;
-        break-before: auto !important;
+         .print-container { 
+      display: block !important; 
     }
-    
-    /* Outra opção é criar uma classe específica para o bloco da Simulação */
-}
-    .card {
-        /* Controla a quebra DENTRO do card */
-        break-inside: avoid !important;
-        page-break-inside: avoid !important;
-        
-        /* REMOVA O page-break-after: always! Se não, cada card fica em uma página separada. */
-        page-break-after: auto !important;
-        break-after: auto !important; 
-        
-        width: 100% !important;
-        height: auto !important;
-        margin: 0 !important; 
-    }
-    
-    .card:last-of-type {
-        page-break-after: auto; 
-        break-after: auto;
-    }
-
+.no-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+      .card {
+    margin: 0 !important;
+    width: 100% !important;
+  }
     .grafico {
-        /* Aumente o width para preencher a página A4 (100% ou um valor maior) */
-        width: 100% !important; 
-        height: 280px !important; 
-        margin: 1rem 0;
-        page-break-after: auto; 
-        break-after: auto;
-    }
-
-    img {
-        width: 45%;
-    }
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
 }
 `,
   });
@@ -334,14 +308,14 @@ function App() {
         className="print-container h-full  border-0 p-10 py-30 max-md:py-30 flex justify-center "
         ref={contentRef}
       >
-        <div className="w-full  max-md:flex max-md:flex-col max-md:justify-center">
-          <div className=" w-full  flex justify-around gap-2 max-md:flex max-md:flex-col    ">
+        <div className="w-full print-container max-md:flex max-md:flex-col max-md:justify-center">
+          <div className=" w-full print-container flex justify-around gap-2 max-md:flex max-md:flex-col    ">
             <img
               className="w-[38%]  img max-sm:w-full -mt-40 "
               src={SHIELDBANK}
             />
 
-            <Card className="w-[40%] card  break-inside-avoid print:break-inside-avoid  max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
+            <Card className="w-[40%] card  no-break   max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
               <Label htmlFor="aporteInicial" className="text-[#CCAA76] ">
                 Aporte Inicial
               </Label>
@@ -431,7 +405,7 @@ function App() {
                 onChange={(e) => setInflacao(Number(e.target.value))}
               />
             </Card>
-            <Card className="w-[18%] card break-inside-avoid print:break-inside-avoid  h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
+            <Card className="w-[18%] card  no-break   h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
               <Label className="text-[1.2rem] text-[#CCAA76] m-5">
                 Simulação de Taxa
               </Label>
@@ -535,7 +509,7 @@ function App() {
 
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
             <div key={selectedOption} className="resume">
-              <Card className="w-full  card flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
+              <Card className="w-full  card  no-break flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
                 <h2 className="text-4xl text-black">Resumo</h2>
                 <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
                   <Card className="transition-transform duration-300 ease-in-out hover:animate-pulse bg-[#162456] w-full  shadow-2xl max-md:w-full max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 border-0 rounded-2xl p-10  gap-3">
@@ -593,8 +567,8 @@ function App() {
             {/* Tabela de Rendimento por mes  */}
             {periodo > 0 && (
               <>
-                <div className=" max-w-full   flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
-                  <Card className="card tabela-rendimentos max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
+                <div className=" max-w-full print-container   flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
+                  <Card className="card  no-break  max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
                     </CardTitle>
@@ -701,7 +675,7 @@ function App() {
                           );
                         })}
                     </Table>
-                    <div className="max-md:flex max-md:w-auto hidden no-print print:hidden">
+                    <div className="max-md:flex print-container max-md:w-auto hidden no-print print:hidden">
                       <div className=" ">
                         <p className="text-sm text-gray-500 float-left mt-2 max-sm:text-xs ml-[1rem]">
                           Role a tabela para o lado{" "}
@@ -712,8 +686,8 @@ function App() {
                       </div>
                     </div>
                   </Card>
-                  <div className="flex  gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
-                    <Card className="tabela-graficos w-full border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                  <div className="flex print-container  gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
+                    <Card className=" card  no-break  w-full border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl max-md:text-center">
                           Grafico de Juros + Investimentos
@@ -814,7 +788,7 @@ function App() {
                       </CardFooter>
                     </Card>
 
-                    <Card className=" w-full   max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                    <Card className=" w-full card no-break  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl">
                           Grafico comparativo
