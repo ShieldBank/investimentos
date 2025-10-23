@@ -277,6 +277,12 @@ function App() {
     contentRef,
     pageStyle: `
 @page { size: A4; margin: 1cm; }
+@media print and (max-width: 600px) {
+  .recharts-wrapper {
+    width: 100% !important;
+    height: 500px !important; /* Um pouco maior no mobile */
+  }
+}
 @media print {
     body {
         -webkit-print-color-adjust: exact;
@@ -294,10 +300,14 @@ function App() {
     margin: 0 !important;
     width: 100% !important;
   }
-    .grafico {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+.grafico {
+    width: 420px !important;
+    height: 260px !important; 
+    margin: 1rem 0;
   }
+    img {
+        width: 45%;
+    }
 }
 `,
   });
@@ -675,7 +685,7 @@ function App() {
                           );
                         })}
                     </Table>
-                    <div className="max-md:flex print-container max-md:w-auto hidden no-print print:hidden">
+                    <div className="max-md:flex no-print print:hidden max-md:w-auto hidden ">
                       <div className=" ">
                         <p className="text-sm text-gray-500 float-left mt-2 max-sm:text-xs ml-[1rem]">
                           Role a tabela para o lado{" "}
@@ -687,7 +697,7 @@ function App() {
                     </div>
                   </Card>
                   <div className="flex print-container  gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
-                    <Card className=" card  no-break  w-full border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                    <Card className="   no-break  w-full border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl max-md:text-center">
                           Grafico de Juros + Investimentos
@@ -788,7 +798,7 @@ function App() {
                       </CardFooter>
                     </Card>
 
-                    <Card className=" w-full card no-break  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                    <Card className=" w-full  no-break  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl">
                           Grafico comparativo
