@@ -37,7 +37,9 @@ import {
 } from "recharts";
 import { Label } from "./components/ui/label";
 
-import SHIELDBANK from "../assets/SHIELDBANK_AZUL_05@4x.png";
+import SHIELDBANK from "../assets/SHIELDBANK.png";
+import Seta from "../assets/avanco-rapido.png";
+
 // import { Button } from "./components/ui/button";
 import axios from "axios";
 import { useReactToPrint } from "react-to-print";
@@ -287,7 +289,6 @@ margin-top: 8rem
 
 }
     .card {
-display: block !important;
         break-inside: avoid !important;
     page-break-inside: avoid !important;
 
@@ -308,16 +309,13 @@ display: block !important;
   }
          .grafico {
 
-     width: 85% !important;
-
-    height: 320px !important; /* Aumentei para deixar mais “encorpado” */
-
-    margin: 1rem 0; /* Menos espaço vertical */
+    width: 380px !important;
+    height: 280px !important; 
+    margin: 1rem 0;
     page-break-after: auto; 
-      break-after: auto;
-   
-
+    break-after: auto;
   }
+        
       img{
       width: 45%
       }
@@ -689,6 +687,16 @@ display: block !important;
                           );
                         })}
                     </Table>
+                    <div className="max-md:flex max-md:w-auto hidden no-print print:hidden">
+                      <div className=" ">
+                        <p className="text-sm text-gray-500 float-left mt-2 max-sm:text-xs ml-[1rem]">
+                          Role a tabela para o lado{" "}
+                        </p>
+                        <span className="inline-block animate-pulse  justify-center items-center pl-[1rem]">
+                          <img className="w-[2rem] " src={Seta} />
+                        </span>
+                      </div>
+                    </div>
                   </Card>
                   <div className="flex  gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
                     <Card className="tabela-graficos w-full border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
@@ -697,7 +705,7 @@ display: block !important;
                           Grafico de Juros + Investimentos
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className=" bg-gray-900 rounded-4xl p-5 max-md:p-2 ">
+                      <CardContent className="  bg-gray-900 rounded-4xl p-5 max-md:p-2 ">
                         <ChartContainer
                           config={chartConfigDados}
                           className=" w-full  max-sm:h-[250px]  max-sm:w-[380px] grafico  text-amber-50"
@@ -801,7 +809,7 @@ display: block !important;
                       <CardContent className="flex  text-amber-50 bg-gray-900 p-10 rounded-4xl max-md:p-5">
                         <ChartContainer
                           config={chartConfig}
-                          className="w-full max-sm:h-[250px]  max-sm:w-[350px] grafico "
+                          className="w-full max-sm:w-[350px] max-sm:h-[280px]  grafico "
                         >
                           <ResponsiveContainer width="100%" height="100%">
                             <BarChart
@@ -1129,6 +1137,17 @@ display: block !important;
                   );
                 })}
               </Table>
+
+              <div className="max-md:flex hidden no-print print:hidden">
+                <div className="items-center ">
+                  <p className="text-sm text-gray-500 float-left mt-2 max-sm:text-xs ml-[1rem]">
+                    Role a tabela para o lado{" "}
+                  </p>
+                  <span className="inline-block animate-pulse  justify-center items-center pl-[1rem]">
+                    <img className="w-[2rem] " src={Seta} />
+                  </span>
+                </div>
+              </div>
             </Card>
           </div>
           <footer className=" p-0 m-0 text-black text-center mt-10   ">
