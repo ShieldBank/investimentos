@@ -305,9 +305,7 @@ function App() {
     height: 260px !important; 
     margin: 1rem 0;
   }
-    img {
-        width: 25%;
-    }
+    
 }
 `,
   });
