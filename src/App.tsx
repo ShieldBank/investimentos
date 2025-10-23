@@ -283,7 +283,16 @@ function App() {
         print-color-adjust: exact;
         background-color: white !important;
     }
-
+@media print {
+    /* ... */
+    .card:not(:first-child) {
+        /* Garante que o Card começa em uma nova página se o espaço for limitado */
+        page-break-before: auto !important;
+        break-before: auto !important;
+    }
+    
+    /* Outra opção é criar uma classe específica para o bloco da Simulação */
+}
     .card {
         /* Controla a quebra DENTRO do card */
         break-inside: avoid !important;
@@ -332,7 +341,7 @@ function App() {
               src={SHIELDBANK}
             />
 
-            <Card className="w-[40%] card break-inside-avoid print:break-inside-avoid  max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
+            <Card className="w-[40%] card  break-inside-avoid print:break-inside-avoid  max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
               <Label htmlFor="aporteInicial" className="text-[#CCAA76] ">
                 Aporte Inicial
               </Label>
@@ -422,7 +431,7 @@ function App() {
                 onChange={(e) => setInflacao(Number(e.target.value))}
               />
             </Card>
-            <Card className="w-[18%] card  break-inside-avoid print:break-inside-avoid h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
+            <Card className="w-[18%] card break-inside-avoid print:break-inside-avoid  h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
               <Label className="text-[1.2rem] text-[#CCAA76] m-5">
                 Simulação de Taxa
               </Label>
