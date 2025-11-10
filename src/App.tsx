@@ -42,7 +42,79 @@ import Seta from "../assets/avanco-rapido.png";
 
 // import { Button } from "./components/ui/button";
 import axios from "axios";
-import { useReactToPrint } from "react-to-print";
+
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function exportPDF() {
+  const input = document.getElementById("relatorio");
+  if (!input) return;
+
+  // 🔹 Esconde botões e elementos desnecessários
+  const buttons = document.querySelectorAll(".no-pdf");
+  buttons.forEach((el) => el.classList.add("hide-for-pdf"));
+
+  // 🔹 Aplica escala menor para caber mais conteúdo
+  input.style.transform = "scale(0.63)";
+  input.style.transformOrigin = "top center";
+  input.style.margin = "0 auto";
+
+  try {
+    // 🔹 Captura o conteúdo como imagem
+    const dataUrl = await toPng(input, {
+      cacheBust: true,
+      pixelRatio: 2.5,
+      quality: 1,
+    });
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    const A4_WIDTH = 210;
+    const A4_HEIGHT = 297;
+
+    const img = new Image();
+    img.src = dataUrl;
+
+    await new Promise((resolve) => (img.onload = resolve));
+
+    const imgWidth = A4_WIDTH;
+    const imgHeight = (img.height * A4_WIDTH) / img.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    // 🔹 Adiciona a primeira página
+    pdf.addImage(img, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= A4_HEIGHT;
+
+    // 🔹 Paginação
+    while (heightLeft > 5) {
+      position -= A4_HEIGHT - 1; // leve ajuste pra evitar corte
+      pdf.addPage();
+      pdf.addImage(img, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= A4_HEIGHT;
+    }
+
+    // 🔹 REMOVE TODAS AS PÁGINAS EM BRANCO NO FINAL
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const totalPages = (pdf.internal as any).getNumberOfPages();
+    for (let i = totalPages; i >= 1; i--) {
+      const page = pdf.internal.pages[i];
+      const isEmpty = !Array.isArray(page) || page.length <= 1;
+      if (isEmpty) pdf.deletePage(i);
+      else break; // para assim que encontrar a última página com conteúdo
+    }
+
+    pdf.save("relatorio.pdf");
+  } catch (error) {
+    console.error("Erro ao exportar PDF:", error);
+  } finally {
+    // 🔹 Restaura o estado visual
+    input.style.transform = "";
+    input.style.margin = "";
+    buttons.forEach((el) => el.classList.remove("hide-for-pdf"));
+  }
+}
 
 function App() {
   const [CDIAno, setCDIAno] = useState<number>();
@@ -274,74 +346,24 @@ function App() {
 
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const reactToPrintFn = useReactToPrint({
-    contentRef,
-    pageStyle: `
-@page {
-  size: A4;
-  margin: 1cm;
-}
-
-/* Garantir cores no Chrome e outros navegadores */
-* {
-  -webkit-print-color-adjust: exact !important;
-  print-color-adjust: exact !important;
-}
-
-/* Evitar fundo branco sobrescrevendo algo */
-body {
-  background: white !important;
-}
-
-/* Evitar quebra de layout e garantir que cada card/gráfico fique por inteiro */
-@media print {
-  .print-container {
-    display: block !important;
-  }
-
-  .no-break {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* Ajustar os cards para ocupar toda a largura */
-  .card {
-    margin: 0 !important;
-    width: 100% !important;
-  }
-
-  /* Ajuste principal dos gráficos para impressão desktop */
-  .grafico {
-    width: 430px !important;
-    height: 320px !important; /* ajuste ideal para desktop */
-    margin: 1rem 0;
-  }
-}
-
-/* Ajustes específicos para telas pequenas (mobile) durante a impressão */
-@media print and (max-width: 600px) {
-  .grafico {
-    width: 100% !important;
-    height: 100% !important; /* maior no mobile para leitura melhor */
-  }
-}
-`,
-  });
-
   return (
     <>
       <div
-        className="print-container h-full  border-0 p-10 py-30 max-md:py-30 flex justify-center "
+        id="relatorio"
+        className=" h-full  border-0 p-10 py-30 max-md:py-30 flex justify-center "
         ref={contentRef}
       >
-        <div className="w-full print-container max-md:flex max-md:flex-col max-md:justify-center">
-          <div className=" w-full print-container flex justify-around gap-2 max-md:flex max-md:flex-col    ">
+        <div
+          id="bloco-a-controlar"
+          className="bloco-inteiro w-full max-md:flex max-md:flex-col max-md:justify-center"
+        >
+          <div className="   w-full flex justify-around gap-2 max-md:flex max-md:flex-col    ">
             <img
-              className="w-[38%]  img max-sm:w-full -mt-40 "
+              className="w-[38%]  img max-sm:w-full min-lg:-mt-40 logo-pdf-print"
               src={SHIELDBANK}
             />
 
-            <Card className="w-[40%] card  no-break   max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
+            <Card className="bloco-inteiro w-[40%] card    max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
               <Label htmlFor="aporteInicial" className="text-[#CCAA76] ">
                 Aporte Inicial
               </Label>
@@ -431,7 +453,7 @@ body {
                 onChange={(e) => setInflacao(Number(e.target.value))}
               />
             </Card>
-            <Card className="w-[18%] card  no-break   h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
+            <Card className="bloco-inteiro w-[18%] card    h-full  max-md:w-full max-md:mb-10   bg-[#020922] border-amber-50 rounded-3xl p-4 text-amber-50 gap-3">
               <Label className="text-[1.2rem] text-[#CCAA76] m-5">
                 Simulação de Taxa
               </Label>
@@ -523,10 +545,10 @@ body {
                 <p className="text-[1rem]"> + IPCA</p>
               </Label>
             </Card>
-            <div className="flex justify-center">
+            <div className=" no-pdf flex justify-center">
               <button
-                className="no-print print:hidden cursor-pointer bg-[#020922] text-amber-50 rounded-2xl p-1 max-md:justify-center  max-md:p-4 max-md:w-[10rem] max-md:mb-10 "
-                onClick={reactToPrintFn}
+                className="cursor-pointer bg-[#020922] text-amber-50 rounded-2xl p-1 max-md:justify-center  max-md:p-4 max-md:w-[10rem] max-md:mb-10 "
+                onClick={exportPDF}
               >
                 Exporta em PDF
               </button>
@@ -534,7 +556,7 @@ body {
           </div>
 
           {rendimentoGrafico[0].Rendimento_Líquido_Imposto > 0 && (
-            <div key={selectedOption} className="print-container">
+            <div key={selectedOption} className="bloco-inteiro">
               <Card className="w-full  card  no-break   flex  max-md:w-full max-md:mb-10  h-auto mt-5  bg-[#e9e9e9]   border-0 rounded-2xl p-5 text-amber-50">
                 <h2 className="text-4xl text-black">Resumo</h2>
                 <div className="  w-full flex justify-center max-md:gap-0 gap-20 max-md:flex-col">
@@ -593,8 +615,8 @@ body {
             {/* Tabela de Rendimento por mes  */}
             {periodo > 0 && (
               <>
-                <div className=" max-w-full print-container   flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
-                  <Card className="card  no-break  max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
+                <div className="  bloco-inteiro max-w-full  flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
+                  <Card className="  no-pdf card  no-break  max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
                     </CardTitle>
@@ -712,7 +734,7 @@ body {
                       </div>
                     </div>
                   </Card>
-                  <div className="flex print-container  gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
+                  <div className="flex bloco-inteiro  gap-10 max-md:gap-0 justify-center items-center w-full max-md:flex max-md:flex-col max-md:justify-center max-md:items-center">
                     <Card className="no-break  w-full border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl max-md:text-center">
@@ -814,7 +836,10 @@ body {
                       </CardFooter>
                     </Card>
 
-                    <Card className=" w-full card no-break  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3">
+                    <Card
+                      id="pagina-comparativo"
+                      className=" pdf-block w-full card no-break  max-md:-mt-15 border-0    bg-transparent  max-md:mb-10  max-sm:max-w-full  max-md:items-center  text-black gap-3"
+                    >
                       <CardHeader className="w-full justify-center items-center">
                         <CardTitle className="text-3xl max-md:text-xl">
                           Grafico comparativo
@@ -879,7 +904,7 @@ body {
               </>
             )}
             {/* Tabela de Rendimento */}
-            <Card className="no-print print:hidden break-inside-avoid max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
+            <Card className="no-pdf print:hidden break-inside-avoid max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
               <CardTitle className="text-black text-3xl ">
                 Comparativo de taxas
               </CardTitle>
