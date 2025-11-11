@@ -52,13 +52,29 @@ export async function exportPDF() {
   if (!input) return;
 
   // 🔹 Esconde botões e elementos desnecessários
-  const buttons = document.querySelectorAll(".no-pdf");
-  buttons.forEach((el) => el.classList.add("hide-for-pdf"));
+  // const buttons = document.querySelectorAll(".no-pdf");
+  // buttons.forEach((el) => el.classList.add("hide-for-pdf"));
 
   // 🔹 Aplica escala menor para caber mais conteúdo
-  input.style.transform = "scale(0.63)";
+  const scrollables = document.querySelector(".tabela");
+  console.log("Elemento:", scrollables);
+  console.log("Classes atuais:", scrollables?.classList);
+  if (scrollables) {
+    scrollables.classList.remove("max-h-[580px]");
+  }
+  // Aguarda o layout atualizar
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  const isMobile = window.innerWidth <= 768; // pode ajustar esse breakpoint
+  const scale = isMobile ? 0.63 : 1; // menor no celular pra caber mais conteúdo
+  const buttons = isMobile ? document.querySelectorAll(".no-pdf") : [];
+  const buttonsS = document.querySelectorAll(".no-pdfF");
+
+  input.style.transform = `scale(${scale})`;
   input.style.transformOrigin = "top center";
   input.style.margin = "0 auto";
+  buttons.forEach((el) => el.classList.add("hide-for-pdf"));
+  buttonsS.forEach((el) => el.classList.add("hide-for-pdf"));
 
   try {
     // 🔹 Captura o conteúdo como imagem
@@ -113,6 +129,7 @@ export async function exportPDF() {
     input.style.transform = "";
     input.style.margin = "";
     buttons.forEach((el) => el.classList.remove("hide-for-pdf"));
+    scrollables?.classList.add("max-h-[580px]");
   }
 }
 
@@ -615,12 +632,12 @@ function App() {
             {/* Tabela de Rendimento por mes  */}
             {periodo > 0 && (
               <>
-                <div className="  bloco-inteiro max-w-full  flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
-                  <Card className="  no-pdf card  no-break  max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
+                <div className="  max-w-full  flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
+                  <Card className="tabela no-pdf  card    max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
                     </CardTitle>
-                    <Table className="  rounded-2xl   bg-slate-50 text-black w-auto max-md:h-[12rem] max-md:text-center  ">
+                    <Table className=" rounded-2xl   bg-slate-50 text-black w-auto max-md:h-[12rem] max-md:text-center  ">
                       <TableHeader className="  bg-gray-900 text-amber-50 ">
                         <TableRow className="  ">
                           <TableHead className="  font-medium sticky left-0  bg-gray-900 border-gray-400  z-50 w-[80px] max-md:text-[0.9rem]  ">
@@ -691,10 +708,7 @@ function App() {
 
                           return (
                             <>
-                              <TableBody
-                                key={index}
-                                className="  h-[1rem] overflow-scroll"
-                              >
+                              <TableBody key={index} className=" h-[1rem]">
                                 <TableRow className="max-md:h-max-[100%] ">
                                   <>
                                     <TableCell className="font-medium sticky left-0 bg-slate-50 z-50  border border-gray-400 max-md:text-[0.9rem]   ">
@@ -904,7 +918,7 @@ function App() {
               </>
             )}
             {/* Tabela de Rendimento */}
-            <Card className="no-pdf print:hidden break-inside-avoid max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
+            <Card className="no-pdfF print:hidden break-inside-avoid max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
               <CardTitle className="text-black text-3xl ">
                 Comparativo de taxas
               </CardTitle>
