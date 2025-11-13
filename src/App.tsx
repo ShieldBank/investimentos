@@ -37,7 +37,7 @@ import {
 } from "recharts";
 import { Label } from "./components/ui/label";
 
-// import SHIELDBANK from "../public/SHIELDBANK.png";
+import SHIELDBANK from "../public/SHIELDBANK.png";
 import Seta from "../assets/avanco-rapido.png";
 
 // import { Button } from "./components/ui/button";
@@ -50,20 +50,26 @@ import jsPDF from "jspdf";
 export async function exportPDF() {
   const input = document.getElementById("relatorio");
   if (!input) return;
-  const images = Array.from(input.querySelectorAll("img"));
-  await Promise.all(
-    images.map(
-      (img) =>
-        new Promise<void>((resolve) => {
-          if (img.complete) return resolve();
-          img.onload = () => resolve();
-          img.onerror = () => resolve();
-        })
-    )
-  );
+  const images = input.querySelector(".imgLogo");
+
+  if (images) {
+    console.log("Imagem:", images.src, images.complete);
+  } else {
+    console.log("Imagem não encontrada");
+  }
+  // await Promise.all(
+  //   images.map(
+  //     (img) =>
+  //       new Promise<void>((resolve) => {
+  //         if (img.complete) return resolve();
+  //         img.onload = () => resolve();
+  //         img.onerror = () => resolve();
+  //       })
+  //   )
+  // );
   // 🔹 Esconde botões e remove limite de altura
   const scrollable = document.querySelector(".tabela");
-  const image = document.querySelector(".img");
+  const image = document.querySelector(".imgLogo");
   const list = document.querySelectorAll(".tdList");
 
   const buttons = document.querySelectorAll(".no-pdf, .no-pdfF");
@@ -356,8 +362,8 @@ function App() {
         >
           <div className="   w-full flex justify-around gap-2 max-md:flex max-md:flex-col    ">
             <img
-              className="w-[38%]  img max-sm:w-full min-lg:-mt-40  max-md:-mt-30"
-              src="/SHIELDBANK.png"
+              className="w-[38%]  imgLogo max-sm:w-full min-lg:-mt-40  max-md:-mt-30"
+              src={SHIELDBANK}
             />
 
             <Card className="bloco-inteiro w-[40%] card    max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
