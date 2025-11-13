@@ -53,14 +53,17 @@ export async function exportPDF() {
 
   // 🔹 Esconde botões e remove limite de altura
   const scrollable = document.querySelector(".tabela");
+  const image = document.querySelector(".img");
   const list = document.querySelectorAll(".tdList");
 
   const buttons = document.querySelectorAll(".no-pdf, .no-pdfF");
-  console.log(scrollable);
+  console.log(image);
   scrollable?.classList.remove("max-h-[580px]");
   list.forEach((el) => el.classList.remove("max-md:text-[0.9rem]"));
 
   scrollable?.classList.add("h-auto");
+  image?.classList.remove("max-md:-mt-30");
+
   list.forEach((el) => el.classList.add("max-md:text-[0.5rem]"));
   buttons.forEach((el) => el.classList.add("hide-for-pdf"));
 
