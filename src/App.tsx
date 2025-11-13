@@ -43,8 +43,10 @@ import Seta from "../assets/avanco-rapido.png";
 // import { Button } from "./components/ui/button";
 import axios from "axios";
 
-import { toPng } from "html-to-image";
+// import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
+// eslint-disable-next-line
+import domtoimage from "dom-to-image-more";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function exportPDF() {
@@ -90,10 +92,16 @@ export async function exportPDF() {
     // const isMobile = window.innerWidth <= 768;
 
     // 🔹 Captura a tela com alta resolução
-    const dataUrl = await toPng(input, {
+    const dataUrl = await domtoimage.toPng(input, {
       cacheBust: true,
       pixelRatio: 3,
       quality: 1,
+      style: {
+        transform: "scale(1)",
+        transformOrigin: "top left",
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      filter: (node: any) => !node.classList.contains("no-pdf"),
     });
 
     const img = new Image();
