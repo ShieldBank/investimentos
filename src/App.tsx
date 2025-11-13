@@ -37,7 +37,7 @@ import {
 } from "recharts";
 import { Label } from "./components/ui/label";
 
-import SHIELDBANK from "../assets/SHIELDBANK.png";
+// import SHIELDBANK from "../assets/SHIELDBANK.png";
 import Seta from "../assets/avanco-rapido.png";
 
 // import { Button } from "./components/ui/button";
@@ -353,7 +353,7 @@ function App() {
           <div className="   w-full flex justify-around gap-2 max-md:flex max-md:flex-col    ">
             <img
               className="w-[38%]  img max-sm:w-full min-lg:-mt-40  max-md:-mt-30"
-              src={SHIELDBANK}
+              src="https://private-user-images.githubusercontent.com/89217840/514083175-18e30a08-babc-40b5-9630-c895a7dc5310.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjMwNjU5NDMsIm5iZiI6MTc2MzA2NTY0MywicGF0aCI6Ii84OTIxNzg0MC81MTQwODMxNzUtMThlMzBhMDgtYmFiYy00MGI1LTk2MzAtYzg5NWE3ZGM1MzEwLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTExMTMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMTEzVDIwMjcyM1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWRjY2FkZjllYWMwNTI0NTVmYWJiMzVjYzgwYjRkYjc5YzczYmUxNDZjOTY5OTNmMzdlMzUwMmVhM2RiNmIzOTUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.xC8_1qRRtlEWoMsWWbZ0W1k1-wK33Rv0bR_vfHDloYE"
             />
 
             <Card className="bloco-inteiro w-[40%] card    max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
