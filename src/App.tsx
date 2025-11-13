@@ -52,12 +52,11 @@ export async function exportPDF() {
   if (!input) return;
   const images = input.querySelector(".imgLogo");
 
-  if (images) {
+  if (images instanceof HTMLImageElement) {
     console.log("Imagem:", images.src, images.complete);
   } else {
     console.log("Imagem não encontrada");
-  }
-  // await Promise.all(
+  } // await Promise.all(
   //   images.map(
   //     (img) =>
   //       new Promise<void>((resolve) => {
