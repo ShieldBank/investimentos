@@ -51,85 +51,46 @@ export async function exportPDF() {
   const input = document.getElementById("relatorio");
   if (!input) return;
 
-  // 🔹 Esconde botões e elementos desnecessários
-  // const buttons = document.querySelectorAll(".no-pdf");
-  // buttons.forEach((el) => el.classList.add("hide-for-pdf"));
+  // 🔹 Esconde botões e remove limite de altura
+  const scrollable = document.querySelector(".tabela");
+  const buttons = document.querySelectorAll(".no-pdf, .no-pdfF");
 
-  // 🔹 Aplica escala menor para caber mais conteúdo
-  const scrollables = document.querySelector(".tabela");
-  console.log("Elemento:", scrollables);
-  console.log("Classes atuais:", scrollables?.classList);
-  if (scrollables) {
-    scrollables.classList.remove("max-h-[580px]");
-  }
-  // Aguarda o layout atualizar
-  await new Promise((resolve) => setTimeout(resolve, 100));
-
-  const isMobile = window.innerWidth <= 768; // pode ajustar esse breakpoint
-  const scale = isMobile ? 0.63 : 1; // menor no celular pra caber mais conteúdo
-  const buttons = isMobile ? document.querySelectorAll(".no-pdf") : [];
-  const buttonsS = document.querySelectorAll(".no-pdfF");
-
-  input.style.transform = `scale(${scale})`;
-  input.style.transformOrigin = "top center";
-  input.style.margin = "0 auto";
+  scrollable?.classList.remove("max-h-[580px]");
   buttons.forEach((el) => el.classList.add("hide-for-pdf"));
-  buttonsS.forEach((el) => el.classList.add("hide-for-pdf"));
+
+  // Aguarda o layout se ajustar
+  await new Promise((resolve) => setTimeout(resolve, 300));
 
   try {
-    // 🔹 Captura o conteúdo como imagem
+    // const isMobile = window.innerWidth <= 768;
+
+    // 🔹 Captura a tela com alta resolução
     const dataUrl = await toPng(input, {
       cacheBust: true,
-      pixelRatio: 2.5,
+      pixelRatio: 3,
       quality: 1,
     });
 
-    const pdf = new jsPDF("p", "mm", "a4");
-    const A4_WIDTH = 210;
-    const A4_HEIGHT = 297;
-
     const img = new Image();
     img.src = dataUrl;
-
     await new Promise((resolve) => (img.onload = resolve));
 
+    // 🔹 Calcula o tamanho do PDF dinamicamente
+    const A4_WIDTH = 210;
     const imgWidth = A4_WIDTH;
-    const imgHeight = (img.height * A4_WIDTH) / img.width;
+    const imgHeight = (img.height * imgWidth) / img.width;
 
-    let heightLeft = imgHeight;
-    let position = 0;
+    // 🔹 Cria o PDF com altura ajustada ao conteúdo
+    const pdf = new jsPDF("p", "mm", [imgHeight, A4_WIDTH]);
 
-    // 🔹 Adiciona a primeira página
-    pdf.addImage(img, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= A4_HEIGHT;
-
-    // 🔹 Paginação
-    while (heightLeft > 5) {
-      position -= A4_HEIGHT - 1; // leve ajuste pra evitar corte
-      pdf.addPage();
-      pdf.addImage(img, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= A4_HEIGHT;
-    }
-
-    // 🔹 REMOVE TODAS AS PÁGINAS EM BRANCO NO FINAL
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const totalPages = (pdf.internal as any).getNumberOfPages();
-    for (let i = totalPages; i >= 1; i--) {
-      const page = pdf.internal.pages[i];
-      const isEmpty = !Array.isArray(page) || page.length <= 1;
-      if (isEmpty) pdf.deletePage(i);
-      else break; // para assim que encontrar a última página com conteúdo
-    }
-
+    pdf.addImage(img, "PNG", 0, 0, imgWidth, imgHeight);
     pdf.save("relatorio.pdf");
-  } catch (error) {
-    console.error("Erro ao exportar PDF:", error);
+  } catch (err) {
+    console.error("Erro ao gerar PDF:", err);
   } finally {
-    // 🔹 Restaura o estado visual
-    input.style.transform = "";
-    input.style.margin = "";
+    // 🔹 Restaura layout
+    scrollable?.classList.add("max-h-[580px]");
     buttons.forEach((el) => el.classList.remove("hide-for-pdf"));
-    scrollables?.classList.add("max-h-[580px]");
   }
 }
 
@@ -632,7 +593,7 @@ function App() {
             {/* Tabela de Rendimento por mes  */}
             {periodo > 0 && (
               <>
-                <div className="  max-w-full  flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
+                <div className=" bloco-inteiro  max-w-full  flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
                   <Card className="tabela no-pdf  card    max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
