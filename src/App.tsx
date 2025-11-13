@@ -62,7 +62,7 @@ export async function exportPDF() {
   list.forEach((el) => el.classList.remove("max-md:text-[0.9rem]"));
 
   scrollable?.classList.add("h-auto");
-  image?.classList.remove("max-md:-mt-30");
+  image?.classList.add("max-md:-mt-30");
 
   list.forEach((el) => el.classList.add("max-md:text-[0.5rem]"));
   buttons.forEach((el) => el.classList.add("hide-for-pdf"));
@@ -84,8 +84,12 @@ export async function exportPDF() {
 
     const img = new Image();
     img.src = dataUrl;
-    await new Promise((resolve) => (img.onload = resolve));
-
+    await new Promise((resolve) => {
+      img.onload = () => setTimeout(resolve, 300); // Espera carregar e só depois dá o delay
+    });
+    if (img.decode) {
+      await img.decode();
+    }
     // 🔹 Calcula o tamanho do PDF dinamicamente
     const A4_WIDTH = 200;
     const imgWidth = A4_WIDTH;
