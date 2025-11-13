@@ -37,7 +37,7 @@ import {
 } from "recharts";
 import { Label } from "./components/ui/label";
 
-import SHIELDBANK from "../assets/SHIELDBANK.png";
+// import SHIELDBANK from "../assets/SHIELDBANK.png";
 import Seta from "../assets/avanco-rapido.png";
 
 // import { Button } from "./components/ui/button";
