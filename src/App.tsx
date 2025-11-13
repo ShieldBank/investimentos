@@ -344,7 +344,7 @@ function App() {
           <div className="   w-full flex justify-around gap-2 max-md:flex max-md:flex-col    ">
             <img
               className="w-[38%]  img max-sm:w-full min-lg:-mt-40  max-md:-mt-30"
-              src="../assets/SHIELDBANK.png"
+              src="assets/SHIELDBANK.png"
             />
 
             <Card className="bloco-inteiro w-[40%] card    max-md:w-full max-md:mb-10  h-full bg-[#020922] border-0 rounded-2xl p-10 text-[#162456] gap-3">
