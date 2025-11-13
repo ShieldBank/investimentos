@@ -75,7 +75,9 @@ export async function exportPDF() {
       cacheBust: true,
       pixelRatio: 3,
       quality: 1,
-    });
+      useCORS: true, // 👈 importante
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any);
 
     const img = new Image();
     img.src = dataUrl;
