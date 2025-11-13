@@ -82,11 +82,9 @@ export async function exportPDF() {
 
     const img = new Image();
     img.src = dataUrl;
-    await new Promise((resolve) => {
-      img.onload = () => setTimeout(resolve, 300); // Espera carregar e só depois dá o delay
-    });
-    if (img.decode) {
-      await img.decode();
+    const image = document.querySelector<HTMLImageElement>(".img");
+    if (image && !image.complete) {
+      await new Promise((resolve) => (image.onload = resolve));
     }
     // 🔹 Calcula o tamanho do PDF dinamicamente
     const A4_WIDTH = 200;
