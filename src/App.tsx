@@ -50,7 +50,17 @@ import jsPDF from "jspdf";
 export async function exportPDF() {
   const input = document.getElementById("relatorio");
   if (!input) return;
-
+  const images = Array.from(input.querySelectorAll("img"));
+  await Promise.all(
+    images.map(
+      (img) =>
+        new Promise<void>((resolve) => {
+          if (img.complete) return resolve();
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+        })
+    )
+  );
   // 🔹 Esconde botões e remove limite de altura
   const scrollable = document.querySelector(".tabela");
   const image = document.querySelector(".img");
@@ -82,10 +92,8 @@ export async function exportPDF() {
 
     const img = new Image();
     img.src = dataUrl;
-    const image = document.querySelector<HTMLImageElement>(".img");
-    if (image && !image.complete) {
-      await new Promise((resolve) => (image.onload = resolve));
-    }
+    await new Promise((resolve) => (img.onload = resolve));
+
     // 🔹 Calcula o tamanho do PDF dinamicamente
     const A4_WIDTH = 200;
     const imgWidth = A4_WIDTH;
