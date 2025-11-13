@@ -53,9 +53,15 @@ export async function exportPDF() {
 
   // 🔹 Esconde botões e remove limite de altura
   const scrollable = document.querySelector(".tabela");
-  const buttons = document.querySelectorAll(".no-pdf, .no-pdfF");
+  const list = document.querySelectorAll(".tdList");
 
+  const buttons = document.querySelectorAll(".no-pdf, .no-pdfF");
+  console.log(scrollable);
   scrollable?.classList.remove("max-h-[580px]");
+  list.forEach((el) => el.classList.remove("max-md:text-[0.9rem]"));
+
+  scrollable?.classList.add("h-auto");
+  list.forEach((el) => el.classList.add("max-md:text-[0.5rem]"));
   buttons.forEach((el) => el.classList.add("hide-for-pdf"));
 
   // Aguarda o layout se ajustar
@@ -76,7 +82,7 @@ export async function exportPDF() {
     await new Promise((resolve) => (img.onload = resolve));
 
     // 🔹 Calcula o tamanho do PDF dinamicamente
-    const A4_WIDTH = 210;
+    const A4_WIDTH = 200;
     const imgWidth = A4_WIDTH;
     const imgHeight = (img.height * imgWidth) / img.width;
 
@@ -337,7 +343,7 @@ function App() {
         >
           <div className="   w-full flex justify-around gap-2 max-md:flex max-md:flex-col    ">
             <img
-              className="w-[38%]  img max-sm:w-full min-lg:-mt-40 logo-pdf-print"
+              className="w-[38%]  img max-sm:w-full min-lg:-mt-40 "
               src={SHIELDBANK}
             />
 
@@ -593,27 +599,27 @@ function App() {
             {/* Tabela de Rendimento por mes  */}
             {periodo > 0 && (
               <>
-                <div className=" bloco-inteiro  max-w-full  flex flex-col  max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
-                  <Card className="tabela no-pdf  card    max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
+                <div className="  max-w-full  flex flex-col    max-md:gap-0 max-sm:flex max-sm:flex-col place-content-center place-items-center border-0 ">
+                  <Card className="tabela  card max-h-[580px] rounded-3xl  border-0   max-sm:max-w-full ">
                     <CardTitle className="text-black text-3xl max-md:text-2xl">
                       Tabela De Rendimentos
                     </CardTitle>
-                    <Table className=" rounded-2xl   bg-slate-50 text-black w-auto max-md:h-[12rem] max-md:text-center  ">
+                    <Table className="teste rounded-2xl  bg-slate-50 text-black  max-md:h-[12rem] max-md:text-center  ">
                       <TableHeader className="  bg-gray-900 text-amber-50 ">
-                        <TableRow className="  ">
-                          <TableHead className="  font-medium sticky left-0  bg-gray-900 border-gray-400  z-50 w-[80px] max-md:text-[0.9rem]  ">
+                        <TableRow className="">
+                          <TableHead className=" tdList   sticky left-0  bg-gray-900 border-gray-400  z-50 w-[80px] max-md:text-[0.9rem]  ">
                             Meses
                           </TableHead>
-                          <TableHead className="w-[150px] max-md:text-[0.9rem] ">
+                          <TableHead className="tdList w-[100px] max-md:text-[0.9rem] ">
                             Juros
                           </TableHead>
-                          <TableHead className=" w-[150px] max-md:text-[0.9rem]">
+                          <TableHead className="tdList w-[100px] max-md:text-[0.9rem]">
                             Total Investido
                           </TableHead>
-                          <TableHead className=" w-[150px] max-md:text-[0.9rem] ">
+                          <TableHead className="tdList w-[100px] max-md:text-[0.9rem] ">
                             Total Juros
                           </TableHead>
-                          <TableHead className=" w-[150px] max-md:text-[0.9rem] ">
+                          <TableHead className="tdList w-[100px] max-md:text-[0.9rem] ">
                             Total Acumulado
                           </TableHead>
                         </TableRow>
@@ -672,21 +678,21 @@ function App() {
                               <TableBody key={index} className=" h-[1rem]">
                                 <TableRow className="max-md:h-max-[100%] ">
                                   <>
-                                    <TableCell className="font-medium sticky left-0 bg-slate-50 z-50  border border-gray-400 max-md:text-[0.9rem]   ">
+                                    <TableCell className="font-medium tdList sticky left-0 bg-slate-50 z-50  border border-gray-400 max-md:text-[0.9rem]   ">
                                       {`  ${index + 1} `}
                                     </TableCell>
-                                    <TableCell className="font-medium border-y border-gray-400 max-md:text-[0.9rem]  ">
+                                    <TableCell className="font-medium tdList border-y border-gray-400 max-md:text-[0.9rem]  ">
                                       {formattedReal(aporteJuros)}
                                     </TableCell>
-                                    <TableCell className="font-medium border-y border-gray-400 max-md:text-[0.9rem] ">
+                                    <TableCell className="font-medium tdList border-y border-gray-400 max-md:text-[0.9rem] ">
                                       {formattedReal(totalInvestimentos)}
                                     </TableCell>
 
-                                    <TableCell className="font-medium border-y border-gray-400 max-md:text-[0.9rem] ">
+                                    <TableCell className="font-medium tdList border-y border-gray-400 max-md:text-[0.9rem] ">
                                       {formattedReal(juroSobrejuros)}
                                     </TableCell>
 
-                                    <TableCell className="font-medium  border-y border-gray-400 max-md:text-[0.9rem] ">
+                                    <TableCell className="font-medium tdList border-y border-gray-400 max-md:text-[0.9rem] ">
                                       {formattedReal(
                                         juroSobrejuros + totalInvestimentos
                                       )}

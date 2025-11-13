@@ -2,12 +2,43 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
 @media print {
-  /* Garante que os contêineres pai não limitem a largura em 100% da viewport pequena */
-  .print-w-full {
+  /* Remove qualquer rolagem do container da tabela */
+  .teste {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  /* Remove rolagem do card que envolve a tabela */
+  .card {
+    overflow: visible !important;
+  }
+
+  /* Ajusta o container que pode estar limitando a tabela */
+  .bloco-inteiro {
+    overflow: visible !important;
+  }
+
+  /* Evita quebra de página no meio da tabela */
+  .teste,
+  .teste * {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Remove as barras de rolagem que sobram */
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* Garante que ocupe toda a largura e não force scroll horizontal */
+  table {
     width: 100% !important;
+    table-layout: auto !important;
   }
 }
+
 .hide-for-pdf {
   display: none !important;
 }
