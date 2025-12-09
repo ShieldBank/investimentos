@@ -905,7 +905,7 @@ function App() {
               </>
             )}
             {/* Tabela de Rendimento */}
-            <Card className="no-pdfF print:hidden break-inside-avoid max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
+            <Card className=" break-inside-avoid max-w-full h-full -mt-10  max-sm:max-w-full max-sm:mt-0 bg-transparent max-md:h-[30rem]   border-0   ">
               <CardTitle className="text-black text-3xl ">
                 Comparativo de taxas
               </CardTitle>
