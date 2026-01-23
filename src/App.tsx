@@ -215,12 +215,12 @@ function App() {
     .toString()
     .padStart(2, "0");
 
-  const dateformattedInitialBancoCentral = `01/${getMonthBancoCentral}/${getYearFormatted}`;
-  const dateformattedInflacao = `01/01/${getYearFormatted}`;
-
+  const dateformattedInitialBancoCentral = `01/${getMonthBancoCentral + 1}/${getYearFormatted}`;
+  const dateformattedInflacao = `01/01/${Number(getYearFormatted) - 1}`;
+  console.log(dateformattedInitialBancoCentral, dateformattedInflacao);
   const urlBancoCentral = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=${dateformattedInitialBancoCentral}&dataFinal=${dateformatted}`;
   const urlBancoCentralInflacao = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json&dataInicial=${dateformattedInflacao}`;
-
+  console.log(urlBancoCentralInflacao);
   const dadosCDI = async () => {
     const result = (await axios.get(urlBancoCentral)).data;
     const cdiDay = result[0].valor / 100;
@@ -235,13 +235,15 @@ function App() {
       {
         data: string;
         valor: string;
-      }
+      },
     ] = (await axios.get(urlBancoCentralInflacao)).data;
+
+    console.log(result);
     const sizeMonth = result.length;
 
     const soma = result.reduce(
       (acc, currentValue) => Number(currentValue.valor) + acc,
-      0
+      0,
     );
     const inflacaoAtual = soma;
     const mediaInflacao = soma / sizeMonth;
@@ -473,8 +475,8 @@ function App() {
                       state.map((e, i) =>
                         i === 0
                           ? { ...e, Indexador: Number(taxa.target.value) }
-                          : e
-                      )
+                          : e,
+                      ),
                     );
                   }}
                 />
@@ -495,8 +497,8 @@ function App() {
                       state.map((e, i) =>
                         i === 1
                           ? { ...e, Indexador: Number(a.target.value) }
-                          : e
-                      )
+                          : e,
+                      ),
                     );
                   }}
                 />
@@ -518,8 +520,8 @@ function App() {
                       state.map((e, i) =>
                         i === 2
                           ? { ...e, Indexador: Number(a.target.value) }
-                          : e
-                      )
+                          : e,
+                      ),
                     );
                   }}
                 />
@@ -541,8 +543,8 @@ function App() {
                       state.map((e, i) =>
                         i === 3
                           ? { ...e, Indexador: Number(ipca.target.value) }
-                          : e
-                      )
+                          : e,
+                      ),
                     )
                   }
                 />
@@ -575,7 +577,7 @@ function App() {
                       >
                         {formattedReal(
                           rendimentoGrafico[0].Rendimento_Valor_investido +
-                            rendimentoGrafico[0].Rendimento_Período_real
+                            rendimentoGrafico[0].Rendimento_Período_real,
                         )}
                       </Label>
                     </div>
@@ -590,7 +592,7 @@ function App() {
                         className="text-4xl  max-md:text-3xl"
                       >
                         {formattedReal(
-                          rendimentoGrafico[0].Rendimento_Valor_investido
+                          rendimentoGrafico[0].Rendimento_Valor_investido,
                         )}
                       </Label>
                     </div>
@@ -606,7 +608,7 @@ function App() {
                       >
                         {" "}
                         {formattedReal(
-                          rendimentoGrafico[0].Rendimento_Período_real
+                          rendimentoGrafico[0].Rendimento_Período_real,
                         )}
                       </Label>
                     </div>
@@ -649,7 +651,7 @@ function App() {
                         mesesjurosCompostos.map((_, index) => {
                           let raizYear: number;
                           const taxaMensal = rendimentoGrafico.filter(
-                            (e) => e.Ativo === "Shield Bank"
+                            (e) => e.Ativo === "Shield Bank",
                           );
 
                           const taxYear: number = taxaMensal[0].Indexador;
@@ -667,7 +669,7 @@ function App() {
 
                           const juroSobrejuros = acumuladorJuros.reduce(
                             (acc, current) => acc + current,
-                            0
+                            0,
                           );
 
                           const totalInvestimentos =
@@ -714,7 +716,7 @@ function App() {
 
                                     <TableCell className="font-medium tdList border-y border-gray-400 max-md:text-[0.9rem] ">
                                       {formattedReal(
-                                        juroSobrejuros + totalInvestimentos
+                                        juroSobrejuros + totalInvestimentos,
                                       )}
                                     </TableCell>
                                   </>
@@ -1033,8 +1035,8 @@ function App() {
                                   Rendimento_Valor_investido:
                                     rendimentoPeriodoValorInvestido,
                                 }
-                              : e
-                          )
+                              : e,
+                          ),
                         );
                         break;
                       case "CDB Pós Fixado":
@@ -1049,8 +1051,8 @@ function App() {
                                   Rendimento_Valor_investido:
                                     rendimentoPeriodoValorInvestido,
                                 }
-                              : e
-                          )
+                              : e,
+                          ),
                         );
                         break;
 
@@ -1066,8 +1068,8 @@ function App() {
                                   Rendimento_Valor_investido:
                                     rendimentoPeriodoValorInvestido,
                                 }
-                              : e
-                          )
+                              : e,
+                          ),
                         );
                         break;
                       case "CRA Inflação":
@@ -1081,8 +1083,8 @@ function App() {
                                   Rendimento_Valor_investido:
                                     rendimentoPeriodoValorInvestido,
                                 }
-                              : e
-                          )
+                              : e,
+                          ),
                         );
                         break;
                       case "Poupança":
@@ -1096,8 +1098,8 @@ function App() {
                                   Rendimento_Valor_investido:
                                     rendimentoPeriodoValorInvestido,
                                 }
-                              : e
-                          )
+                              : e,
+                          ),
                         );
                         break;
                     }
@@ -1122,10 +1124,10 @@ function App() {
                               e.Ativo === "CDB Pós Fixado"
                                 ? "do CDI"
                                 : e.Ativo === "Tesouro Pré Fixado"
-                                ? "a.a"
-                                : e.Ativo === "CRA Inflação"
-                                ? " + IPCA"
-                                : ""
+                                  ? "a.a"
+                                  : e.Ativo === "CRA Inflação"
+                                    ? " + IPCA"
+                                    : ""
                             }`}
                           </TableCell>
                           <TableCell className="font-medium border-y border-gray-400">
@@ -1133,18 +1135,19 @@ function App() {
                               e.Ativo === "Shield Bank"
                                 ? `${(e.Indexador * 12).toFixed(2)}%`
                                 : // ? `${(e.Indexador * 12).toFixed(2)}%`
-                                e.Ativo === "CDB Pós Fixado"
-                                ? `${(
-                                    (e.Indexador * (CDIAno ?? 0)) /
-                                    100
-                                  ).toFixed(2)}%`
-                                : e.Ativo === "Tesouro Pré Fixado"
-                                ? `${e.Indexador}%`
-                                : e.Ativo === "CRA Inflação"
-                                ? `${
-                                    e.Indexador + Number(inflacao.toFixed(2))
-                                  }%`
-                                : "7,44%"
+                                  e.Ativo === "CDB Pós Fixado"
+                                  ? `${(
+                                      (e.Indexador * (CDIAno ?? 0)) /
+                                      100
+                                    ).toFixed(2)}%`
+                                  : e.Ativo === "Tesouro Pré Fixado"
+                                    ? `${e.Indexador}%`
+                                    : e.Ativo === "CRA Inflação"
+                                      ? `${
+                                          e.Indexador +
+                                          Number(inflacao.toFixed(2))
+                                        }%`
+                                      : "7,44%"
                             }`}
                           </TableCell>
                           <TableCell className="font-medium border-y border-gray-400 ">
@@ -1161,15 +1164,15 @@ function App() {
                             {e.Ativo === "CRA Inflação"
                               ? "isento"
                               : e.Ativo === "Poupança"
-                              ? "isento"
-                              : formmatedN(aliquota! / 100)}
+                                ? "isento"
+                                : formmatedN(aliquota! / 100)}
                           </TableCell>
                           <TableCell className="font-medium border-y border-gray-400">
                             {e.Ativo === "CRA Inflação"
                               ? formattedReal(rendimentoPeriodo)
                               : e.Ativo === "Poupança"
-                              ? formattedReal(rendimentoPeriodo)
-                              : formattedReal(rendimentoLiquidoImposto)}
+                                ? formattedReal(rendimentoPeriodo)
+                                : formattedReal(rendimentoLiquidoImposto)}
                           </TableCell>
                         </>
                       </TableRow>
