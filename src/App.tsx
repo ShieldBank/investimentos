@@ -73,7 +73,6 @@ export async function exportPDF() {
   const list = document.querySelectorAll(".tdList");
 
   const buttons = document.querySelectorAll(".no-pdf, .no-pdfF");
-  console.log(image);
   scrollable?.classList.remove("max-h-[580px]");
   list.forEach((el) => el.classList.remove("max-md:text-[0.9rem]"));
 
@@ -215,7 +214,7 @@ function App() {
     .toString()
     .padStart(2, "0");
 
-  const dateformattedInitialBancoCentral = `01/${getMonthBancoCentral + 1}/${getYearFormatted}`;
+  const dateformattedInitialBancoCentral = `01/${getMonthBancoCentral}/${getYearFormatted}`;
   const dateformattedInflacao = `01/01/${Number(getYearFormatted) - 1}`;
   console.log(dateformattedInitialBancoCentral, dateformattedInflacao);
   const urlBancoCentral = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=${dateformattedInitialBancoCentral}&dataFinal=${dateformatted}`;
