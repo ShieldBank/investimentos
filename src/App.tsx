@@ -119,7 +119,7 @@ export async function exportPDF() {
 }
 
 function App() {
-  const [CDIAno, setCDIAno] = useState<number>();
+  const [CDIAno, setCDIAno] = useState<number>(14.75);
   const [inflacao, setInflacao] = useState<number>(0);
   const [periodo, setPeriodo] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<number>(0);
@@ -200,13 +200,13 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   const getMonth = new Date().getMonth() + 1;
-  const getDay = new Date().getDate();
+  // const getDay = new Date().getDate();
   const getYear = new Date().getFullYear();
 
-  const getDayFormatted = getDay.toString().padStart(2, "0");
-  const getMonthFormatted = getMonth.toString().padStart(2, "0");
+  // const getDayFormatted = getDay.toString().padStart(2, "0");
+  // const getMonthFormatted = getMonth.toString().padStart(2, "0");
   const getYearFormatted = getYear.toString().padStart(2, "0");
-  const dateformatted = `${getDayFormatted}/${getMonthFormatted}/${getYearFormatted}`;
+  // const dateformatted = `${getDayFormatted}/${getMonthFormatted}/${getYearFormatted}`;
   // const dateformattedInitial = `01/${getMonthFormatted}/${getYearFormatted}`;
 
   const getMonthBancoCentral = new Date()
@@ -216,15 +216,15 @@ function App() {
 
   const dateformattedInitialBancoCentral = `01/${getMonthBancoCentral}/${getYearFormatted}`;
   const dateformattedInflacao = `01/01/${Number(getYearFormatted) - 1}`;
-  console.log(dateformattedInitialBancoCentral, dateformattedInflacao);
-  const urlBancoCentral = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=${dateformattedInitialBancoCentral}&dataFinal=${dateformatted}`;
+  const urlBancoCentral = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=${dateformattedInitialBancoCentral}`;
   const urlBancoCentralInflacao = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json&dataInicial=${dateformattedInflacao}`;
-  console.log(urlBancoCentralInflacao);
   const dadosCDI = async () => {
     const result = (await axios.get(urlBancoCentral)).data;
     const cdiDay = result[0].valor / 100;
+    console.log(result[0].valor);
     const cdiAnual = (1 + Number(cdiDay)) ** 252 - 1;
-    setCDIAno(cdiAnual * 100);
+
+    setCDIAno((state) => (!state ? cdiAnual * 100 : state));
   };
   useEffect(() => {
     dadosCDI();
