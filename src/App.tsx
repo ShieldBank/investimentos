@@ -200,13 +200,13 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   const getMonth = new Date().getMonth() + 1;
-  const getDay = new Date().getDate();
+  // const getDay = new Date().getDate();
   const getYear = new Date().getFullYear();
 
-  const getDayFormatted = getDay.toString().padStart(2, "0");
-  const getMonthFormatted = getMonth.toString().padStart(2, "0");
+  // const getDayFormatted = getDay.toString().padStart(2, "0");
+  // const getMonthFormatted = getMonth.toString().padStart(2, "0");
   const getYearFormatted = getYear.toString().padStart(2, "0");
-  const dateformatted = `${getDayFormatted}/${getMonthFormatted}/${getYearFormatted}`;
+  // const dateformatted = `${getDayFormatted}/${getMonthFormatted}/${getYearFormatted}`;
   // const dateformattedInitial = `01/${getMonthFormatted}/${getYearFormatted}`;
 
   const getMonthBancoCentral = new Date()
