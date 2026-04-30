@@ -119,7 +119,7 @@ export async function exportPDF() {
 }
 
 function App() {
-  const [CDIAno, setCDIAno] = useState<number>(14.75);
+  const [CDIAno, setCDIAno] = useState<number>(14.5);
   const [inflacao, setInflacao] = useState<number>(0);
   const [periodo, setPeriodo] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<number>(0);
