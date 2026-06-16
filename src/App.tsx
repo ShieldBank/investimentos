@@ -598,7 +598,10 @@ function App() {
                   </Card>
                   <Card className=" max-md:w-full  w-full shadow-2xl max-md:h-[7rem] max-md:mb-10  max-md:p-1 justify-center items-center max-md:gap-0 h-28 bg-[#e9e9e9] border-0 rounded-2xl p-10 text-amber-50 gap-3">
                     <div className="  flex  flex-col gap-2 justify-center items-center">
-                      <h1 className="text-3xl  text-blue-950 max-md:text-2xl">
+                      <h1
+                        translate="no"
+                        className="text-3xl  text-blue-950 max-md:text-2xl"
+                      >
                         Rendimento Shield
                       </h1>
                       <Label
@@ -1115,7 +1118,10 @@ function App() {
                     <TableBody key={i}>
                       <TableRow>
                         <>
-                          <TableCell className="font-medium sticky left-0 bg-slate-50 z-50 border border-gray-400 ">
+                          <TableCell
+                            translate="no"
+                            className="font-medium sticky left-0 bg-slate-50 z-50 border border-gray-400 "
+                          >
                             {e.Ativo}
                           </TableCell>
                           <TableCell className="font-medium z-10  border-y border-gray-400">
@@ -1129,7 +1135,10 @@ function App() {
                                     : ""
                             }`}
                           </TableCell>
-                          <TableCell className="font-medium border-y border-gray-400">
+                          <TableCell
+                            translate="no"
+                            className="font-medium border-y border-gray-400"
+                          >
                             {`${
                               e.Ativo === "Shield Bank"
                                 ? `${(e.Indexador * 12).toFixed(2)}%`
@@ -1193,7 +1202,7 @@ function App() {
             </Card>
           </div>
           <footer className=" p-0 m-0 text-black text-center mt-10   ">
-            <p> © 2025 Shield Bank</p>
+            <p translate="no"> © 2025 Shield Bank</p>
           </footer>
         </div>
       </div>
