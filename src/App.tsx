@@ -240,18 +240,18 @@ function App() {
     ] = (await axios.get(urlBancoCentralInflacao)).data;
 
     console.log(result);
-    const sizeMonth = result.length;
+    // const sizeMonth = result.length;
 
-    const soma = result.reduce(
-      (acc, currentValue) => Number(currentValue.valor) + acc,
-      0,
-    );
-    const inflacaoAtual = soma;
-    const mediaInflacao = soma / sizeMonth;
-    const inserindoMediaMesesSubsequentes = mediaInflacao * (12 - sizeMonth);
+    // const soma = result.reduce(
+    //   (acc, currentValue) => Number(currentValue.valor) + acc,
+    //   0,
+    // );
+    // const inflacaoAtual = soma;
+    // const mediaInflacao = soma / sizeMonth;
+    // const inserindoMediaMesesSubsequentes = mediaInflacao * (12 - sizeMonth);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const inflacaoMedia = inflacaoAtual + inserindoMediaMesesSubsequentes;
+    // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // const inflacaoMedia = inflacaoAtual + inserindoMediaMesesSubsequentes;
 
     // setInflacao(inflacaoMedia);
   };
