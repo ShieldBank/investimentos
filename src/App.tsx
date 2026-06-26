@@ -1,4 +1,6 @@
+//ts-nocheck
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Card,
@@ -119,8 +121,8 @@ export async function exportPDF() {
 }
 
 function App() {
-  const [CDIAno, setCDIAno] = useState<number>(14.5);
-  const [inflacao, setInflacao] = useState<number>(0);
+  const [CDIAno, setCDIAno] = useState<number>(14.15);
+  const [inflacao, setInflacao] = useState<number>(4.72);
   const [periodo, setPeriodo] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<number>(0);
   const [aporteInicial, setaporteInicial] = useState<number>(0);
@@ -248,9 +250,10 @@ function App() {
     const mediaInflacao = soma / sizeMonth;
     const inserindoMediaMesesSubsequentes = mediaInflacao * (12 - sizeMonth);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const inflacaoMedia = inflacaoAtual + inserindoMediaMesesSubsequentes;
 
-    setInflacao(inflacaoMedia);
+    // setInflacao(inflacaoMedia);
   };
   useEffect(() => {
     dados();
