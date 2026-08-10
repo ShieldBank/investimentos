@@ -121,8 +121,8 @@ export async function exportPDF() {
 }
 
 function App() {
-  const [CDIAno, setCDIAno] = useState<number>(14.15);
-  const [inflacao, setInflacao] = useState<number>(4.72);
+  const [CDIAno, setCDIAno] = useState<number>(14.71);
+  const [inflacao, setInflacao] = useState<number>(4.64);
   const [periodo, setPeriodo] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<number>(0);
   const [aporteInicial, setaporteInicial] = useState<number>(0);
@@ -1156,7 +1156,7 @@ function App() {
                                     : e.Ativo === "CRA Inflação"
                                       ? `${
                                           e.Indexador +
-                                          Number(inflacao.toFixed(2))
+                                          Number(inflacao.toFixed(1))
                                         }%`
                                       : "7,44%"
                             }`}
